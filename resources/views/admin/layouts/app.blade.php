@@ -187,6 +187,36 @@
                 <span>أكواد الخصم</span>
             </a>
 
+            <div class="pt-4 mt-2 border-t border-slate-800/60">
+                <p class="px-4 pb-2 text-[10px] uppercase tracking-widest text-slate-500 font-bold">المخزون والشحن</p>
+            </div>
+
+            <a href="{{ route('admin.stock.index') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group {{ request()->routeIs('admin.stock.index') ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                <i class="fa-solid fa-warehouse text-lg group-hover:scale-110 transition-transform"></i>
+                <span>إدارة المخزون</span>
+            </a>
+
+            <a href="{{ route('admin.stock.history') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group {{ request()->routeIs('admin.stock.history') ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                <i class="fa-solid fa-clock-rotate-left text-lg group-hover:scale-110 transition-transform"></i>
+                <span>سجل المخزون</span>
+            </a>
+
+            <a href="{{ route('admin.shipping-carriers.index') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group {{ request()->routeIs('admin.shipping-carriers.*') ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                <i class="fa-solid fa-truck-fast text-lg group-hover:scale-110 transition-transform"></i>
+                <span>شركات الشحن</span>
+            </a>
+
+            <a href="{{ route('admin.returns.index') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group {{ request()->routeIs('admin.returns.*') ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+                <i class="fa-solid fa-rotate-left text-lg group-hover:scale-110 transition-transform"></i>
+                <span>المرتجعات</span>
+            </a>
+
+            <div class="pt-4 mt-2 border-t border-slate-800/60"></div>
+
             <a 
                 href="{{ route('admin.settings.index') }}" 
                 class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group {{ request()->routeIs('admin.settings.*') ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}"
