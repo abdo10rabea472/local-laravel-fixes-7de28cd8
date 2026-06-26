@@ -86,22 +86,21 @@
                         </div>
                     </div>
 
-                    {{-- Aramex live rate --}}
+                    {{-- Shipping carrier --}}
+                    @php $carriers = \App\Models\ShippingCarrier::active()->orderBy('sort_order')->get(['id','name','code','default_cost']); @endphp
+                    @if($carriers->count())
                     <div class="border-t border-slate-100 pt-5">
-                        <div class="flex items-center justify-between gap-3 flex-wrap">
-                            <div class="flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold text-xs">A</span>
-                                <div>
-                                    <p class="text-sm font-bold text-slate-800">Aramex Shipping</p>
-                                    <p class="text-[11px] text-slate-500">احسب سعر شحن Aramex لعنوانك</p>
-                                </div>
-                            </div>
-                            <button type="button" id="aramex-rate-btn" class="px-3 py-2 text-xs font-bold rounded-xl bg-orange-100 text-orange-700 hover:bg-orange-200">
-                                <i class="fa-solid fa-calculator ml-1"></i> احسب الشحن
-                            </button>
-                        </div>
-                        <p id="aramex-rate-result" class="hidden mt-2 text-xs font-semibold"></p>
+                        <label class="block text-xs font-bold text-slate-600 mb-2">شركة الشحن</label>
+                        <select id="shipping-carrier" name="shipping_carrier_id" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <option value="">— اختر شركة الشحن —</option>
+                            @foreach($carriers as $c)
+                                <option value="{{ $c->id }}" data-code="{{ $c->code }}" data-cost="{{ $c->default_cost }}">{{ $c->name }}</option>
+                            @endforeach
+                        </select>
+                        <p id="carrier-rate-status" class="hidden mt-2 text-xs font-semibold"></p>
                     </div>
+                    @endif
+
 
 
                     <div class="border-t border-slate-100 pt-6">
