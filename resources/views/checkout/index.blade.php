@@ -57,9 +57,9 @@
                             </select>
                         </div>
                         <div class="space-y-1.5 sm:col-span-2">
-                            <label class="text-xs font-bold text-slate-500">State / City</label>
-                            <select id="shipping-state" name="state" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
-                                <option value="">Select state</option>
+                            <label class="text-xs font-bold text-slate-500">State / City / Region</label>
+                            <select id="shipping-region" name="region" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                                <option value="">Select region</option>
                             </select>
                             <p id="unsupported-country" class="hidden text-xs text-rose-600 font-bold mt-1">
                                 <i class="fa-solid fa-circle-info ml-1"></i> We do not support your country yet. It will be available soon.
