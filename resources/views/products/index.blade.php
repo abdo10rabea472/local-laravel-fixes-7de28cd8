@@ -136,11 +136,12 @@
                 </form>
 
                 @if($products->isNotEmpty())
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4">
                     @foreach($products as $product)
-                        @include('components.product-card', ['product' => $product])
+                        @include('products.partials.compact-card', ['product' => $product])
                     @endforeach
                 </div>
+
                 <div class="mt-10 flex justify-center">{{ $products->links() }}</div>
                 @else
                 <div class="text-center py-20 bg-white rounded-3xl border border-slate-200">
