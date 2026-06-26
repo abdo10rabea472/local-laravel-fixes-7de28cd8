@@ -141,6 +141,18 @@
                                 <div class="flex-1">
                                     <p class="font-bold text-slate-900">{{ $g->name }}</p>
                                     @if($g->description)<p class="text-xs text-slate-500">{{ $g->description }}</p>@endif
+                                    @if($g->code === 'paymob' && $g->configValue('PAYMOB_WALLET_ENABLED') === '1')
+                                        <div class="mt-3 grid grid-cols-2 gap-2 text-xs font-bold" data-paymob-channels>
+                                            <label class="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 cursor-pointer has-[:checked]:border-violet-600 has-[:checked]:bg-violet-50 has-[:checked]:text-violet-700">
+                                                <input type="radio" name="paymob_channel" value="card" checked class="text-violet-600 focus:ring-violet-500">
+                                                <span>بطاقة</span>
+                                            </label>
+                                            <label class="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 cursor-pointer has-[:checked]:border-violet-600 has-[:checked]:bg-violet-50 has-[:checked]:text-violet-700">
+                                                <input type="radio" name="paymob_channel" value="wallet" class="text-violet-600 focus:ring-violet-500">
+                                                <span>محفظة</span>
+                                            </label>
+                                        </div>
+                                    @endif
                                     @if((float)$g->extra_fees > 0)
                                         <p class="text-xs text-amber-600 font-semibold mt-1">+ رسوم {{ number_format((float)$g->extra_fees, 2) }} {{ config('app.currency','EGP') }}</p>
                                     @endif
@@ -595,7 +607,7 @@
                     cart: cart.map(i => ({ id: i.id, price: i.price, quantity: i.quantity || 1 })),
                     email: form.email.value,
                     phone: form.phone.value,
-                    customer_name: form.full_name?.value || form.name?.value || null,
+                    customer_name: [form.first_name?.value, form.last_name?.value].filter(Boolean).join(' ') || form.full_name?.value || form.name?.value || null,
                     shipping_country: countryOpt?.textContent?.trim() || null,
                     shipping_region: regionOpt?.textContent?.trim() || null,
                     shipping_address: addrEl?.value || null,
@@ -604,6 +616,9 @@
                     shipping_cost: shippingCost,
                     shipping_carrier_id: carrierSel?.value ? parseInt(carrierSel.value, 10) : null,
                     payment_gateway: (form.querySelector('input[name="payment_gateway"]:checked')?.value) || null,
+                    payment_channel: (form.querySelector('input[name="payment_gateway"]:checked')?.value === 'paymob')
+                        ? (form.querySelector('input[name="paymob_channel"]:checked')?.value || 'card')
+                        : null,
                 }),
             });
 

@@ -20,7 +20,7 @@ class PaymentController extends Controller
         abort_unless(Auth::id() === $order->user_id, 403);
 
         $gateway = PaymentGateway::where('code', $request->input('gateway'))->firstOrFail();
-        $result  = $service->pay($order, $gateway);
+        $result  = $service->pay($order, $gateway, $request->input('channel'));
 
         if (! ($result['ok'] ?? false)) {
             $service->rejectUnpaidOrder($order, $result['message'] ?? 'payment start failed');
