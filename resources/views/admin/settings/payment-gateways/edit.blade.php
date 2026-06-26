@@ -157,6 +157,21 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // Toggle wallet-only fields based on PAYMOB_WALLET_ENABLED
+    const walletSelect = document.getElementById('paymob-wallet-enabled');
+    const walletFields = document.querySelectorAll('[data-wallet-field]');
+    function syncWalletFields() {
+        const on = walletSelect && walletSelect.value === '1';
+        walletFields.forEach(el => {
+            el.classList.toggle('hidden', !on);
+            el.querySelectorAll('input').forEach(i => { i.disabled = !on; });
+        });
+    }
+    if (walletSelect) {
+        walletSelect.addEventListener('change', syncWalletFields);
+        syncWalletFields();
+    }
+
     const btn = document.getElementById('btn-test-gateway');
     const box = document.getElementById('test-result');
     if (!btn) return;
