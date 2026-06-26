@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\ShippingCountry;
 use App\Models\ShippingRegion;
 use App\Models\SiteSetting;
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ShippingRateController extends Controller
 {
+    public function __construct(private ImageService $imageService)
+    {
+    }
+
     public function index(): View
     {
         $countries = ShippingCountry::with('regions')->orderBy('position')->orderBy('name')->get();
@@ -22,9 +27,14 @@ class ShippingRateController extends Controller
             'countries' => $countries,
             'freeShippingEnabled' => $freeShippingEnabled,
             'freeThreshold' => $freeThreshold,
+            'freeShippingShowInHeader' => SiteSetting::get('free_shipping_show_in_header', '1') === '1',
+            'freeShippingPopupEnabled' => SiteSetting::get('free_shipping_popup_enabled', '0') === '1',
+            'freeShippingPopupTitle' => SiteSetting::get('free_shipping_popup_title', 'Free Shipping Available!'),
+            'freeShippingPopupMessage' => SiteSetting::get('free_shipping_popup_message', 'Enjoy free shipping on all orders above our minimum threshold.'),
             'activeTab' => 'shipping',
         ]);
     }
+
 
     // ───── Countries ─────
     public function storeCountry(Request $request): RedirectResponse
