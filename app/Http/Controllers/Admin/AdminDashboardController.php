@@ -5,25 +5,40 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $totalProducts = Product::count();
-        $totalStock = Product::sum('stock');
-        $totalStockValue = Product::selectRaw('SUM(COALESCE(sale_price, price) * stock) as total_value')->first()->total_value ?? 0;
-        $outOfStockCount = Product::where('stock', 0)->count();
-        $totalCategories = Category::count();
+        // Aggregate all five product stats in a single query instead of 4 round-trips.
+        // Result is cached briefly to keep the dashboard snappy under repeated reloads.
+        $productStats = Cache::remember('admin.dashboard.product_stats', 60, function () {
+            return Product::query()->selectRaw(
+                'COUNT(*) as total_products,'
+                . ' COALESCE(SUM(stock), 0) as total_stock,'
+                . ' COALESCE(SUM(COALESCE(sale_price, price) * stock), 0) as total_stock_value,'
+                . ' SUM(CASE WHEN stock = 0 THEN 1 ELSE 0 END) as out_of_stock_count'
+            )->first();
+        });
 
-        $categoryStats = Product::query()
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('categories.name as category_name', DB::raw('count(*) as count'))
-            ->groupBy('categories.name')
-            ->orderByDesc('count')
-            ->limit(8)
-            ->get();
+        $totalProducts = (int) ($productStats->total_products ?? 0);
+        $totalStock = (int) ($productStats->total_stock ?? 0);
+        $totalStockValue = (float) ($productStats->total_stock_value ?? 0);
+        $outOfStockCount = (int) ($productStats->out_of_stock_count ?? 0);
+
+        $totalCategories = Cache::remember('admin.dashboard.total_categories', 300, fn () => Category::count());
+
+        $categoryStats = Cache::remember('admin.dashboard.category_stats', 300, function () {
+            return Product::query()
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->select('categories.name as category_name', DB::raw('count(*) as count'))
+                ->groupBy('categories.id', 'categories.name')
+                ->orderByDesc('count')
+                ->limit(8)
+                ->get();
+        });
 
         $recentProducts = Product::query()
             ->select(['id', 'name', 'slug', 'price', 'stock', 'category_id', 'created_at'])
