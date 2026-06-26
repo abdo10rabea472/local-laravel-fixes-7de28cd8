@@ -3,14 +3,33 @@
 @section('title', 'Checkout')
 
 @section('content')
-<main class="bg-slate-50 min-h-screen py-8 sm:py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-4 mb-8">
-            <a href="{{ route('products.index') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-slate-200 hover:bg-slate-50 transition-colors">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
-            <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Checkout</h1>
+<main class="bg-slate-50 min-h-screen">
+    {{-- Page hero --}}
+    <div class="relative overflow-hidden bg-gradient-to-br from-violet-700 via-indigo-700 to-violet-800 text-white">
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-amber-400/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-fuchsia-500/20 rounded-full blur-3xl"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-4 min-w-0">
+                <a href="{{ route('products.index') }}" class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur border border-white/20 hover:bg-white/25 transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="min-w-0">
+                    <nav class="text-[11px] font-bold text-violet-100/80 mb-1 flex items-center gap-2">
+                        <a href="{{ route('home') }}" class="hover:text-white">Home</a>
+                        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        <span class="text-white">Checkout</span>
+                    </nav>
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight truncate">Secure checkout</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold">
+                <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur border border-white/20 px-3 py-1.5 rounded-full"><i class="fa-solid fa-lock"></i> Encrypted</span>
+                <span class="inline-flex items-center gap-1.5 bg-emerald-400/90 text-emerald-950 px-3 py-1.5 rounded-full"><i class="fa-solid fa-shield-halved"></i> SSL</span>
+            </div>
         </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <div id="checkout-empty" class="hidden text-center py-20 bg-white rounded-3xl border border-slate-200">
             <i class="fa-solid fa-cart-shopping text-5xl text-slate-300 mb-4"></i>
