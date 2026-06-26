@@ -166,8 +166,12 @@
     const freeShippingEnabled = @json(site_setting('free_shipping_enabled', '1')) === '1';
     const freeThreshold = parseFloat(@json(site_setting('free_shipping_threshold', '2000')));
     const shippingCountries = @json($shippingCountries);
+    const applyCouponUrl = @json(route('checkout.apply-coupon'));
+    const placeOrderUrl = @json(route('checkout.place-order'));
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-    let discountPercent = 0;
+    let discountAmount = 0;
+    let appliedCouponCode = null;
     let shippingCost = 0;
 
     function saveCart() {
