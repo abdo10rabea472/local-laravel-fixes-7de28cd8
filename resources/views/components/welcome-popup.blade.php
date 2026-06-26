@@ -75,6 +75,22 @@ $image = site_setting_url('welcome_popup_image');
     const panel = popup.querySelector(':scope > div');
     const closeBtn = document.getElementById('welcome-popup-close');
     const laterBtn = document.getElementById('welcome-popup-later');
+    const STORAGE_KEY = 'welcome_popup_dismissed_at';
+    const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+    function shouldAutoShow() {
+        try {
+            const last = localStorage.getItem(STORAGE_KEY);
+            if (!last) return true; // first-time visitor
+            return (Date.now() - parseInt(last, 10)) >= COOLDOWN_MS;
+        } catch (e) {
+            return true;
+        }
+    }
+
+    function markDismissed() {
+        try { localStorage.setItem(STORAGE_KEY, Date.now().toString()); } catch (e) {}
+    }
 
     function showPopup() {
         popup.classList.remove('opacity-0', 'pointer-events-none');
@@ -83,6 +99,7 @@ $image = site_setting_url('welcome_popup_image');
         panel.classList.add('scale-100');
     }
 
+    // Header button (or any external trigger) — always show, ignore cooldown
     window.openWelcomePopup = function (code, percent) {
         if (code) {
             const input = document.getElementById('welcome-popup-code');
@@ -98,6 +115,7 @@ $image = site_setting_url('welcome_popup_image');
         popup.setAttribute('aria-hidden', 'true');
         panel.classList.remove('scale-100');
         panel.classList.add('scale-95');
+        markDismissed();
     }
 
     if (closeBtn) closeBtn.addEventListener('click', closePopup);
@@ -106,8 +124,11 @@ $image = site_setting_url('welcome_popup_image');
         if (e.target === popup) closePopup();
     });
 
-    setTimeout(showPopup, 1200);
+    if (shouldAutoShow()) {
+        setTimeout(showPopup, 1200);
+    }
 })();
+
 
 function copyWelcomeCode() {
     const input = document.getElementById('welcome-popup-code');
