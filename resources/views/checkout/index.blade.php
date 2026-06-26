@@ -590,6 +590,63 @@
             (window.UL ? window.UL.toast('تعذّر إتمام الطلب. حاول لاحقاً.', 'error') : alert('تعذّر إتمام الطلب. حاول لاحقاً.'));
         }
     });
+
+    // Aramex live rate
+    const aramexBtn = document.getElementById('aramex-rate-btn');
+    const aramexResult = document.getElementById('aramex-rate-result');
+    aramexBtn?.addEventListener('click', async () => {
+        const countrySel = document.getElementById('shipping-country');
+        const countryOpt = countrySel?.options[countrySel.selectedIndex];
+        const countryName = countryOpt?.textContent?.trim() || '';
+        const cityEl = document.querySelector('[name="city"], #shipping-city');
+        const addrEl = document.querySelector('[name="address"], #shipping-address');
+        const zipEl  = document.querySelector('[name="postcode"], [name="postal_code"], #shipping-postcode');
+        const city = cityEl?.value?.trim() || '';
+        const addr = addrEl?.value?.trim() || '';
+        if (!countryName || !city || !addr) {
+            aramexResult.classList.remove('hidden');
+            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
+            aramexResult.textContent = 'أكمل بيانات العنوان أولاً (الدولة، المدينة، العنوان).';
+            return;
+        }
+        if (!cart || cart.length === 0) {
+            aramexResult.classList.remove('hidden');
+            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
+            aramexResult.textContent = 'السلة فارغة.';
+            return;
+        }
+        // 2-letter code mapping: try common ones, else EG
+        const codeMap = { 'Egypt':'EG','مصر':'EG','Saudi Arabia':'SA','UAE':'AE','United Arab Emirates':'AE','Kuwait':'KW','Qatar':'QA','Jordan':'JO','Bahrain':'BH','Oman':'OM' };
+        const cc = codeMap[countryName] || 'EG';
+        aramexBtn.disabled = true; aramexBtn.textContent = '...';
+        try {
+            const res = await fetch('{{ route('checkout.aramex-rate') }}', {
+                method: 'POST',
+                headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': csrfToken },
+                body: JSON.stringify({
+                    country_code: cc, city, line1: addr, postal_code: zipEl?.value || '',
+                    cart: cart.map(i => ({ id: i.id, quantity: i.quantity || 1 })),
+                }),
+            });
+            const json = await res.json();
+            aramexResult.classList.remove('hidden');
+            if (json.ok) {
+                const amt = (json.data?.amount ?? 0).toFixed(2);
+                aramexResult.className = 'mt-2 text-xs font-bold text-emerald-700';
+                aramexResult.textContent = `✓ Aramex: ${amt} ${json.data?.currency || 'EGP'}`;
+            } else {
+                aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
+                aramexResult.textContent = json.message || 'تعذر الحساب.';
+            }
+        } catch (e) {
+            aramexResult.classList.remove('hidden');
+            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
+            aramexResult.textContent = 'تعذر الاتصال بالخادم.';
+        } finally {
+            aramexBtn.disabled = false;
+            aramexBtn.innerHTML = '<i class="fa-solid fa-calculator ml-1"></i> احسب الشحن';
+        }
+    });
 })();
 </script>
 @endpush
