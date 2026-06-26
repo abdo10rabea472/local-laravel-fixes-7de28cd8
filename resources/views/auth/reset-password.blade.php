@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
+    <form method="POST" action="{{ route('password.store') }}" data-ajax data-success-toast="تم تحديث كلمة المرور">
         @csrf
 
         <!-- Password Reset Token -->

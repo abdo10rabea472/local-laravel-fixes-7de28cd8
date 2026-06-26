@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" data-ajax data-success-toast="تم إنشاء الحساب بنجاح">
         @csrf
 
         <!-- Name -->
