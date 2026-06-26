@@ -62,8 +62,8 @@ $discountLabel = $coupon
                             Copy
                         </button>
                     </div>
-                    @if($percent > 0)
-                    <p class="text-sm text-emerald-600 font-bold mt-2">{{ $percent }}% OFF your first order</p>
+                    @if($discountLabel)
+                    <p class="text-sm text-emerald-600 font-bold mt-2">{{ $discountLabel }} — انسخ الكود وادخله في صفحة الدفع لاستخدامه</p>
                     @endif
                 </div>
                 @endif
