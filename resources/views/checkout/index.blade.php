@@ -48,26 +48,31 @@
                         <i class="fa-solid fa-truck text-violet-600"></i> Shipping Information
                     </h2>
 
+                    @php
+                        $nameParts = preg_split('/\s+/', trim((string)($profile['customer_name'] ?? '')), 2);
+                        $fn = $nameParts[0] ?? '';
+                        $ln = $nameParts[1] ?? '';
+                    @endphp
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-slate-500">First Name</label>
-                            <input type="text" name="first_name" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <input type="text" name="first_name" value="{{ $fn }}" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-slate-500">Last Name</label>
-                            <input type="text" name="last_name" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <input type="text" name="last_name" value="{{ $ln }}" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
                         </div>
                         <div class="space-y-1.5 sm:col-span-2">
                             <label class="text-xs font-bold text-slate-500">Email</label>
-                            <input type="email" name="email" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <input type="email" name="email" value="{{ $profile['email'] ?? '' }}" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
                         </div>
                         <div class="space-y-1.5 sm:col-span-2">
                             <label class="text-xs font-bold text-slate-500">Address</label>
-                            <input type="text" name="address" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <input type="text" name="address" value="{{ $profile['shipping_address'] ?? '' }}" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-slate-500">Phone</label>
-                            <input type="tel" name="phone" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                            <input type="tel" name="phone" value="{{ $profile['phone'] ?? '' }}" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
                         </div>
                         <div class="space-y-1.5">
                             <label class="text-xs font-bold text-slate-500">Country</label>
