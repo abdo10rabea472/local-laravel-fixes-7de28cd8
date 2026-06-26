@@ -365,8 +365,11 @@ class CheckoutController extends Controller
 
         return response()->json([
             'ok' => true,
+            'order_id' => $createdOrder->id,
             'order_number' => $createdOrder->order_number,
-            'redirect' => route('pages.payment-success'),
+            'redirect' => route('checkout.pay', ['order' => $createdOrder->id]) . '?gateway=' . urlencode($data['payment_gateway']),
+            'pay_url'  => route('checkout.pay', ['order' => $createdOrder->id]),
+            'gateway'  => $data['payment_gateway'],
         ]);
     }
 
