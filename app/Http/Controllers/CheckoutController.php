@@ -267,7 +267,12 @@ class CheckoutController extends Controller
                 }
 
                 $shipping = (float) ($data['shipping_cost'] ?? 0);
-                $total = max(0, round($subtotal - $discount + $shipping, 2));
+
+                // Include payment-gateway extra fees (e.g. COD surcharge).
+                $gateway = \App\Models\PaymentGateway::where('code', $data['payment_gateway'])->first();
+                $payFees = $gateway ? (float) $gateway->extra_fees : 0.0;
+
+                $total = max(0, round($subtotal - $discount + $shipping + $payFees, 2));
 
                 $order = \App\Models\Order::create([
                     'order_number' => \App\Models\Order::generateNumber(),
@@ -286,6 +291,8 @@ class CheckoutController extends Controller
                     'discount_amount' => $discount,
                     'coupon_code' => $couponCode,
                     'shipping_cost' => $shipping,
+                    'payment_fees' => $payFees,
+                    'payment_gateway' => $data['payment_gateway'],
                     'total' => $total,
                     'currency' => 'EGP',
                     'status' => 'pending',
