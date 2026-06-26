@@ -12,7 +12,27 @@ class ShippingCarrierController extends Controller
     public function index()
     {
         $carriers = ShippingCarrier::orderBy('sort_order')->orderBy('name')->get();
-        return view('admin.shipping-carriers.index', compact('carriers'));
+        $aramexInstalled = class_exists(\Octw\Aramex\Aramex::class);
+        $aramexConfigured = app(\App\Services\AramexService::class)->isConfigured();
+        return view('admin.shipping-carriers.index', compact('carriers', 'aramexInstalled', 'aramexConfigured'));
+    }
+
+    /** One-click: create/update an Aramex carrier row with sensible defaults. */
+    public function installAramex()
+    {
+        ShippingCarrier::updateOrCreate(
+            ['code' => 'aramex'],
+            [
+                'name' => 'Aramex',
+                'tracking_url_template' => 'https://www.aramex.com/track/results?ShipmentNumber={tracking}',
+                'auto_track' => true,
+                'is_active' => true,
+                'sort_order' => 0,
+                'default_cost' => 0,
+                'contact_email' => 'support@aramex.com',
+            ]
+        );
+        return back()->with('success', 'تم تفعيل Aramex كشركة شحن.');
     }
 
     public function store(Request $request)
