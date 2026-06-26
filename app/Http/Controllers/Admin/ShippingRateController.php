@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ShippingRate;
+use App\Models\ShippingCountry;
+use App\Models\ShippingRegion;
 use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,70 +14,122 @@ class ShippingRateController extends Controller
 {
     public function index(): View
     {
-        $rates = ShippingRate::orderBy('position')->orderBy('state')->orderBy('city')->paginate(50);
+        $countries = ShippingCountry::with('regions')->orderBy('position')->orderBy('name')->get();
+        $freeShippingEnabled = SiteSetting::get('free_shipping_enabled', '1') === '1';
         $freeThreshold = SiteSetting::get('free_shipping_threshold', '2000');
 
-        return view('admin.settings.shipping', compact('rates', 'freeThreshold') + ['activeTab' => 'shipping']);
+        return view('admin.settings.shipping', [
+            'countries' => $countries,
+            'freeShippingEnabled' => $freeShippingEnabled,
+            'freeThreshold' => $freeThreshold,
+            'activeTab' => 'shipping',
+        ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    // ───── Countries ─────
+    public function storeCountry(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'country' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'cost' => 'required|numeric|min:0',
+        $data = $request->validate([
+            'name' => 'required|string|max:100|unique:shipping_countries,name',
+            'cost' => 'nullable|numeric|min:0',
             'position' => 'nullable|integer|min:0',
         ]);
+        $data['status'] = $request->boolean('status', true);
+        $data['position'] = $data['position'] ?? 0;
 
-        $validated['status'] = $request->boolean('status', true);
-        $validated['position'] = $validated['position'] ?? 0;
-
-        ShippingRate::create($validated);
+        ShippingCountry::create($data);
         SiteSetting::clearCache();
 
-        return redirect()->route('admin.settings.shipping')->with('success', 'تم إضافة سعر الشحن بنجاح.');
+        return back()->with('success', 'تم إضافة الدولة بنجاح.');
     }
 
-    public function update(Request $request, ShippingRate $rate): RedirectResponse
+    public function updateCountry(Request $request, ShippingCountry $country): RedirectResponse
     {
-        $validated = $request->validate([
-            'country' => 'required|string|max:100',
-            'state' => 'required|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'cost' => 'required|numeric|min:0',
+        $data = $request->validate([
+            'name' => 'required|string|max:100|unique:shipping_countries,name,' . $country->id,
+            'cost' => 'nullable|numeric|min:0',
             'position' => 'nullable|integer|min:0',
         ]);
+        $data['status'] = $request->boolean('status', true);
 
-        $validated['status'] = $request->boolean('status', true);
-
-        $rate->update($validated);
+        $country->update($data);
         SiteSetting::clearCache();
 
-        return redirect()->route('admin.settings.shipping')->with('success', 'تم تحديث سعر الشحن بنجاح.');
+        return back()->with('success', 'تم تحديث الدولة بنجاح.');
     }
 
-    public function destroy(ShippingRate $rate): RedirectResponse
+    public function destroyCountry(ShippingCountry $country): RedirectResponse
     {
-        $rate->delete();
+        $country->delete();
         SiteSetting::clearCache();
 
-        return redirect()->route('admin.settings.shipping')->with('success', 'تم حذف سعر الشحن بنجاح.');
+        return back()->with('success', 'تم حذف الدولة بنجاح.');
     }
 
+    // ───── Regions ─────
+    public function storeRegion(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'country_id' => 'required|exists:shipping_countries,id',
+            'name' => 'required|string|max:100',
+            'cost' => 'nullable|numeric|min:0',
+            'position' => 'nullable|integer|min:0',
+        ]);
+        $data['status'] = $request->boolean('status', true);
+        $data['position'] = $data['position'] ?? 0;
+
+        ShippingRegion::create($data);
+        SiteSetting::clearCache();
+
+        return back()->with('success', 'تم إضافة المنطقة بنجاح.');
+    }
+
+    public function updateRegion(Request $request, ShippingRegion $region): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:100',
+            'cost' => 'nullable|numeric|min:0',
+            'position' => 'nullable|integer|min:0',
+        ]);
+        $data['status'] = $request->boolean('status', true);
+
+        $region->update($data);
+        SiteSetting::clearCache();
+
+        return back()->with('success', 'تم تحديث المنطقة بنجاح.');
+    }
+
+    public function destroyRegion(ShippingRegion $region): RedirectResponse
+    {
+        $region->delete();
+        SiteSetting::clearCache();
+
+        return back()->with('success', 'تم حذف المنطقة بنجاح.');
+    }
+
+    // ───── Free shipping settings ─────
     public function updateThreshold(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'free_shipping_threshold' => 'required|numeric|min:0',
+        $data = $request->validate([
+            'free_shipping_threshold' => 'nullable|numeric|min:0',
         ]);
 
-        $setting = SiteSetting::firstOrNew(['key' => 'free_shipping_threshold']);
-        $setting->value = $validated['free_shipping_threshold'];
-        $setting->label = $setting->label ?: 'حد الشحن المجاني';
-        $setting->group = 'shipping';
-        $setting->save();
+        $enabled = $request->boolean('free_shipping_enabled');
+
+        $this->saveSetting('free_shipping_enabled', $enabled ? '1' : '0', 'تفعيل الشحن المجاني');
+        $this->saveSetting('free_shipping_threshold', (string) ($data['free_shipping_threshold'] ?? '0'), 'حد الشحن المجاني');
+
         SiteSetting::clearCache();
 
-        return redirect()->route('admin.settings.shipping')->with('success', 'تم تحديث إعدادات الشحن بنجاح.');
+        return back()->with('success', 'تم تحديث إعدادات الشحن المجاني بنجاح.');
+    }
+
+    private function saveSetting(string $key, string $value, string $label): void
+    {
+        $setting = SiteSetting::firstOrNew(['key' => $key]);
+        $setting->value = $value;
+        $setting->label = $setting->label ?: $label;
+        $setting->group = 'shipping';
+        $setting->save();
     }
 }

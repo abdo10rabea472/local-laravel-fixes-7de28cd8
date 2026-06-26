@@ -3,17 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ShippingRate extends Model
+class ShippingRegion extends Model
 {
-    protected $fillable = [
-        'country',
-        'state',
-        'city',
-        'cost',
-        'position',
-        'status',
-    ];
+    protected $fillable = ['country_id', 'name', 'cost', 'position', 'status'];
 
     protected function casts(): array
     {
@@ -22,6 +16,11 @@ class ShippingRate extends Model
             'position' => 'integer',
             'status' => 'boolean',
         ];
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(ShippingCountry::class, 'country_id');
     }
 
     public function scopeActive($query)

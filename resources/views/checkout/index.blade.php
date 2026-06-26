@@ -57,9 +57,9 @@
                             </select>
                         </div>
                         <div class="space-y-1.5 sm:col-span-2">
-                            <label class="text-xs font-bold text-slate-500">State / City</label>
-                            <select id="shipping-state" name="state" required class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
-                                <option value="">Select state</option>
+                            <label class="text-xs font-bold text-slate-500">State / City / Region</label>
+                            <select id="shipping-region" name="region" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-violet-300 focus:bg-white transition-colors">
+                                <option value="">Select region</option>
                             </select>
                             <p id="unsupported-country" class="hidden text-xs text-rose-600 font-bold mt-1">
                                 <i class="fa-solid fa-circle-info ml-1"></i> We do not support your country yet. It will be available soon.
@@ -163,8 +163,9 @@
 
     const welcomeCode = @json(site_setting('welcome_popup_discount_code', 'WELCOME10'));
     const welcomePercent = parseInt(@json(site_setting('welcome_popup_discount_percent', '10')));
+    const freeShippingEnabled = @json(site_setting('free_shipping_enabled', '1')) === '1';
     const freeThreshold = parseFloat(@json(site_setting('free_shipping_threshold', '2000')));
-    const shippingRates = @json($shippingRates);
+    const shippingCountries = @json($shippingCountries);
 
     let discountPercent = 0;
     let shippingCost = 0;
@@ -197,18 +198,23 @@
         return cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
     }
 
-    function getDistinctCountries() {
-        return [...new Set(shippingRates.map(r => r.country))].sort();
+    function findCountry(id) {
+        return shippingCountries.find(c => String(c.id) === String(id));
+    }
+
+    function findRegion(country, id) {
+        if (!country || !id) return null;
+        return (country.regions || []).find(r => String(r.id) === String(id));
     }
 
     function populateCountries() {
         const select = document.getElementById('shipping-country');
         if (!select) return;
         select.innerHTML = '<option value="">Select country</option>';
-        getDistinctCountries().forEach(country => {
+        shippingCountries.forEach(c => {
             const opt = document.createElement('option');
-            opt.value = country;
-            opt.textContent = country;
+            opt.value = c.id;
+            opt.textContent = c.name;
             select.appendChild(opt);
         });
         const other = document.createElement('option');
@@ -217,28 +223,46 @@
         select.appendChild(other);
     }
 
-    function populateStates(country) {
-        const select = document.getElementById('shipping-state');
+    function populateRegions(country) {
+        const select = document.getElementById('shipping-region');
         if (!select) return;
-        select.innerHTML = '<option value="">Select state</option>';
-        shippingRates.filter(r => r.country === country).forEach(r => {
+        select.innerHTML = '<option value="">Select region</option>';
+        if (!country || !country.regions) return;
+        country.regions.forEach(r => {
             const opt = document.createElement('option');
             opt.value = r.id;
-            opt.textContent = r.state + (r.city ? ' - ' + r.city : '');
+            const priceLabel = r.cost !== null && r.cost !== undefined ? ` (+${parseFloat(r.cost).toLocaleString()} EGP)` : '';
+            opt.textContent = r.name + priceLabel;
             select.appendChild(opt);
         });
     }
 
     function calculateShipping() {
         const st = subtotal();
-        if (st >= freeThreshold) {
+
+        if (freeShippingEnabled && st >= freeThreshold) {
             shippingCost = 0;
             return;
         }
-        const stateSelect = document.getElementById('shipping-state');
-        const rateId = stateSelect ? stateSelect.value : '';
-        const rate = shippingRates.find(r => String(r.id) === String(rateId));
-        shippingCost = rate ? parseFloat(rate.cost) : 0;
+
+        const countrySelect = document.getElementById('shipping-country');
+        const regionSelect = document.getElementById('shipping-region');
+        const countryId = countrySelect ? countrySelect.value : '';
+
+        if (!countryId || countryId === '__other__') {
+            shippingCost = 0;
+            return;
+        }
+
+        const country = findCountry(countryId);
+        if (!country) { shippingCost = 0; return; }
+
+        let cost = country.cost !== null && country.cost !== undefined ? parseFloat(country.cost) : 0;
+        const region = findRegion(country, regionSelect ? regionSelect.value : '');
+        if (region && region.cost !== null && region.cost !== undefined) {
+            cost += parseFloat(region.cost);
+        }
+        shippingCost = cost;
     }
 
     function updateTotals() {
@@ -250,7 +274,7 @@
         totalEl.textContent = total.toLocaleString() + ' EGP';
 
         const shippingEl = document.getElementById('shipping-display');
-        if (shippingCost === 0 && st >= freeThreshold) {
+        if (shippingCost === 0 && freeShippingEnabled && st >= freeThreshold) {
             shippingEl.textContent = 'Free';
             shippingEl.className = 'font-bold text-emerald-600';
         } else {
@@ -286,31 +310,31 @@
     couponInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); } });
 
     const countrySelect = document.getElementById('shipping-country');
-    const stateSelect = document.getElementById('shipping-state');
+    const regionSelect = document.getElementById('shipping-region');
     const unsupportedMsg = document.getElementById('unsupported-country');
 
     populateCountries();
 
     countrySelect?.addEventListener('change', () => {
-        const country = countrySelect.value;
-        if (country === '__other__' || !country) {
-            stateSelect.innerHTML = '<option value="">Select state</option>';
-            stateSelect.disabled = true;
-            if (unsupportedMsg) unsupportedMsg.classList.remove('hidden');
-            shippingCost = 0;
+        const value = countrySelect.value;
+        if (value === '__other__' || !value) {
+            regionSelect.innerHTML = '<option value="">Select region</option>';
+            regionSelect.disabled = true;
+            if (unsupportedMsg && value === '__other__') unsupportedMsg.classList.remove('hidden');
+            else if (unsupportedMsg) unsupportedMsg.classList.add('hidden');
             updateTotals();
             return;
         }
-        stateSelect.disabled = false;
         if (unsupportedMsg) unsupportedMsg.classList.add('hidden');
-        populateStates(country);
+        regionSelect.disabled = false;
+        populateRegions(findCountry(value));
         updateTotals();
     });
 
-    stateSelect?.addEventListener('change', updateTotals);
+    regionSelect?.addEventListener('change', updateTotals);
 
-    if (getDistinctCountries().length === 0) {
-        stateSelect.disabled = true;
+    if (shippingCountries.length === 0) {
+        regionSelect.disabled = true;
         if (unsupportedMsg) unsupportedMsg.classList.remove('hidden');
     }
 
