@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ShippingRate;
+use App\Models\ShippingCountry;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -15,8 +15,22 @@ class CheckoutController extends Controller
             'canonical_url' => route('checkout'),
         ];
 
-        $shippingRates = ShippingRate::active()->orderBy('state')->orderBy('city')->get();
+        $shippingCountries = ShippingCountry::active()
+            ->with(['regions' => fn ($q) => $q->where('status', true)])
+            ->orderBy('position')
+            ->orderBy('name')
+            ->get()
+            ->map(fn ($c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'cost' => $c->cost !== null ? (float) $c->cost : null,
+                'regions' => $c->regions->map(fn ($r) => [
+                    'id' => $r->id,
+                    'name' => $r->name,
+                    'cost' => $r->cost !== null ? (float) $r->cost : null,
+                ])->values(),
+            ])->values();
 
-        return view('checkout.index', compact('seo', 'shippingRates'));
+        return view('checkout.index', compact('seo', 'shippingCountries'));
     }
 }
