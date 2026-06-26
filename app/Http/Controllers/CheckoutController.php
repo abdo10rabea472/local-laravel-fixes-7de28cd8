@@ -301,6 +301,19 @@ class CheckoutController extends Controller
             \Illuminate\Support\Facades\Log::warning('Order placed mail failed', ['err' => $e->getMessage()]);
         }
 
+        // Auto-create the carrier shipment in the background (Aramex, etc.)
+        if ($createdOrder->shipping_carrier_id) {
+            try {
+                \App\Jobs\CreateCarrierShipment::dispatch($createdOrder->id)->onQueue('shipping');
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::channel('shipping')->error('Shipment dispatch failed', [
+                    'order_id' => $createdOrder->id,
+                    'error'    => $e->getMessage(),
+                ]);
+            }
+        }
+
+
         cache()->forget('admin.orders.stats');
 
         AuditLog::record('checkout.order.placed', [
