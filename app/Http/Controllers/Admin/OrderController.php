@@ -143,6 +143,9 @@ class OrderController extends Controller
         $data = $request->validate([
             'tracking_number' => 'nullable|string|max:100',
             'shipping_carrier' => 'nullable|string|max:100',
+            'shipping_carrier_id' => 'nullable|integer|exists:shipping_carriers,id',
+            'actual_shipping_cost' => 'nullable|numeric|min:0',
+            'shipped_notes' => 'nullable|string|max:1000',
         ]);
         $order->update($data);
         return $this->jsonOrBack($request, true, 'تم تحديث بيانات الشحن.');
