@@ -41,10 +41,27 @@ class CheckoutController extends Controller
                 ])->values(),
             ])->values();
 
-        // Currently discounted product IDs (so the UI can warn before user tries a coupon)
         $discountedProductIds = ProductDiscount::active()->pluck('product_id')->map(fn ($id) => (int) $id)->values();
 
-        return view('checkout.index', compact('seo', 'shippingCountries', 'discountedProductIds'));
+        // Pre-fill from the authenticated user's profile.
+        $user = Auth::user();
+        $profile = [
+            'customer_name'     => $user->name,
+            'email'             => $user->email,
+            'phone'             => $user->phone,
+            'shipping_country'  => $user->shipping_country,
+            'shipping_region'   => $user->shipping_region,
+            'shipping_city'     => $user->shipping_city,
+            'shipping_address'  => $user->shipping_address,
+            'shipping_postcode' => $user->shipping_postcode,
+        ];
+
+        // Only enabled gateways; filter by user's country if set.
+        $paymentGateways = \App\Models\PaymentGateway::activeFor($user->shipping_country);
+
+        return view('checkout.index', compact(
+            'seo', 'shippingCountries', 'discountedProductIds', 'profile', 'paymentGateways'
+        ));
     }
 
     /**
