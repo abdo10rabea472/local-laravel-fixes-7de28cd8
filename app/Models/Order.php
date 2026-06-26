@@ -27,7 +27,12 @@ class Order extends Model
         'refunded_at' => 'datetime',
         'tracking_last_sync_at' => 'datetime',
         'tracking_history' => 'array',
+        'pickup_address' => 'array',
+        'pickup_datetime' => 'datetime',
+        'carrier_response' => 'array',
+        'shipment_created_at' => 'datetime',
     ];
+
 
 
     public function items(): HasMany

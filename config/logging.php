@@ -65,6 +65,15 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'shipping' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/shipping.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+            'replace_placeholders' => true,
+        ],
+
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
