@@ -47,9 +47,12 @@
                 @endif
             </div>
             @if(site_setting('free_shipping_enabled', '1') === '1' && site_setting('free_shipping_show_in_header', '1') === '1')
-            <p class="font-semibold text-amber-400 text-center">
+            <button type="button"
+                    onclick="if (typeof openFreeShippingPopup === 'function') { openFreeShippingPopup(); }"
+                    class="font-semibold text-amber-400 text-center hover:text-amber-300 transition-colors cursor-pointer bg-transparent border-0 p-0">
                 Free shipping on orders over {{ number_format((float) site_setting('free_shipping_threshold', 2000), 0) }} EGP
-            </p>
+            </button>
+
             @endif
 
             <div class="flex items-center gap-4">
