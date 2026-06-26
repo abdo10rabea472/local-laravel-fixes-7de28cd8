@@ -64,9 +64,9 @@
                     </td>
                     <td class="p-3 text-center">
                         <button @click='edit = @json($d); openForm = true' class="text-violet-600 hover:underline text-xs font-bold">تعديل</button>
-                        <form action="{{ route('admin.product-discounts.toggle', $d) }}" method="POST" class="inline">
+                        <form action="{{ route('admin.product-discounts.toggle', $d) }}" method="POST" class="inline" data-ajax-toggle>
                             @csrf @method('PATCH')
-                            <button class="text-amber-600 hover:underline text-xs font-bold mx-2">{{ $d->is_active ? 'تعطيل' : 'تفعيل' }}</button>
+                            <button data-toggle-state="{{ $d->is_active ? 'on' : 'off' }}" data-toggle-on="تعطيل" data-toggle-off="تفعيل" class="text-amber-600 hover:underline text-xs font-bold mx-2">{{ $d->is_active ? 'تعطيل' : 'تفعيل' }}</button>
                         </form>
                         <form action="{{ route('admin.product-discounts.destroy', $d) }}" method="POST" class="inline" data-ajax-confirm="حذف الخصم؟" data-ajax-remove>
                             @csrf @method('DELETE')
