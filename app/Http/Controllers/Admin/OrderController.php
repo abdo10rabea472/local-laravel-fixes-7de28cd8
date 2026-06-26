@@ -77,12 +77,25 @@ class OrderController extends Controller
             $from = $order->status;
             $order->status = $data['status'];
 
-            // Restock on cancellation/refund
+            // Restock on cancellation/refund (tracked via StockService)
             if (in_array($data['status'], ['cancelled', 'refunded'], true)
                 && ! in_array($from, ['cancelled','refunded'], true)) {
+                $stockService = app(\App\Services\StockService::class);
                 foreach ($order->items as $item) {
                     if ($item->product_id) {
-                        Product::where('id', $item->product_id)->increment('stock', $item->quantity);
+                        $p = Product::find($item->product_id);
+                        if ($p) {
+                            $stockService->apply(
+                                $p,
+                                (int) $item->quantity,
+                                'order_cancel',
+                                'Order',
+                                $order->id,
+                                "إلغاء الطلب {$order->order_number}",
+                                'admin',
+                                \Illuminate\Support\Facades\Auth::guard('admin')->id()
+                            );
+                        }
                     }
                 }
             }
