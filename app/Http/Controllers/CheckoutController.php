@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
+use App\Models\CouponRedemption;
 use App\Models\ShippingCountry;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -32,5 +39,73 @@ class CheckoutController extends Controller
             ])->values();
 
         return view('checkout.index', compact('seo', 'shippingCountries'));
+    }
+
+    public function applyCoupon(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'code' => 'required|string|max:50',
+            'cart' => 'required|array',
+            'cart.*.id' => 'required|integer',
+            'cart.*.price' => 'required|numeric',
+            'cart.*.quantity' => 'required|integer|min:1',
+            'email' => 'nullable|email',
+            'phone' => 'nullable|string',
+        ]);
+
+        $coupon = Coupon::where('code', strtoupper($data['code']))->first();
+        if (! $coupon) {
+            return response()->json(['ok' => false, 'message' => 'كود الخصم غير موجود.'], 200);
+        }
+
+        $userId = Auth::id();
+        $result = $coupon->validateFor($data['cart'], $userId, $data['email'] ?? null, $data['phone'] ?? null);
+
+        return response()->json(array_merge($result, [
+            'code' => $coupon->code,
+            'type' => $coupon->type,
+            'value' => (float) $coupon->value,
+        ]));
+    }
+
+    public function placeOrder(Request $request): JsonResponse|RedirectResponse
+    {
+        $data = $request->validate([
+            'code' => 'nullable|string|max:50',
+            'cart' => 'required|array|min:1',
+            'cart.*.id' => 'required|integer',
+            'cart.*.price' => 'required|numeric',
+            'cart.*.quantity' => 'required|integer|min:1',
+            'email' => 'required|email',
+            'phone' => 'nullable|string',
+        ]);
+
+        if (! empty($data['code'])) {
+            $coupon = Coupon::where('code', strtoupper($data['code']))->first();
+            if ($coupon) {
+                $result = $coupon->validateFor($data['cart'], Auth::id(), $data['email'], $data['phone'] ?? null);
+                if (! $result['ok']) {
+                    return response()->json(['ok' => false, 'message' => $result['message']], 422);
+                }
+
+                DB::transaction(function () use ($coupon, $result, $data) {
+                    CouponRedemption::create([
+                        'coupon_id' => $coupon->id,
+                        'user_id' => Auth::id(),
+                        'email' => strtolower(trim($data['email'])),
+                        'phone' => $data['phone'] ?? null,
+                        'order_total' => $result['subtotal'] ?? 0,
+                        'discount_amount' => $result['discount'] ?? 0,
+                        'used_at' => now(),
+                    ]);
+                    $coupon->increment('used_count');
+                });
+            }
+        }
+
+        return response()->json([
+            'ok' => true,
+            'redirect' => route('pages.payment-success'),
+        ]);
     }
 }
