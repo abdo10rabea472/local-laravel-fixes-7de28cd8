@@ -1,101 +1,83 @@
-## خطة نظام العروض والخصومات الشامل
-
-سأبني نظامًا متكاملًا للعروض والخصومات في لوحة التحكم مع التكامل الكامل مع الواجهة الأمامية وصفحة Checkout.
-
----
-
-### 1) خصومات المنتجات (Product Discounts)
-
-**قاعدة البيانات** — migration جديدة لجدول `product_discounts`:
-- `id`, `product_id` (FK), `type` (percent|fixed), `value` (decimal)
-- `starts_at`, `ends_at` (nullable)
-- `is_active` (boolean), `timestamps`
-- Index على `product_id` + `is_active`
-
-**Model**: `ProductDiscount` بعلاقة `belongsTo(Product)`، و scope `active()` يفحص التواريخ.
-**Product Model**: علاقة `hasOne(activeDiscount)` + accessors:
-- `final_price` — السعر بعد الخصم
-- `discount_percent` — النسبة المحسوبة للعرض في Badge
-- `has_discount` — boolean
-
-**لوحة التحكم** — `Admin/ProductDiscountController` + route group `/admin/discounts/products`:
-- صفحة index بقائمة الخصومات + فلترة (نشط/منتهي)
-- form إضافة/تعديل مع اختيار منتج (Select2 بحث)، نوع، قيمة، تواريخ، حالة
-- إجراءات: تفعيل/تعطيل/حذف
-
-**الواجهة الأمامية** — تحديث كل أماكن عرض المنتج:
-- بطاقة المنتج (`product-card` component مشترك): شارة `-X%` + السعر القديم مشطوب + السعر الجديد
-- صفحة المنتج (`product/show.blade.php`)
-- نتائج البحث، صفحات الأقسام، المنتجات المشابهة
-- قسم "العروض" في الصفحة الرئيسية: قائمة آخر المنتجات التي لديها `activeDiscount`، يتم تفعيله من إعدادات الصفحة الرئيسية
-
-### 2) أكواد الخصم (Coupons)
-
-**Migrations**:
-- `coupons`: `id, code (unique), type (percent|fixed), value, starts_at, ends_at, min_order_total, max_discount_amount, usage_limit, used_count, scope (all|products|categories), is_active, timestamps`
-- `coupon_products`: pivot
-- `coupon_categories`: pivot
-- `coupon_redemptions`: `id, coupon_id, user_id (nullable), email, phone, order_total, discount_amount, used_at` — لمنع التكرار
-
-**Models**: `Coupon`, `CouponRedemption` مع علاقات + method `isValidFor($cart, $user, $email)` يعيد `[ok, message, discount]`.
-
-**لوحة التحكم** — `Admin/CouponController` + `/admin/coupons`:
-- index بقائمة + فلترة + بحث
-- create/edit form كامل بكل الحقول + اختيار منتجات/أقسام عند `scope != all`
-- تفعيل/تعطيل/حذف
-- عرض عدد مرات الاستخدام `used_count / usage_limit`
-
-### 3) تطوير نافذة الترحيب
-
-في `welcome-popup.blade.php`:
-- استبدال الكود الثابت بـ `Coupon::active()->inRandomOrder()->first()`
-- عرض الكود + النسبة/القيمة + رسالة تشجيعية + زر نسخ
-- إخفاء قسم الكود إذا لا يوجد كوبون فعّال
-
-### 4) Checkout — حقل كود الخصم
-
-**Route**: `POST /checkout/apply-coupon` (AJAX، يرجع JSON)
-- التحقق: نشط، ضمن التواريخ، حد أدنى للطلب، scope منطبق على عناصر السلة، لم يستخدمه المستخدم/الإيميل/الهاتف من قبل، لم يتجاوز `usage_limit`
-- يحسب الخصم (مع `max_discount_amount`)
-
-**Frontend** في `checkout/index.blade.php`:
-- input + زر "تطبيق"
-- عند النجاح: عرض سطر "خصم الكوبون" في الملخص + تحديث الإجمالي مباشرة
-- حفظ في localStorage حتى submit
-- عند submit: إعادة التحقق server-side وإنشاء `coupon_redemption` + زيادة `used_count`
-
-### 5) منع التكرار
-
-داخل `Coupon::isValidFor()`:
-- لو user مسجل → فحص `CouponRedemption::where(coupon_id, user_id)`
-- لو زائر → فحص بالـ email أو phone من بيانات الطلب
-- رسالة: "لقد استخدمت هذا الكود من قبل"
+## الهدف
+أتمتة كاملة لتدفّق الشحن: حساب التكلفة فور اختيار العنوان/الشركة، إنشاء شحنة Aramex تلقائياً عند تأكيد الطلب، حفظ كل بيانات الشحنة في الطلب، وعرض/طباعة البوليصة وإعادة المزامنة من الإدارة — مع تسجيل أي فشل وإمكانية إعادة المحاولة.
 
 ---
 
-### التفاصيل التقنية
+## 1) صفحة الـ Checkout (واجهة العميل)
+- إزالة زر **"احسب تكلفة الشحن"** نهائياً من `resources/views/checkout/index.blade.php`.
+- إضافة سكربت يستمع لتغيّر:
+  - `country_id` / `region_id` / `city` / `postal_code` / `address_line1`
+  - `shipping_carrier_id`
+- يطلق **AJAX** إلى `POST /checkout/calculate-shipping` (موجود مسبقاً) مع debounce 400ms.
+- تحديث **تلقائي** لقيم: تكلفة الشحن، الضريبة، الإجمالي — بدون reload.
+- مؤشّر تحميل صغير بجوار قيمة الشحن أثناء الحساب.
 
-- جميع migrations تتبع Laravel 12 + indexes مناسبة
-- Helper جديد: `product_final_price($product)`, `product_discount_badge($product)`
-- Blade component مشترك `<x-product-card />` لتوحيد عرض الخصم في كل المواضع
-- التحقق server-side دائمًا، الحساب client-side للعرض الفوري فقط
-- ربط نافذة الترحيب بأكواد فعلية بدل القيم الثابتة في الإعدادات
+## 2) إنشاء الطلب + إنشاء الشحنة تلقائياً
+عند `CheckoutController@place`:
+1. إنشاء الطلب داخل `DB::transaction`.
+2. بعد commit، **dispatch** Job: `App\Jobs\CreateCarrierShipment($order)` على queue `shipping`.
+3. الـ Job ينادي `ShippingDispatchService::createForOrder($order)`:
+   - يحدّد الـ driver من `shipping_carrier.code` (`aramex` → `AramexService::createShipment`).
+   - يبني الـ payload من بيانات الطلب + عنوان الشحن + إعدادات Shipper من `config/aramex.php`.
+   - عند **النجاح**: يحفظ في الطلب الحقول الجديدة (انظر قسم Migration) ويغيّر `status = processing` و `shipping_status = shipment_created`.
+   - عند **الفشل**: يحفظ `shipping_error`, `shipping_attempts++`, ويُبقي الطلب بحالة `pending_shipment`.
+   - يسجّل في `Log::channel('shipping')` ويضيف صفّاً في `order_status_history`.
 
-### الملفات الرئيسية المضافة/المعدلة
+## 3) Migration جديدة — `add_carrier_shipment_fields_to_orders`
+أعمدة جديدة على `orders`:
+```text
+shipment_number       string  nullable  index
+tracking_number       string  nullable  index
+shipping_status       string  nullable  default 'pending'
+label_url             string  nullable
+barcode               string  nullable
+tracking_url          string  nullable
+pickup_address        json    nullable
+pickup_datetime       datetime nullable
+carrier_response      json    nullable   -- raw response للمرجع
+shipping_error        text    nullable
+shipping_attempts     unsignedTinyInteger default 0
+shipment_created_at   datetime nullable
+```
++ indexes على `shipping_status`, `tracking_number`.
 
-**جديد**:
-- 4 migrations (product_discounts, coupons, coupon_products/categories pivot, coupon_redemptions)
-- Models: `ProductDiscount`, `Coupon`, `CouponRedemption`
-- Controllers: `Admin/ProductDiscountController`, `Admin/CouponController`
-- Views: `admin/discounts/products/{index,form}`, `admin/coupons/{index,form}`
-- Component: `components/product-card.blade.php`
+## 4) صفحة تفاصيل الطلب في الإدارة
+في `resources/views/admin/orders/show.blade.php`:
+- بطاقة **معلومات الشحنة** تعرض: شركة الشحن، رقم الشحنة، رقم التتبع، الحالة، الباركود (صورة)، عنوان وميعاد الاستلام، رابط التتبع (يفتح في تبويب جديد).
+- أزرار:
+  - **طباعة البوليصة** → يفتح `label_url` في نافذة جديدة جاهز للطباعة.
+  - **تحميل البوليصة** → نفس الرابط بصفة `download`.
+  - **إعادة محاولة إنشاء الشحنة** (يظهر فقط لو `shipping_error` موجود) → POST إلى `admin.orders.shipment.retry`.
+  - **إعادة مزامنة الحالة** → POST إلى `admin.orders.shipment.sync` يستدعي `AramexService::trackShipments`.
+- إذا `shipping_error` → بانر أحمر يعرض الرسالة + زر إعادة المحاولة.
 
-**معدّل**:
-- `Product` model (علاقات + accessors)
-- `routes/web.php` + `routes/admin` (إضافة المسارات)
-- `welcome-popup.blade.php` (كود ديناميكي)
-- `checkout/index.blade.php` + `CheckoutController` (تطبيق الكوبون + redemption عند submit)
-- كل blade يعرض منتج: استخدام `<x-product-card>` أو إضافة منطق الخصم
-- قائمة admin sidebar (روابط جديدة)
+## 5) Routes جديدة في `routes/web.php` (مجموعة admin)
+```text
+POST  /admin/orders/{order}/shipment/retry  → OrderController@retryShipment
+POST  /admin/orders/{order}/shipment/sync   → OrderController@syncShipment
+GET   /admin/orders/{order}/shipment/label  → OrderController@printLabel (proxy للطباعة)
+```
 
-هل أبدأ التنفيذ؟
+## 6) ملفات/Classes جديدة
+- `app/Jobs/CreateCarrierShipment.php` — Queueable, `tries=3`, backoff تصاعدي.
+- `app/Services/ShippingDispatchService.php` — منسّق بين الـ Order وملقّمات الشحن (Strategy Pattern؛ يسهل إضافة شركات لاحقاً).
+- `config/logging.php` — قناة `shipping` تكتب في `storage/logs/shipping.log`.
+
+## 7) معالجة الأخطاء والـ Logs
+- كل استدعاء SOAP محاط بـ try/catch.
+- تسجيل: `order_id`, `carrier_code`, `payload`, `response/error` في القناة `shipping`.
+- لو فشل الـ Job 3 مرات → يبقى الطلب `pending_shipment` ويُرسل إشعار للأدمن (بريد عبر `CustomerNotificationMail` بنسخة admin).
+
+## 8) ما **لن** يتغيّر
+- مخطط جدول `shipping_carriers`، صفحات Cart، نظام الكوبونات، RLS/Policies الموجودة.
+- صفحة `checkout` الـ HTML يبقى تصميمها كما هو — فقط إزالة الزر + إضافة سكربت AJAX.
+
+---
+
+## تفاصيل تقنية مختصرة
+- الـ Driver المُختار يُحدَّد من حقل `shipping_carriers.code` (`aramex`, `bosta`, …) عبر `match()`.
+- بناء عنوان Aramex من `order.shipping_*` بالشكل: `line1`, `city`, `post_code`, `country_code` (الأخطاء السابقة التي ظهرت في tinker).
+- استخدام `queue:work --queue=shipping,default` (تذكير في الـ README).
+- لا حاجة لتغيير شيء في الـ Frontend خارج صفحة Checkout وصفحة Order في الإدارة.
+
+هل أبدأ التنفيذ بهذا الشكل؟
