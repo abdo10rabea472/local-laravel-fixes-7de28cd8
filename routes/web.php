@@ -40,6 +40,9 @@ Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])
 Route::get('/checkout/stocks', [CheckoutController::class, 'stocks'])
     ->middleware('throttle:60,1')
     ->name('checkout.stocks');
+Route::post('/checkout/aramex-rate', [CheckoutController::class, 'aramexRate'])
+    ->middleware('throttle:30,1')
+    ->name('checkout.aramex-rate');
 
 // Server-backed cart (replaces localStorage)
 Route::prefix('cart')->name('cart.')->middleware('throttle:120,1')->group(function () {
