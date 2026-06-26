@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\HeaderMenuController;
 use App\Http\Controllers\Admin\ShippingRateController;
 use App\Http\Controllers\Admin\ProductDiscountController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\CartController;
+
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -38,6 +40,17 @@ Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])
 Route::get('/checkout/stocks', [CheckoutController::class, 'stocks'])
     ->middleware('throttle:60,1')
     ->name('checkout.stocks');
+
+// Server-backed cart (replaces localStorage)
+Route::prefix('cart')->name('cart.')->middleware('throttle:120,1')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::patch('/update', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove', [CartController::class, 'remove'])->name('remove');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::post('/merge', [CartController::class, 'merge'])->name('merge');
+});
+
 Route::get('/payment/success', [PageController::class, 'paymentSuccess'])->name('pages.payment-success');
 Route::get('/faqs', [PageController::class, 'faqs'])->name('pages.faqs');
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('pages.privacy');

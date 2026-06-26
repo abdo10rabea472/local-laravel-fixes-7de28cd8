@@ -154,7 +154,9 @@
 @push('scripts')
 <script>
 (function () {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // السلة تأتي من الخادم عبر main.js (window.cart). نحافظ على مرجع محلي للقراءة فقط.
+    let cart = Array.isArray(window.cart) ? window.cart : [];
+
     const emptyEl = document.getElementById('checkout-empty');
     const contentEl = document.getElementById('checkout-content');
     const itemsEl = document.getElementById('checkout-items');
@@ -201,9 +203,11 @@
     }
 
     function saveCart() {
-        localStorage.setItem('cart', JSON.stringify(cart));
+        // الكتابة تتم على الخادم عبر دوال main.js (addToCart/changeQuantity/removeFromCart).
+        // هنا نُذكِّر فقط بتحديث الواجهة.
         document.dispatchEvent(new CustomEvent('cart:updated'));
     }
+
 
     // Map of productId -> stock fetched from server
     const stockMap = {};
@@ -300,7 +304,7 @@
     }
 
 
-    itemsEl.addEventListener('click', (e) => {
+    itemsEl.addEventListener('click', async (e) => {
         const btn = e.target.closest('button[data-action]');
         if (!btn) return;
         const id = btn.getAttribute('data-id');
@@ -308,29 +312,32 @@
         const idx = cart.findIndex(i => String(i.id) === String(id));
         if (idx === -1) return;
 
-        if (action === 'inc') {
-            const current = cart[idx].quantity || 1;
-            const max = Number(stockMap[cart[idx].id] ?? Infinity);
-            if (Number.isFinite(max) && current >= max) {
-                return; // silently cap at stock
+        btn.disabled = true;
+        try {
+            if (action === 'inc') {
+                const current = cart[idx].quantity || 1;
+                const max = Number(stockMap[cart[idx].id] ?? Infinity);
+                if (Number.isFinite(max) && current >= max) return;
+                await window.changeQuantity(id, +1);
+            } else if (action === 'dec') {
+                await window.changeQuantity(id, -1);
+            } else if (action === 'remove') {
+                await window.removeFromCart(id);
             }
-            cart[idx].quantity = current + 1;
-        } else if (action === 'dec') {
-
-
-            const newQty = (cart[idx].quantity || 1) - 1;
-            if (newQty <= 0) {
-                cart.splice(idx, 1);
-            } else {
-                cart[idx].quantity = newQty;
-            }
-        } else if (action === 'remove') {
-            cart.splice(idx, 1);
+        } finally {
+            btn.disabled = false;
         }
-
-        saveCart();
+        // window.cart مُحدّث الآن من السيرفر؛ زامن المرجع المحلي ثم أعد الرسم.
+        cart = window.cart;
         refreshView();
     });
+
+    // التزامن اللحظي: لو السلة الجانبية أو تبويب آخر عدّل السلة، أعد رسم Checkout مباشرة.
+    document.addEventListener('cart:updated', () => {
+        cart = window.cart || [];
+        refreshView();
+    });
+
 
 
 
@@ -538,7 +545,7 @@
                 return;
             }
             window.UL?.toast('✅ تم تأكيد الطلب بنجاح', 'success');
-            localStorage.removeItem('cart');
+            if (typeof window.clearCart === 'function') { try { await window.clearCart(); } catch (_) {} }
             window.location.href = json.redirect;
         } catch (e) {
             confirmBtn.disabled = false;
