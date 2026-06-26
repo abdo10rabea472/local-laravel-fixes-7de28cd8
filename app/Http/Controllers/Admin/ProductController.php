@@ -161,8 +161,12 @@ class ProductController extends Controller
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|string|max:255',
             'schema_markup' => 'nullable|string',
-            'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:4096',
+            'images' => 'nullable|array|max:5',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp,gif|max:4096',
+        ], [
+            'images.max' => 'الحد الأقصى 5 صور لكل منتج.',
+            'images.*.image' => 'الملف المرفوع يجب أن يكون صورة.',
+            'images.*.max' => 'حجم الصورة يجب أن لا يتجاوز 4 ميجابايت.',
         ]);
     }
 
@@ -172,9 +176,19 @@ class ProductController extends Controller
             return;
         }
 
+        // فرض الحد الأقصى الإجمالي = 5 (الصور الحالية + الجديدة)
+        $existingCount = $product->images()->count();
+        $removeCount = is_array($request->input('remove_images')) ? count($request->input('remove_images')) : 0;
+        $availableSlots = max(0, 5 - ($existingCount - $removeCount));
+
+        $files = array_slice($request->file('images'), 0, $availableSlots);
+        if (empty($files)) {
+            return;
+        }
+
         $sortOrder = $product->images()->max('sort_order') ?? 0;
 
-        foreach ($request->file('images') as $file) {
+        foreach ($files as $file) {
             $sortOrder++;
             $paths = $this->imageService->storeProductImages($file, $product->id);
             $product->images()->create(array_merge($paths, ['sort_order' => $sortOrder]));

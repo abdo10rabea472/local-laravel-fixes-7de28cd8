@@ -73,8 +73,15 @@
         </div>
 
         <div>
-            <label class="text-xs font-bold text-slate-500">صور المنتج (متعددة)</label>
-            <input type="file" name="images[]" multiple accept="image/*" class="w-full text-sm mt-1">
+            @php $currentCount = $product->exists ? $product->images->count() : 0; $remaining = max(0, 5 - $currentCount); @endphp
+            <label class="text-xs font-bold text-slate-500">
+                صور المنتج (حد أقصى 5 — متبقي {{ $remaining }})
+            </label>
+            <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp,image/gif"
+                   class="w-full text-sm mt-1" @if($remaining === 0) disabled @endif>
+            <p class="text-[11px] text-slate-400 mt-1">سيتم تحويل الصور تلقائيًا إلى WebP لتقليل الحجم. الحد الأقصى 4MB للصورة.</p>
+            @error('images') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
+            @error('images.*') <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
             @if($product->exists && $product->images->count())
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
                 @foreach($product->images as $image)
