@@ -30,19 +30,28 @@ use App\Http\Controllers\CartController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])
-    ->middleware('throttle:30,1')
-    ->name('checkout.apply-coupon');
-Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])
-    ->middleware('throttle:30,1')
-    ->name('checkout.place-order');
-Route::get('/checkout/stocks', [CheckoutController::class, 'stocks'])
-    ->middleware('throttle:60,1')
-    ->name('checkout.stocks');
-Route::post('/checkout/aramex-rate', [CheckoutController::class, 'aramexRate'])
-    ->middleware('throttle:30,1')
-    ->name('checkout.aramex-rate');
+// Checkout — all routes require an authenticated end-user (web guard).
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])
+        ->middleware('throttle:30,1')->name('checkout.apply-coupon');
+    Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])
+        ->middleware('throttle:30,1')->name('checkout.place-order');
+    Route::get('/checkout/stocks', [CheckoutController::class, 'stocks'])
+        ->middleware('throttle:60,1')->name('checkout.stocks');
+    Route::post('/checkout/aramex-rate', [CheckoutController::class, 'aramexRate'])
+        ->middleware('throttle:30,1')->name('checkout.aramex-rate');
+
+    // Payment lifecycle
+    Route::post('/checkout/{order}/pay', [\App\Http\Controllers\PaymentController::class, 'start'])
+        ->middleware('throttle:30,1')->name('checkout.pay');
+    Route::get('/checkout/{order}/completed', [\App\Http\Controllers\PaymentController::class, 'completed'])
+        ->name('checkout.completed');
+});
+
+// Public gateway return URL (must be GET/POST, CSRF-exempt for some gateways).
+Route::match(['get', 'post'], '/payments/verify/{payment?}', [\App\Http\Controllers\PaymentController::class, 'verify'])
+    ->name('verify-payment');
 
 // Server-backed cart (replaces localStorage)
 Route::prefix('cart')->name('cart.')->middleware('throttle:120,1')->group(function () {
