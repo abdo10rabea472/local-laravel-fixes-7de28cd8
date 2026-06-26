@@ -1,7 +1,6 @@
-// Initialize cart state from localStorage
-if (typeof window.cart === 'undefined') {
-    window.cart = JSON.parse(localStorage.getItem('cart')) || [];
-}
+// Cart state is initialized via server fetch in the cart system below.
+window.cart = window.cart || [];
+
 
 // Mobile menu controls
 const mobileMenu = document.getElementById("mobile-menu");
