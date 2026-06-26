@@ -156,7 +156,22 @@ class CheckoutController extends Controller
             'shipping_cost' => 'nullable|numeric|min:0',
             'shipping_carrier_id' => 'nullable|integer|exists:shipping_carriers,id',
             'notes' => 'nullable|string|max:1000',
+            'payment_gateway' => 'required|string|exists:payment_gateways,code',
         ]);
+
+        // Persist shipping defaults onto the user's profile so subsequent
+        // orders pre-fill automatically (no need to re-enter every time).
+        if ($user = Auth::user()) {
+            $user->forceFill(array_filter([
+                'name'              => $data['customer_name'] ?? $user->name,
+                'phone'             => $data['phone'] ?? $user->phone,
+                'shipping_country'  => $data['shipping_country'] ?? null,
+                'shipping_region'   => $data['shipping_region'] ?? null,
+                'shipping_city'     => $data['shipping_city'] ?? null,
+                'shipping_address'  => $data['shipping_address'] ?? null,
+                'shipping_postcode' => $data['shipping_postcode'] ?? null,
+            ], fn ($v) => $v !== null && $v !== ''))->save();
+        }
 
 
         $requested = [];
