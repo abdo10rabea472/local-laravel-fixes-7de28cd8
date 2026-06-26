@@ -43,7 +43,7 @@
                     @foreach($product->images as $image)
                     <button type="button" onclick="document.getElementById('main-product-image').src='{{ $image->getUrl('large') }}'"
                         class="aspect-square rounded-2xl border-2 border-transparent hover:border-violet-300 overflow-hidden bg-white p-1">
-                        <img src="{{ $image->getUrl('thumb') }}" alt="" class="w-full h-full object-contain">
+                        <img src="{{ $image->getUrl('thumb') }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-contain">
                     </button>
                     @endforeach
                 </div>
