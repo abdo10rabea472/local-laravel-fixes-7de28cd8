@@ -211,6 +211,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{order}', [\App\Http\Controllers\AccountController::class, 'order'])->name('orders.show');
         Route::get('/reviews', [\App\Http\Controllers\AccountController::class, 'reviews'])->name('reviews');
         Route::post('/reviews', [\App\Http\Controllers\AccountController::class, 'storeReview'])->name('reviews.store');
+
+        // Returns (RMA)
+        Route::get('/returns', [\App\Http\Controllers\CustomerReturnController::class, 'index'])->name('returns.index');
+        Route::get('/orders/{order}/return', [\App\Http\Controllers\CustomerReturnController::class, 'create'])->name('returns.create');
+        Route::post('/orders/{order}/return', [\App\Http\Controllers\CustomerReturnController::class, 'store'])->name('returns.store');
+        Route::get('/returns/{return}', [\App\Http\Controllers\CustomerReturnController::class, 'show'])->name('returns.show');
     });
 });
 
