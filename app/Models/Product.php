@@ -132,11 +132,15 @@ class Product extends Model
 
     protected function resolveActiveDiscount(): ?ProductDiscount
     {
-        if ($this->relationLoaded('activeDiscount')) {
-            return $this->getRelation('activeDiscount');
+        // Always cache via the relation slot to avoid repeated DB hits
+        // when multiple accessors (effective_price, compare_at_price,
+        // discount_percent) read this on the same model instance.
+        if (! $this->relationLoaded('activeDiscount')) {
+            $this->setRelation('activeDiscount', $this->activeDiscount()->first());
         }
-        return $this->activeDiscount()->first();
+        return $this->getRelation('activeDiscount');
     }
+
 
     public function getPrimaryImageAttribute(): ?ProductImage
     {
