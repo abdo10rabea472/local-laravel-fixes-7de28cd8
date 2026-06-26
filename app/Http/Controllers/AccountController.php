@@ -28,7 +28,7 @@ class AccountController extends Controller
     public function order(Order $order)
     {
         abort_unless($order->user_id === Auth::id(), 404);
-        $order->load(['items.product:id,slug,name', 'history']);
+        $order->load(['items.product:id,slug,name', 'history', 'carrier']);
         return view('account.order-show', compact('order'));
     }
 
