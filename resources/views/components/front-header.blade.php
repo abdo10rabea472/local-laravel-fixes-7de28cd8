@@ -170,8 +170,8 @@
                         <span id="cart-count" class="absolute -top-1 -right-1 h-5 min-w-[20px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold text-violet-700 bg-amber-300 ring-2 ring-white">0</span>
                     </button>
 
-                    <button type="button" id="mobile-menu-btn" class="lg:hidden h-11 w-11 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
-                        <i class="fa-solid fa-bars text-lg"></i>
+                    <button type="button" data-mobile-menu-toggle aria-controls="site-mobile-menu" aria-expanded="false" aria-label="Open menu" class="lg:hidden h-11 w-11 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                        <i data-mobile-menu-icon class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
             </div>
@@ -305,7 +305,7 @@
     </div>
 
     {{-- ═══ Mobile Menu ═══ --}}
-    <div id="mobile-menu" class="lg:hidden hidden bg-white border-b border-slate-200 max-h-[85vh] overflow-y-auto shadow-lg">
+    <div id="site-mobile-menu" data-mobile-menu-panel class="lg:hidden hidden bg-white border-b border-slate-200 max-h-[85vh] overflow-y-auto shadow-lg">
         <div class="px-4 py-4 space-y-4">
             <form action="{{ route('products.index') }}" method="get" class="relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
@@ -392,29 +392,3 @@
         </div>
     </div>
 </header>
-
-<script>
-(function () {
-    function initMobileMenu() {
-        document.addEventListener('click', function (e) {
-            var btn = e.target.closest('#mobile-menu-btn');
-            if (!btn) return;
-            e.preventDefault();
-            var menu = document.getElementById('mobile-menu');
-            if (!menu) return;
-            var isHidden = menu.classList.toggle('hidden');
-            btn.setAttribute('aria-expanded', String(!isHidden));
-            var icon = btn.querySelector('i');
-            if (icon) {
-                icon.classList.toggle('fa-bars', isHidden);
-                icon.classList.toggle('fa-xmark', !isHidden);
-            }
-        });
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMobileMenu);
-    } else {
-        initMobileMenu();
-    }
-})();
-</script>

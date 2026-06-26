@@ -1,22 +1,53 @@
 // Cart state is initialized via server fetch in the cart system below.
 window.cart = window.cart || [];
 
+// Mobile navigation menu
+(function () {
+    function initSiteMobileMenu() {
+        const button = document.querySelector('[data-mobile-menu-toggle]');
+        const menu = document.querySelector('[data-mobile-menu-panel]');
+        const icon = button ? button.querySelector('[data-mobile-menu-icon]') : null;
 
-// Mobile menu controls (event delegation — works even if script loads before DOM)
-document.addEventListener("click", (e) => {
-    const btn = e.target.closest("#mobile-menu-btn");
-    if (!btn) return;
-    e.preventDefault();
-    const menu = document.getElementById("mobile-menu");
-    if (!menu) return;
-    const isHidden = menu.classList.toggle("hidden");
-    btn.setAttribute("aria-expanded", String(!isHidden));
-    const icon = btn.querySelector("i");
-    if (icon) {
-        icon.classList.toggle("fa-bars", isHidden);
-        icon.classList.toggle("fa-xmark", !isHidden);
+        if (!button || !menu) return;
+
+        function setMenuOpen(open) {
+            menu.classList.toggle('hidden', !open);
+            button.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+            if (icon) {
+                icon.classList.toggle('fa-bars', !open);
+                icon.classList.toggle('fa-xmark', open);
+            }
+        }
+
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            setMenuOpen(menu.classList.contains('hidden'));
+        });
+
+        menu.addEventListener('click', function (event) {
+            const link = event.target.closest('a');
+            if (link) setMenuOpen(false);
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') setMenuOpen(false);
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 1024) setMenuOpen(false);
+        });
+
+        setMenuOpen(false);
     }
-});
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSiteMobileMenu, { once: true });
+    } else {
+        initSiteMobileMenu();
+    }
+})();
 
 // Shop by College dropdown (desktop)
 const collegesDropdown = document.getElementById("colleges-dropdown");
