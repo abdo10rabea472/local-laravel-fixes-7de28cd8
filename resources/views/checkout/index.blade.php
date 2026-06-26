@@ -175,12 +175,35 @@
     const applyCouponUrl = @json(route('checkout.apply-coupon'));
     const placeOrderUrl = @json(route('checkout.place-order'));
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+    const discountedProductIds = @json($discountedProductIds).map(String);
+    const discountNoticeEl = document.getElementById('coupon-discount-notice');
 
     let discountAmount = 0;
     let appliedCouponCode = null;
     let shippingCost = 0;
 
+    function cartHasDiscountedItem() {
+        return cart.some(i => discountedProductIds.includes(String(i.id)));
+    }
+
+    function syncCouponAvailability() {
+        const blocked = cartHasDiscountedItem();
+        discountNoticeEl.classList.toggle('hidden', !blocked);
+        applyCouponBtn.disabled = blocked;
+        couponInput.disabled = blocked;
+        if (blocked && appliedCouponCode) {
+            // Auto-remove any previously applied coupon
+            discountAmount = 0;
+            appliedCouponCode = null;
+            couponMsg.classList.add('hidden');
+            updateTotals();
+        }
+    }
+
     function saveCart() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+    }
         localStorage.setItem('cart', JSON.stringify(cart));
         document.dispatchEvent(new CustomEvent('cart:updated'));
     }
