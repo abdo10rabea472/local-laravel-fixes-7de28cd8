@@ -172,10 +172,16 @@ class CheckoutController extends Controller
                     }
                 }
 
+                $stockService = app(\App\Services\StockService::class);
                 foreach ($products as $product) {
-                    Product::where('id', $product->id)
-                        ->where('stock', '>=', $requested[$product->id])
-                        ->decrement('stock', (int) $requested[$product->id]);
+                    $stockService->apply(
+                        $product,
+                        -(int) $requested[$product->id],
+                        'order',
+                        'Order',
+                        null,
+                        'طلب جديد'
+                    );
                 }
 
                 // Build server-trusted items + totals

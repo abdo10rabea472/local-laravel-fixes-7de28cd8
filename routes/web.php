@@ -172,6 +172,25 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::post('/reviews/{review}/reply', [\App\Http\Controllers\Admin\ReviewController::class, 'reply'])->name('reviews.reply');
     Route::delete('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
 
+    // Stock Management
+    Route::get('/stock', [\App\Http\Controllers\Admin\StockController::class, 'index'])->name('stock.index');
+    Route::patch('/stock/{product}', [\App\Http\Controllers\Admin\StockController::class, 'update'])->name('stock.update');
+    Route::post('/stock/bulk-update', [\App\Http\Controllers\Admin\StockController::class, 'bulkUpdate'])->name('stock.bulk-update');
+    Route::get('/stock-history', [\App\Http\Controllers\Admin\StockController::class, 'history'])->name('stock.history');
+
+    // Shipping Carriers
+    Route::get('/shipping-carriers', [\App\Http\Controllers\Admin\ShippingCarrierController::class, 'index'])->name('shipping-carriers.index');
+    Route::post('/shipping-carriers', [\App\Http\Controllers\Admin\ShippingCarrierController::class, 'store'])->name('shipping-carriers.store');
+    Route::put('/shipping-carriers/{carrier}', [\App\Http\Controllers\Admin\ShippingCarrierController::class, 'update'])->name('shipping-carriers.update');
+    Route::patch('/shipping-carriers/{carrier}/toggle', [\App\Http\Controllers\Admin\ShippingCarrierController::class, 'toggle'])->name('shipping-carriers.toggle');
+    Route::delete('/shipping-carriers/{carrier}', [\App\Http\Controllers\Admin\ShippingCarrierController::class, 'destroy'])->name('shipping-carriers.destroy');
+
+    // Returns (RMA)
+    Route::get('/returns', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'index'])->name('returns.index');
+    Route::get('/returns/{return}', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'show'])->name('returns.show');
+    Route::patch('/returns/{return}/status', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'updateStatus'])->name('returns.status');
+    Route::delete('/returns/{return}', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'destroy'])->name('returns.destroy');
+
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 });
@@ -192,6 +211,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/{order}', [\App\Http\Controllers\AccountController::class, 'order'])->name('orders.show');
         Route::get('/reviews', [\App\Http\Controllers\AccountController::class, 'reviews'])->name('reviews');
         Route::post('/reviews', [\App\Http\Controllers\AccountController::class, 'storeReview'])->name('reviews.store');
+
+        // Returns (RMA)
+        Route::get('/returns', [\App\Http\Controllers\CustomerReturnController::class, 'index'])->name('returns.index');
+        Route::get('/orders/{order}/return', [\App\Http\Controllers\CustomerReturnController::class, 'create'])->name('returns.create');
+        Route::post('/orders/{order}/return', [\App\Http\Controllers\CustomerReturnController::class, 'store'])->name('returns.store');
+        Route::get('/returns/{return}', [\App\Http\Controllers\CustomerReturnController::class, 'show'])->name('returns.show');
     });
 });
 
