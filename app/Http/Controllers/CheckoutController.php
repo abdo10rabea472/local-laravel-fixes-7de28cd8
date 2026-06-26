@@ -314,12 +314,6 @@ class CheckoutController extends Controller
                     'changed_by_id' => Auth::id(),
                 ]);
 
-                // Clear cart
-                \App\Models\CartItem::query()
-                    ->when(Auth::id(), fn ($q) => $q->where('user_id', Auth::id()))
-                    ->when(! Auth::id(), fn ($q) => $q->where('session_id', session()->getId()))
-                    ->delete();
-
                 return $order;
             });
         } catch (\Throwable $e) {
