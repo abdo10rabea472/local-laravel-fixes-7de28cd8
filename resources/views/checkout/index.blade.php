@@ -205,6 +205,38 @@
         document.dispatchEvent(new CustomEvent('cart:updated'));
     }
 
+    // Map of productId -> stock fetched from server
+    const stockMap = {};
+    let stockFetchKey = '';
+
+    async function syncStocks() {
+        const ids = cart.map(i => i.id).filter(Boolean);
+        const key = ids.slice().sort((a, b) => a - b).join(',');
+        if (!key || key === stockFetchKey) return;
+        stockFetchKey = key;
+        try {
+            const res = await fetch(`{{ route('checkout.stocks') }}?ids=${encodeURIComponent(key)}`, {
+                headers: { 'Accept': 'application/json' },
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            Object.assign(stockMap, data.stocks || {});
+            // Clamp any over-stock quantities
+            let changed = false;
+            cart.forEach(item => {
+                const max = Number(stockMap[item.id] ?? Infinity);
+                if (Number.isFinite(max) && (item.quantity || 1) > max) {
+                    item.quantity = Math.max(1, max);
+                    changed = true;
+                }
+            });
+            if (changed) {
+                saveCart();
+                renderItems();
+            }
+        } catch (_) { /* ignore */ }
+    }
+
     function refreshView() {
         if (cart.length === 0) {
             emptyEl.classList.remove('hidden');
@@ -213,11 +245,13 @@
             emptyEl.classList.add('hidden');
             contentEl.classList.remove('hidden');
             renderItems();
+            syncStocks();
         }
         syncCouponAvailability();
     }
 
     refreshView();
+
 
     function renderItems() {
         itemsEl.innerHTML = '';
@@ -262,8 +296,19 @@
         if (idx === -1) return;
 
         if (action === 'inc') {
-            cart[idx].quantity = (cart[idx].quantity || 1) + 1;
+            const current = cart[idx].quantity || 1;
+            const max = Number(stockMap[cart[idx].id] ?? Infinity);
+            if (Number.isFinite(max) && current >= max) {
+                if (typeof window.toast === 'function') {
+                    window.toast(`الحد الأقصى المتاح في المخزون: ${max}`, 'warning');
+                } else {
+                    alert(`الحد الأقصى المتاح في المخزون: ${max}`);
+                }
+                return;
+            }
+            cart[idx].quantity = current + 1;
         } else if (action === 'dec') {
+
             const newQty = (cart[idx].quantity || 1) - 1;
             if (newQty <= 0) {
                 cart.splice(idx, 1);
