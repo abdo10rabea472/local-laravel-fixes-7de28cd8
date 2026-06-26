@@ -159,6 +159,7 @@ class CheckoutController extends Controller
             'shipping_carrier_id' => 'nullable|integer|exists:shipping_carriers,id',
             'notes' => 'nullable|string|max:1000',
             'payment_gateway' => 'required|string|exists:payment_gateways,code',
+            'payment_channel' => 'nullable|string|in:card,wallet',
         ]);
 
         // Persist shipping defaults onto the user's profile so subsequent
@@ -342,7 +343,7 @@ class CheckoutController extends Controller
             'ok' => true,
             'order_id' => $createdOrder->id,
             'order_number' => $createdOrder->order_number,
-            'redirect' => route('checkout.pay', ['order' => $createdOrder->id]) . '?gateway=' . urlencode($data['payment_gateway']),
+            'redirect' => route('checkout.pay', ['order' => $createdOrder->id]) . '?gateway=' . urlencode($data['payment_gateway']) . (! empty($data['payment_channel']) ? '&channel=' . urlencode($data['payment_channel']) : ''),
             'pay_url'  => route('checkout.pay', ['order' => $createdOrder->id]),
             'gateway'  => $data['payment_gateway'],
         ]);
