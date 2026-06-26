@@ -6,6 +6,32 @@
 @php
     $adminName = optional(auth('admin')->user())->name ?? 'المدير';
     $fmt = fn($n) => number_format((float) $n);
+
+    // حساب نسب التغير (آخر 7 أيام مقابل السابقة) من بيانات حقيقية
+    $salesTrend = 0; $ordersTrend = 0; $customersTrend = 0;
+    if (\Illuminate\Support\Facades\Schema::hasTable('orders')) {
+        $paid = ['paid','shipped','delivered'];
+        $cur  = (float) \App\Models\Order::whereIn('status',$paid)->where('created_at','>=',now()->subDays(7))->sum('total');
+        $prev = (float) \App\Models\Order::whereIn('status',$paid)->whereBetween('created_at',[now()->subDays(14),now()->subDays(7)])->sum('total');
+        $salesTrend = $prev > 0 ? round((($cur-$prev)/$prev)*100,1) : ($cur>0?100:0);
+
+        $curO  = \App\Models\Order::where('status','delivered')->where('created_at','>=',now()->subDays(7))->count();
+        $prevO = \App\Models\Order::where('status','delivered')->whereBetween('created_at',[now()->subDays(14),now()->subDays(7)])->count();
+        $ordersTrend = $prevO > 0 ? round((($curO-$prevO)/$prevO)*100,1) : ($curO>0?100:0);
+    }
+    if (\Illuminate\Support\Facades\Schema::hasTable('users')) {
+        $curU  = \App\Models\User::where('created_at','>=',now()->subDays(7))->count();
+        $prevU = \App\Models\User::whereBetween('created_at',[now()->subDays(14),now()->subDays(7)])->count();
+        $customersTrend = $prevU > 0 ? round((($curU-$prevU)/$prevU)*100,1) : ($curU>0?100:0);
+    }
+    $trendBadge = function($v){
+        if ($v > 0) return ['text-emerald-500','fa-arrow-up','+'.$v.'%'];
+        if ($v < 0) return ['text-red-500','fa-arrow-down',$v.'%'];
+        return ['text-gray-400','fa-minus','0%'];
+    };
+    [$sC,$sI,$sT] = $trendBadge($salesTrend);
+    [$oC,$oI,$oT] = $trendBadge($ordersTrend);
+    [$cC,$cI,$cT] = $trendBadge($customersTrend);
 @endphp
 
 <div class="space-y-6">
