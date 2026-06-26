@@ -136,6 +136,7 @@
                     @if(request('in_stock'))<input type="hidden" name="in_stock" value="1">@endif
                 </form>
 
+            <div id="products-results" class="flex-1 min-w-0 transition-opacity">
                 @if($products->isNotEmpty())
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4">
                     @foreach($products as $product)
