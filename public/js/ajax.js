@@ -149,5 +149,88 @@
         }
     });
 
-    window.UL = { request, json, swap, toast, withLoading };
+    // ---------- AJAX form submission (handles Laravel 422 validation + redirects) ----------
+    function renderFormErrors(form, errors) {
+        // Clear previous AJAX errors
+        form.querySelectorAll('[data-ul-error]').forEach((el) => el.remove());
+        Object.entries(errors || {}).forEach(([field, messages]) => {
+            const input = form.querySelector(`[name="${field}"], [name="${field}[]"]`);
+            if (!input) return;
+            const msg = Array.isArray(messages) ? messages[0] : String(messages);
+            const span = document.createElement('p');
+            span.setAttribute('data-ul-error', '1');
+            span.className = 'text-sm text-red-600 dark:text-red-400 mt-1';
+            span.textContent = msg;
+            (input.parentElement || form).appendChild(span);
+        });
+    }
+
+    async function submitForm(form, { onSuccess, onError, successToast } = {}) {
+        if (!form) return;
+        const submitBtn = form.querySelector('button[type="submit"], [type="submit"]');
+        form.querySelectorAll('[data-ul-error]').forEach((el) => el.remove());
+        const url = form.action;
+        const method = (form.getAttribute('method') || 'POST').toUpperCase();
+        const fd = new FormData(form);
+        // Laravel method spoofing → real verb is in _method, fetch must POST
+        const realMethod = (fd.get('_method') || method).toString().toUpperCase();
+        const fetchMethod = ['GET', 'HEAD'].includes(realMethod) ? realMethod : 'POST';
+
+        const exec = async () => {
+            try {
+                const res = await fetch(url, {
+                    method: fetchMethod,
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': CSRF,
+                    },
+                    body: fetchMethod === 'GET' ? undefined : fd,
+                });
+                if (res.status === 422) {
+                    const data = await res.json().catch(() => ({}));
+                    renderFormErrors(form, data.errors || {});
+                    toast(data.message || 'يرجى مراجعة الحقول.', 'error');
+                    onError && onError(data);
+                    return;
+                }
+                if (res.redirected) {
+                    if (successToast) toast(successToast, 'success');
+                    if (onSuccess) onSuccess({ redirect: res.url });
+                    else window.location.href = res.url;
+                    return;
+                }
+                let data = null;
+                try { data = await res.json(); } catch (_) {}
+                if (!res.ok) {
+                    const msg = (data && (data.message || data.error)) || `Error (${res.status})`;
+                    toast(msg, 'error');
+                    onError && onError(data);
+                    return;
+                }
+                if (successToast) toast(successToast, 'success');
+                if (onSuccess) onSuccess(data || {});
+                else if (data && data.redirect) window.location.href = data.redirect;
+            } catch (e) {
+                console.error('submitForm failed', e);
+                toast('تعذّر الاتصال بالخادم.', 'error');
+                onError && onError({ message: e.message });
+            }
+        };
+
+        return submitBtn ? withLoading(submitBtn, exec) : exec();
+    }
+
+    // Auto-enable: any form with data-ajax attribute
+    document.addEventListener('submit', (e) => {
+        const form = e.target.closest('form[data-ajax]');
+        if (!form) return;
+        e.preventDefault();
+        const successToast = form.dataset.successToast || null;
+        submitForm(form, { successToast });
+    });
+
+    window.UL = { request, json, swap, toast, withLoading, submitForm };
 })();
+
