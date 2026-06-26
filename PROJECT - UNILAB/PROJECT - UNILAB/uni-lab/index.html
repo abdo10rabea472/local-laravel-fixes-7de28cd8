@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNI-LAB MARKET</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Hero Section - القسم الرئيسي في أعلى الصفحة -->
+  <!-- Hero Section -->
+  <section class="hero relative min-h-screen flex items-center overflow-hidden">
+
+    <!-- خلفية متدرجة داكنة (Gradient Background) -->
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950"></div>
+
+    <!-- صورة خلفية مع تأثير Overlay (شفافية + مزج) -->
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071')] 
+              bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+
+    <!-- الحاوية الرئيسية التي تحتوي على المحتوى -->
+    <div class="container mx-auto px-6 relative z-10 pt-20 pb-16">
+      <div class="max-w-4xl">
+
+        <!-- Trust Badge - علامة الثقة (Trusted by...) -->
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 
+                  rounded-full px-6 py-2.5 text-sm text-white mb-8">
+          <span class="text-amber-400 text-lg">✦</span>
+          <span class="font-medium">Trusted by 10,000+ students</span>
+        </div>
+
+        <!-- العنوان الرئيسي (Headline) -->
+        <h1 class="text-5xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6">
+          Professional Tools for<br>
+          <!-- كلمات ملونة بتدرج لوني -->
+          <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Future Professionals
+          </span>
+        </h1>
+
+        <!-- النص الفرعي -->
+        <p class="text-xl text-slate-300 max-w-2xl mb-10 leading-relaxed">
+          Your one-stop shop for premium educational equipment. From medical instruments
+          and nursing tools to engineering kits, art supplies, and scientific instruments.
+        </p>
+
+        <!-- مجموعة الأزرار -->
+        <div class="flex flex-wrap gap-4 mb-16">
+
+          <!-- زر Browse All Products -->
+          <a href="./All-product.html" class="group inline-flex items-center justify-center gap-3 bg-amber-400 hover:bg-amber-500 
+                  text-slate-950 font-semibold text-lg px-10 py-4 rounded-2xl transition-all 
+                  duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1v-5m10-10l2 2m-2-2v10a1 1 0 01-1 1v-5m-6 0a1 1 0 001-1v5" />
+            </svg>
+            Browse All Products
+          </a>
+
+          <!-- زر Explore Colleges -->
+          <a href="./Medicine.html" class="group inline-flex items-center justify-center gap-3 border-2 border-white/70 hover:border-white 
+                  text-white font-semibold text-lg px-10 py-4 rounded-2xl transition-all duration-300 
+                  hover:bg-white/10">
+            Explore Colleges
+            <!-- أيقونة سهم -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:translate-x-1"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <!-- إحصائيات الموقع (Stats) -->
+        <div class="grid grid-cols-3 gap-8">
+
+          <!-- إحصائية 1 اي هو عدد المنتجات اللي ف الموقع-->
+          <div class="stat-item">
+            <div class="text-4xl lg:text-5xl font-bold text-white mb-1">500+</div>
+            <div class="text-slate-400 text-lg">Premium Products</div>
+          </div>
+
+          <!-- إحصائية 2  اي اللي هي عدد الكليات-->
+          <div class="stat-item">
+            <div class="text-4xl lg:text-5xl font-bold text-white mb-1">3</div>
+            <div class="text-slate-400 text-lg">Colleges</div>
+          </div>
+
+          <!-- إحصائية 3 اي اللي هي عدد الأقسام -->
+          <div class="stat-item">
+            <div class="text-4xl lg:text-5xl font-bold text-white mb-1">10+</div>
+            <div class="text-slate-400 text-lg">Departments</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- عنصر زخرفي في الخلفية (Decorative Element) - يظهر فقط على الشاشات الكبيرة -->
+    <div class="absolute bottom-10 right-10 hidden xl:block">
+      <div class="w-64 h-64 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+    </div>
+  </section>
+
+
+  <!-- قسم "Shop by College" - قسم عرض الكليات -->
+  <!-- Shop by College - Light Theme with Darker Cards -->
+  <section class="py-20 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+    <div class="container">
+
+      <!-- الحاوية الرئيسية للقسم -->
+      <div class="container mx-auto px-6 relative z-10">
+
+        <!-- Header القسم (العنوان + الوصف) -->
+        <div class="text-center mb-16">
+
+          <!-- Badge صغير فوق العنوان -->
+          <div
+            class="inline-flex items-center gap-2 bg-violet-100 text-violet-700 border border-violet-200 rounded-full px-5 py-2 text-sm font-medium mb-4">
+            <span>🏛️</span>
+            <span>Specialized Equipment</span>
+          </div>
+
+          <!-- العنوان الرئيسي -->
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight mb-4">
+            Shop by College
+          </h2>
+
+          <!-- الوصف الفرعي -->
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Premium tools and instruments tailored for each academic discipline
+          </p>
+        </div>
+
+        <br>
+      </div>
+      <!-- شبكة الكليات (Cards Grid) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        <!-- 1. بطاقة كلية الطب (Medicine) -->
+        <a href="./Medicine.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-emerald-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/10">
+
+          <!-- شريط لوني علوي -->
+          <div class="h-1.5 bg-gradient-to-r from-emerald-400 to-cyan-400"></div>
+
+          <div class="p-6 flex flex-col h-full">
+
+            <!-- أيقونة الكلية -->
+            <div
+              class="h-14 w-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-emerald-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11 2v2M5 2v2M5 3H4a2 2 0 00-2 2v4a6 6 0 0012 0V5a2 2 0 00-2-2h-1M8 15a6 6 0 0012 0v-3" />
+                <circle cx="20" cy="10" r="2" />
+              </svg>
+            </div>
+
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Medicine</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">High-quality medical instruments and clinical
+              supplies.</p>
+
+            <!-- رابط "Explore" -->
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-emerald-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2. بطاقة كلية الهندسة (Engineering) -->
+        <a href="./Engineering.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-blue-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-blue-400 to-cyan-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 21V5a2 2 0 01-2 2H7a2 2 0 01-2 2v16m14 0h2m-2 0h-5m-4 0H3" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 11v6m-3-3h6" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Engineering</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Professional tools for all engineering
+              disciplines.</p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 3. بطاقة كلية الفنون الجميلة (Fine Arts) -->
+        <a href="./Fine art.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-rose-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-rose-400 to-purple-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-rose-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2 2 2 0 012-2 2 2 0 01-2-2z" />
+                <circle cx="13.5" cy="6.5" r="0.5" fill="currentColor" />
+                <circle cx="17.5" cy="10.5" r="0.5" fill="currentColor" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Fine Arts</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Premium supplies for artists and design students.
+            </p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-rose-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 4. بطاقة كلية التمريض (Nursing) -->
+        <a href="./Nursing.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-pink-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-pink-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-pink-400 to-rose-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-pink-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-pink-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M17 14v6m-4-3v3m-4-6v6M3 12h18M3 8h18M3 16h18" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Nursing</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Clinical training equipment and patient care
+              tools.</p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-pink-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 5. بطاقة كلية الصيدلة (Pharmacy) -->
+        <a href="./Pharmacy.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-violet-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-violet-400 to-purple-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-violet-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-violet-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Pharmacy</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Pharmaceutical instruments, compounding tools &
+              lab equipment.</p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-violet-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 6. بطاقة كلية العلوم (Sciences) -->
+        <a href="./Sciences.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-amber-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-amber-400 to-yellow-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-amber-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-amber-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h.01M14 18h.01" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Sciences</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Physics, Chemistry & Biology laboratory equipment.
+            </p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-amber-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- 7. بطاقة كلية علوم الحاسب (Computer Science) -->
+        <a href="./Computer Science.html"
+          class="group relative bg-slate-100 border border-slate-300 hover:border-indigo-500 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-500/10">
+          <div class="h-1.5 bg-gradient-to-r from-indigo-400 to-blue-400"></div>
+          <div class="p-6 flex flex-col h-full">
+            <div
+              class="h-14 w-14 rounded-2xl bg-indigo-100 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h.01M10 14h.01" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Computer Science</h3>
+            <p class="text-gray-600 text-sm flex-1 mb-5 line-clamp-3">Electronics, robotics kits, and programming tools.
+            </p>
+            <div
+              class="text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors flex items-center gap-1">
+              Explore Collection <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- قسم السلايدر (Carousel / Image Slider) -->
+  <section class="py-20 bg-slate-50">
+
+    <!-- الحاوية الرئيسية للتحكم في العرض والمسافات -->
+    <div class="container mx-auto px-4">
+
+      <!-- wrapper خارجي للسلايدر -->
+      <div class="slider">
+
+        <!-- Swiper Container - المكون الرئيسي لمكتبة Swiper.js -->
+        <div class="swiper slide-swp">
+
+          <!-- Swiper Wrapper - يحتوي على جميع السلايدات -->
+          <div class="swiper-wrapper">
+
+            <!-- سلايد 1 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <!-- صورة السلايد الأولى -->
+                <img src="./imges/index/111.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 2 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/222.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 3 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/333.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 4 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/444.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 5 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/555.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 6 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/666.png" alt="">
+              </a>
+            </div>
+
+            <!-- سلايد 7 -->
+            <div class="swiper-slide">
+              <a href="#">
+                <img src="./imges/index/777.png" alt="">
+              </a>
+            </div>
+
+          </div>
+
+          <!-- شريط النقاط (Pagination) - يظهر أسفل السلايدر للتنقل بين الصور -->
+          <div class="swiper-pagination"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- قسم العروض والخصومات (Deals / Special Offers) -->
+  <section class="py-16">
+
+    <!-- الحاوية الرئيسية للقسم مع تحديد العرض الأقصى -->
+    <div class="max-w-7xl mx-auto px-4">
+
+      <!-- شبكة البطاقات (Grid) - 1 عمود على الموبايل، 4 أعمدة على الشاشات الكبيرة -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- بطاقة العرض 1 -->
+        <a href="#"
+          class="group relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+
+          <!-- دائرة زخرفية في الخلفية (Decorative Circle) -->
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full"></div>
+
+          <div class="relative z-10">
+
+            <!-- badge الخصم -->
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full">
+              UP TO 70% OFF
+            </span>
+
+            <!-- عنوان المنتج -->
+            <h3 class="mt-3 text-lg font-bold">Brake Disc</h3>
+
+            <!-- منطقة النسبة + الصورة -->
+            <div class="flex items-center justify-between mt-4">
+              <div>
+                <div class="text-3xl font-extrabold text-blue-600">70%</div>
+                <div class="text-sm text-slate-500">Discount</div>
+              </div>
+
+              <!-- صورة المنتج -->
+              <img src="./imges/products/514DxPDgAJL._AC_SX679_.jpg"
+                class="w-24 h-24 object-contain group-hover:scale-110 transition">
+            </div>
+
+            <!-- زر "Shop Now" -->
+            <p class="mt-3 text-blue-600 font-semibold">Shop Now →</p>
+          </div>
+        </a>
+
+        <!-- بطاقة العرض 2 -->
+        <a href="#"
+          class="group relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-green-100 rounded-full"></div>
+
+          <div class="relative z-10">
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full">
+              UP TO 50% OFF
+            </span>
+
+            <h3 class="mt-3 text-lg font-bold">Medical Tools</h3>
+
+            <div class="flex items-center justify-between mt-4">
+              <div>
+                <div class="text-3xl font-extrabold text-green-600">50%</div>
+                <div class="text-sm text-slate-500">Discount</div>
+              </div>
+
+              <img src="./imges/products/3Ring_Style_Syringe_1-450x450.jpg-removebg-preview.png"
+                class="w-24 h-24 object-contain group-hover:scale-110 transition">
+            </div>
+
+            <p class="mt-3 text-green-600 font-semibold">Shop Now →</p>
+          </div>
+        </a>
+
+        <!-- بطاقة العرض 3 -->
+        <a href="#"
+          class="group relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-100 rounded-full"></div>
+
+          <div class="relative z-10">
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full">
+              UP TO 40% OFF
+            </span>
+
+            <h3 class="mt-3 text-lg font-bold">Multimeter</h3>
+
+            <div class="flex items-center justify-between mt-4">
+              <div>
+                <div class="text-3xl font-extrabold text-purple-600">40%</div>
+                <div class="text-sm text-slate-500">Discount</div>
+              </div>
+
+              <img src="./imges/Engineering/Digital multimeter.webp"
+                class="w-24 h-24 object-contain group-hover:scale-110 transition">
+            </div>
+
+            <p class="mt-3 text-purple-600 font-semibold">Shop Now →</p>
+          </div>
+        </a>
+
+        <!-- بطاقة العرض 4 -->
+        <a href="#"
+          class="group relative overflow-hidden rounded-3xl bg-white border border-slate-200 p-5 shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-100 rounded-full"></div>
+
+          <div class="relative z-10">
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full">
+              UP TO 60% OFF
+            </span>
+
+            <h3 class="mt-3 text-lg font-bold">Drawing Set</h3>
+
+            <div class="flex items-center justify-between mt-4">
+              <div>
+                <div class="text-3xl font-extrabold text-orange-600">60%</div>
+                <div class="text-sm text-slate-500">Discount</div>
+              </div>
+
+              <img src="./imges/Engineering/Drawing set.webp"
+                class="w-24 h-24 object-contain group-hover:scale-110 transition">
+            </div>
+
+            <p class="mt-3 text-orange-600 font-semibold">Shop Now →</p>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- products -->
+  <section class="products bg-gradient-to-b from-gray-50 to-white py-20">
+    <div class="container mx-auto px-4">
+
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <div
+            class="inline-flex items-center gap-2 bg-violet-100 text-violet-700 px-5 py-2 rounded-full text-sm font-semibold mb-3">
+            ⭐ TOP RATED
+          </div>
+          <h2 class="text-4xl md:text-4xl font-bold text-gray-900 tracking-tight">Top Rated Products</h2>
+          <p class="mt-3 text-lg text-gray-600 max-w-md">Highly recommended by students and professionals</p>
+        </div>
+
+        <a href="./All-product.html"
+          class="group inline-flex items-center justify-center bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-2xl text-sm font-semibold h-12 px-8 gap-3 transition-all hover:-translate-y-0.5 shadow-lg shadow-violet-500/30">
+          View All Products
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:translate-x-1"
+            fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+            <path d="M5 12h14" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="m12 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+      </div>
+      <div class="cards grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="1" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-emerald-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Clinical Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/71RNtfCLkxL._AC_SX679_.jpg" alt="Dental Anesthetic Injection">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping"></span> Critical Stock: 3 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-emerald-600 transition-colors duration-300 line-clamp-1">
+                  Dental Anesthetic Injection</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality dental
+                  anesthetic injection containing Lidocaine, designed to provide fast and effective local anesthesia
+                  during dental procedures</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">700.00 <span
+                      class="text-[11px] font-extrabold text-emerald-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-emerald-500 group-hover:to-emerald-600 group-hover:text-white group-hover:border-emerald-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- SAVE 15% -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="2" data-category="Engineering">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-4 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-cyan-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Electrical Engineering
+              </span>
+              <div
+                class="absolute top-4 right-4 z-10 bg-gradient-to-br from-rose-500 to-red-600 text-white font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(244,63,94,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-6 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
+                SAVE 15%
+              </div>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Engineering/Soldering iron.webp" alt="Scalpel Sterile Blades">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span> Only 12 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-700 transition-colors duration-300 line-clamp-1">
+                  Soldering iron</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A reliable soldering
+                  iron designed for assembling and repairing electronic circuits with precision and ease It provides
+                  stable heat for melting solder, making it and electronic projects</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">4775.00 <span
+                      class="text-[11px] font-extrabold text-cyan-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-cyan-500 group-hover:to-cyan-600 group-hover:text-white group-hover:border-cyan-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="3" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-emerald-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Training Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/PHOTO-2026-04-12-14-23-32.jpg" alt="Endo training teeth">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-emerald-600 transition-colors duration-300 line-clamp-1">
+                  Endo training teeth</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality
+                  endodontic training model teeth set designed for practicing root canal procedures in a simulated
+                  clinical environment.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1299.00 <span
+                      class="text-[11px] font-extrabold text-emerald-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-emerald-500 group-hover:to-emerald-600 group-hover:text-white group-hover:border-emerald-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- OUT -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/40 overflow-hidden opacity-75 transition-all duration-300"
+          data-id="4" data-category="medicine">
+          <div class="absolute inset-0 bg-slate-100/20 backdrop-blur-[1px] z-20 pointer-events-none"></div>
+          <a href="javascript:void(0)" class="block flex-1 flex flex-col cursor-not-allowed focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50/70 overflow-hidden flex items-center justify-center p-4 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white/80 text-slate-400 border border-slate-200/40 uppercase tracking-widest">
+                Electrical Engineering
+              </span>
+              <span
+                class="absolute inset-0 m-auto h-fit w-fit z-30 px-4 py-2 text-xs font-black rounded-xl bg-slate-900/90 text-white shadow-xl uppercase tracking-widest backdrop-blur-sm border border-white/10 transform -rotate-3">
+                Sold Out
+              </span>
+              <img class="max-h-full max-w-full object-contain filter grayscale opacity-40"
+                src="./imges/Engineering/Oscilloscope.jpeg" alt="Anatomy Model Set">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-slate-50/30">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Out of Stock
+                  </span>
+                </div>
+                <h2 class="text-base font-extrabold text-slate-400 tracking-tight line-clamp-1">Oscilloscope</h2>
+                <p class="text-xs text-slate-400/80 mt-2 font-medium leading-relaxed line-clamp-2">A powerful electronic
+                  testing device used to visualize and analyze electrical signals in real-time, making it essential for
+                  circuit design, troubleshooting, and lab experiments.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-300">
+                  <div class="flex text-slate-300 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-200/60">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-400 font-mono tracking-tight">7599.00 <span
+                      class="text-[11px] font-extrabold text-slate-300 ml-0.5">EGP</span></span>
+                </div>
+                <button disabled
+                  class="h-12 w-12 rounded-2xl bg-slate-100 text-slate-300 flex items-center justify-center border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] cursor-not-allowed focus:outline-none">
+                  <i class="fa-solid fa-ban text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- SAVE 15% -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="5" data-category="Painting">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Painting
+              </span>
+              <div
+                class="absolute top-4 right-4 z-10 bg-gradient-to-br from-rose-500 to-red-600 text-white font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(244,63,94,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-6 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
+                SAVE 15%
+              </div>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Fine Arts/Basic paint sets.webp" alt="Basic paint sets">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span> Only 12 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Basic paint sets</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A beginner-friendly
+                  basic paint set designed for students to practice color mixing, shading, and painting techniques
+                  includes essential colors suitable for learning and art skills</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1359.00 <span
+                      class="text-[11px] font-extrabold text-violet-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="6" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-emerald-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Diagnostic Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/tweezerwal4_1024x.webp" alt="Dental Tweezers">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-emerald-600 transition-colors duration-300 line-clamp-1">
+                  Dental Tweezers</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A precision dental
+                  instrument used for holding, transferring, and placing small materials during dental procedures inside
+                  the oral cavity.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">399.00 <span
+                      class="text-[11px] font-extrabold text-emerald-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-emerald-500 group-hover:to-emerald-600 group-hover:text-white group-hover:border-emerald-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="7" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-4 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-cyan-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Electrical Engineering
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Engineering/Digital multimeter.webp" alt="Professional Stethoscope">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-md border border-cyan-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse"></span> In Stock (34 items)
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-cyan-700 transition-colors duration-300 line-clamp-1">
+                  Digital multimeter</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A versatile digital
+                  multimeter designed to measure voltage, current, and resistance with high accuracy, making it an
+                  essential tool for electrical engineering and troubleshooting.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">599.00 <span
+                      class="text-[11px] font-extrabold text-cyan-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-cyan-500 group-hover:to-cyan-600 group-hover:text-white group-hover:border-cyan-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="8" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-pink-500 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Clinical Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Nursing/syringes-filled-with-liquid-inside-white-background-view-from-multiple-hypodermic-4.jpg"
+                alt="Dental Anesthetic Injection">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping"></span> Critical Stock: 3 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-pink-500 transition-colors duration-300 line-clamp-1">
+                  Dental Anesthetic Injection</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality dental
+                  anesthetic injection containing Lidocaine, designed to provide fast and effective local anesthesia
+                  during dental procedures</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">700.00 <span
+                      class="text-[11px] font-extrabold text-pink-500 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-pink-100 text-pink-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-pink-500 group-hover:to-pink-600 group-hover:text-white group-hover:border-pink-600 group-hover:shadow-[0_10px_20px_rgba(236,72,153,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="9" data-category="Sculpture">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Sculpture
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Fine Arts/Professional brushes.webp" alt="Dental contra high speed">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-600 transition-colors duration-300 line-clamp-1">
+                  Professional brushes</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A set of high-quality
+                  professional brushes designed for detailed painting and artistic expression.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1299.00 <span
+                      class="text-[11px] font-extrabold text-violet-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="10" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-pink-500 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Diagnostic Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Nursing/stethoscope-isolated-white-surface-2.jpg" alt="Professional Stethoscope">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock (34 items)
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-pink-500 transition-colors duration-300 line-clamp-1">
+                  Professional Stethoscope</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality
+                  stethoscope designed for accurate auscultation of heart, lung, and body sounds, making it an essential
+                  tool for medical students</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1599.00 <span
+                      class="text-[11px] font-extrabold text-pink-500 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-pink-100 text-pink-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-pink-500 group-hover:to-pink-600 group-hover:text-white group-hover:border-pink-600 group-hover:shadow-[0_10px_20px_rgba(244,63,94,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- BEST SELLER -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="11" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-4 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-cyan-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Civil Engineering
+              </span>
+              <div
+                class="absolute top-4 right-4 z-10 bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-[10px] px-2.5 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(245,158,11,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-2 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
+                BEST SELLER
+              </div>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Engineering/s-l1600.webp" alt="Electronic theodolite">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-cyan-600 bg-cyan-50 px-2 py-0.5 rounded-md border border-cyan-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-cyan-500 animate-pulse"></span> Available in stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-text-cyan-700 transition-colors duration-300 line-clamp-1">
+                  Electronic theodolite</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-precision
+                  electronic surveying instrument used for measuring horizontal and vertical angles in construction and
+                  civil engineering projects</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1299.00 <span
+                      class="text-[11px] font-extrabold text-cyan-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-cyan-500 group-hover:to-cyan-600 group-hover:text-white group-hover:border-cyan-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="12" data-category="Painting">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Painting
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/Fine Arts/Proportion divider.jpeg" alt="Proportion divider">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock (34 items)
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Proportion divider</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A precision proportion
+                  divider tool used to accurately measure and transfer proportions in drawing and sculpture It helps
+                  maintain correct scale and accuracy in artistic and technical work</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">250.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-slate-100 text-slate-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(16,185,129,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+
+      <!-- عنوان Features -->
+      <div class="section-title">
+        <h2>Features</h2>
+        <p>Everything you need to shop with confidence</p>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="features-grid">
+
+        <!-- Feature 1 -->
+        <div class="feature">
+          <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="#4338ca"
+              stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+          </div>
+          <h3>Fast Shipping</h3>
+          <p>Get your products delivered quickly and reliably.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature">
+          <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="#10b981"
+              stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 8.944 11.922.42.095.858.143 1.295.143a3 3 0 01.86-.143" />
+            </svg>
+          </div>
+          <h3>Secure Payments</h3>
+          <p>Shop with confidence using our secure payment options.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature">
+          <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="#f59e0b"
+              stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 8h2a2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2 2 2 0 01-2-2 2 2 0 012-2zm0 0V9a2 2 0 00-2-2M5 8h2a2 2 0 012 2 2 2 0 01-2 2 2 2 0 01-2-2 2 2 0 012-2z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 20h18M3 16h18" />
+            </svg>
+          </div>
+          <h3>24/7 Support</h3>
+          <p>Our support team is here to assist you anytime.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature">
+          <div class="icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="#8b5cf6"
+              stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 9v6l7 4 7-4V9" />
+            </svg>
+          </div>
+          <h3>Student Discounts</h3>
+          <p>Special pricing for students.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- JS -->
+  <script src="./js/main.js"></script>
+  <script defer src="./js/swiper.js"></script>
+
+</body>
+
+</html>

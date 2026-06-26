@@ -1,0 +1,390 @@
+/* =========================
+   Hero Slider
+========================= */
+
+.slider {
+  position: relative;
+  width: 100%;
+}
+
+.slide-swp {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.slide-swp .swiper-wrapper {
+  height: 100%;
+}
+
+.slide-swp .swiper-slide {
+  overflow: hidden;
+}
+
+.slide-swp .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  max-height: 550px;
+  object-fit: inherit;
+  border-radius: 24px;
+  transition: transform 0.6s ease;
+}
+
+.slide-swp .swiper-slide:hover img {
+  transform: scale(1.03);
+}
+
+/* Pagination */
+
+.slide-swp .swiper-pagination {
+  bottom: 20px !important;
+}
+
+.slide-swp .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #cbd5e1;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.slide-swp .swiper-pagination-bullet-active {
+  width: 32px !important;
+  height: 10px !important;
+  border-radius: 999px !important;
+  background: #2563eb !important;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+@media (min-width: 768px) {
+  .grid-cols-md-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .card {
+    flex: 2 2 calc(20% - 25px);
+  }
+}
+
+@media (max-width: 576px) {
+  .card {
+    flex: 1 1 100%;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (min-width: 640px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 2fr));
+  }
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1280px) {
+  .xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .container {
+    max-width: 1400px;
+  }
+}
+
+
+
+
+/*  */
+
+/* product */
+.products {
+  background: hsl(220deg 14% 92% / 30%);
+  min-height: 100vh;
+}
+.p-y {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  font-size: 32px;
+  color: #111111;
+}
+
+.section-header p {
+  color: #888888;
+}
+
+.view-products {
+  padding: 10px 18px;
+  border: 1px solid #ddd;
+  background: #f7f6f6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-decoration: none;
+  color: #111111;
+}
+
+.view-products:hover {
+  background: #233b6e;
+  color: #fff;
+}
+
+.cards {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #2ea79b;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.image {
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.card-content h2 {
+  margin: 15px 0;
+  color: #111111;
+  font-size: 18px;
+}
+
+.card-content p {
+  font-size: 14px;
+  color: #888888;
+  margin-bottom: 10px;
+}
+
+.rating {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.add-btn {
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background-color: #0563f0;
+  opacity: 0.85;
+}
+
+@media (min-width: 640px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 2fr));
+  }
+  .container {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1280px) {
+  .xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .container {
+    max-width: 1400px;
+  }
+}
+
+
+
+
+
+
+
+
+/* ====================================================================================================================== */
+
+/* features */
+.features {
+  background: #f8f8f8;
+  padding: 80px 0;
+}
+
+.features .container {
+  margin: auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title h2 {
+  font-size: 35px;
+  font-weight: 400;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.section-title p {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.features-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.feature {
+  flex: 1 1 calc(25% - 25px);
+  background: #fff;
+  padding: 40px 25px;
+  text-align: center;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.feature:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.icon-wrapper {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: #f1f5f9;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+}
+
+.feature h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.feature p {
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .feature {
+    flex: 1 1 calc(50% - 25px);
+  }
+}
+
+@media (max-width: 576px) {
+  .feature {
+    flex: 1 1 100%;
+  }
+
+  .section-title h2 {
+    font-size: 34px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+}

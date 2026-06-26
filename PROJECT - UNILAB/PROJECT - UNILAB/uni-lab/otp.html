@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Code & Reset Password</title>
+  <link rel="stylesheet" href="./css/otp.css">
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <!-- STEP 1: OTP -->
+    <div id="otpStep">
+      <h2>Verify Code</h2>
+      <p>Enter the 6-digit code sent to your phone</p>
+
+      <div class="otp-inputs">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+        <input type="text" maxlength="1">
+      </div>
+
+      <span class="error" id="otpError"></span>
+
+      <button id="verifyBtn">Verify Code</button>
+
+      <p class="resend">Didn't receive code? <span id="resend">Resend</span></p>
+    </div>
+
+    <!-- STEP 2: RESET PASSWORD -->
+    <div id="resetStep" class="hidden">
+      <h2>Reset Password</h2>
+      <p>Create a new password</p>
+
+      <input type="password" id="newPass" placeholder="New Password">
+      <input type="password" id="confirmPass" placeholder="Confirm Password">
+
+      <span class="error" id="passError"></span>
+
+      <button id="resetBtn">Update Password</button>
+
+      <p class="success" id="successMsg"></p>
+    </div>
+
+  </div>
+</div>
+
+<script src="./js/otp.js"></script>
+</body>
+</html>

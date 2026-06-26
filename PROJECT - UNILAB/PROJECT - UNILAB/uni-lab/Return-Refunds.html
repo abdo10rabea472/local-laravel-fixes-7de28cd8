@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Returns & Refunds Policy - Practical College Tools. Clear and fair policy for laboratory equipment and scientific tools.">
+  <title>Returns & Refunds | Practical College Tools</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./css/ss.css">
+  <link rel="stylesheet" href="./css/Return-Refunds.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-bg text-white">
+    <div class="container">
+    <div class="max-w-screen-2xl mx-auto px-6 py-20 lg:py-24">
+      <div class="max-w-3xl mx-auto text-center">
+        <div
+          class="inline-flex items-center gap-x-3 bg-white/20 backdrop-blur-md px-6 py-2.5 rounded-3xl text-sm font-medium mb-6">
+          <i class="fa-solid fa-rotate-left"></i>
+          Hassle-Free Returns
+        </div>
+
+        <h1 class="text-5xl lg:text-7xl font-bold tracking-tighter leading-none mb-6">
+          Returns & Refunds
+        </h1>
+
+        <p class="text-xl text-white/90 max-w-2xl mx-auto">
+          We want you to be completely satisfied with your laboratory equipment and Practical tools.
+          Here's our clear and fair return policy.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-10 text-sm">
+          <div class="flex items-center gap-x-2">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span>Last updated: April 15, 2026</span>
+          </div>
+          <div class="flex items-center gap-x-2">
+            <i class="fa-solid fa-clock"></i>
+            <span>30-Day Return Window</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <main class="max-w-screen-2xl mx-auto px-6 py-12">
+   <div class="container">
+    <!-- Table of Contents -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-12 border">
+      <h2 class="text-xl font-semibold mb-6 flex items-center gap-x-3">
+        <i class="fa-solid fa-list-check text-teal-700"></i>
+        Table of Contents
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <a onclick="scrollToSection('overview')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">01</span>
+          <span>Overview</span>
+        </a>
+        <a onclick="scrollToSection('eligibility')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">02</span>
+          <span>Eligibility for Returns</span>
+        </a>
+        <a onclick="scrollToSection('process')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">03</span>
+          <span>Return Process</span>
+        </a>
+        <a onclick="scrollToSection('refunds')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">04</span>
+          <span>Refunds</span>
+        </a>
+        <a onclick="scrollToSection('exceptions')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">05</span>
+          <span>Non-Returnable Items</span>
+        </a>
+        <a onclick="scrollToSection('contact')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">06</span>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Overview -->
+    <section id="overview" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">01
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Overview</h2>
+      </div>
+      <p class="text-lg leading-relaxed text-slate-700">
+        At <strong>Practical College Tools</strong>, we stand behind the quality of our laboratory equipment and
+        scientific instruments.
+        If you're not completely satisfied with your purchase, you may return most items within <strong>30 days</strong>
+        of delivery.
+      </p>
+      <div class="mt-8 bg-teal-50 border border-teal-200 rounded-2xl p-6 flex items-start gap-4">
+        <i class="fa-solid fa-info-circle text-teal-600 text-2xl mt-1"></i>
+        <p class="text-slate-700">
+          All returns must be in original condition, with all accessories, manuals, and packaging included.
+        </p>
+      </div>
+    </section>
+
+    <!-- Eligibility -->
+    <section id="eligibility" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">02
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Eligibility for Returns</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <div class="flex gap-5">
+            <div
+              class="icon-box w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
+              ✅</div>
+            <div>
+              <h4 class="font-semibold">Item is defective or damaged</h4>
+              <p class="text-slate-600">Upon arrival or within the warranty period</p>
+            </div>
+          </div>
+          <div class="flex gap-5">
+            <div
+              class="icon-box w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
+              📦</div>
+            <div>
+              <h4 class="font-semibold">Wrong item received</h4>
+              <p class="text-slate-600">We will arrange a free replacement or refund</p>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="flex gap-5">
+            <div
+              class="icon-box w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">
+              🔄</div>
+            <div>
+              <h4 class="font-semibold">Change of mind</h4>
+              <p class="text-slate-600">For most standard items (restocking fee may apply for large equipment)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Return Process -->
+    <section id="process" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">03
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">How to Return an Item</h2>
+      </div>
+      <div class="space-y-8">
+        <div class="flex gap-6 bg-slate-50 p-7 rounded-3xl">
+          <div class="font-mono text-4xl text-teal-700 font-bold w-10">1</div>
+          <div>
+            <h4 class="font-semibold text-lg">Contact Us First</h4>
+            <p class="text-slate-700">Email <strong>returns@practicaltools.com</strong> or call us with your order
+              number and reason for return.</p>
+          </div>
+        </div>
+        <div class="flex gap-6 bg-slate-50 p-7 rounded-3xl">
+          <div class="font-mono text-4xl text-teal-700 font-bold w-10">2</div>
+          <div>
+            <h4 class="font-semibold text-lg">Receive Return Approval</h4>
+            <p class="text-slate-700">We will provide you with a Return Authorization (RA) number and shipping
+              instructions.</p>
+          </div>
+        </div>
+        <div class="flex gap-6 bg-slate-50 p-7 rounded-3xl">
+          <div class="font-mono text-4xl text-teal-700 font-bold w-10">3</div>
+          <div>
+            <h4 class="font-semibold text-lg">Ship the Item Back</h4>
+            <p class="text-slate-700">Pack the item securely in its original packaging and ship it to the address
+              provided.</p>
+          </div>
+        </div>
+        <div class="flex gap-6 bg-slate-50 p-7 rounded-3xl">
+          <div class="font-mono text-4xl text-teal-700 font-bold w-10">4</div>
+          <div>
+            <h4 class="font-semibold text-lg">Receive Refund or Replacement</h4>
+            <p class="text-slate-700">Once we receive and inspect the item, we will process your refund or send a
+              replacement.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Refunds -->
+    <section id="refunds" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">04
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Refunds</h2>
+      </div>
+      <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-10">
+        <div class="grid md:grid-cols-2 gap-10">
+          <div>
+            <h3 class="font-semibold text-xl mb-4">Refund Timeline</h3>
+            <ul class="space-y-4">
+              <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-600"></i> <span>Once
+                  inspected: 2–5 business days</span></li>
+              <li class="flex items-center gap-3"><i class="fa-solid fa-check text-emerald-600"></i> <span>Original
+                  payment method: 5–10 business days</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-xl mb-4">What is Refunded</h3>
+            <p class="text-slate-700">• Full item price (if eligible)<br>
+              • Shipping cost (only if the return is due to our error)</p>
+            <p class="mt-4 text-amber-600 text-sm">• Return shipping fees are paid by the customer unless the item is
+              defective or incorrect.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Non-Returnable Items -->
+    <section id="exceptions" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">05
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Non-Returnable Items</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-6 bg-red-50 border border-red-100 rounded-3xl">
+          <p class="font-medium text-red-700 mb-3">• Opened chemicals and reagents</p>
+          <p class="font-medium text-red-700 mb-3">• Used or installed glassware &amp; consumables</p>
+          <p class="font-medium text-red-700 mb-3">• Customized or engraved equipment</p>
+        </div>
+        <div class="p-6 bg-red-50 border border-red-100 rounded-3xl">
+          <p class="font-medium text-red-700 mb-3">• Perishable or time-sensitive materials</p>
+          <p class="font-medium text-red-700 mb-3">• Items marked as “Final Sale” or “Non-Returnable”</p>
+          <p class="font-medium text-red-700">• Special bulk orders for universities (case by case)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact"
+      class="policy-card bg-gradient-to-br from-teal-700 to-teal-900 text-white rounded-3xl shadow-sm p-10 lg:p-14">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div class="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center text-2xl font-bold">06</div>
+        <h2 class="text-4xl font-semibold tracking-tight text-white">Need Help?</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="space-y-8">
+          <div class="flex gap-x-5">
+            <i class="fa-solid fa-envelope text-3xl w-8"></i>
+            <div>
+              <p class="font-medium">Returns Email</p>
+              <a href="mailto:returns@practicaltools.com" class="hover:underline">returns@practicaltools.com</a>
+            </div>
+          </div>
+          <div class="flex gap-x-5">
+            <i class="fa-solid fa-phone text-3xl w-8"></i>
+            <div>
+              <p class="font-medium">Phone</p>
+              <a href="tel:+201123456789" class="hover:underline">+20 112 345 6789</a>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 text-center flex flex-col justify-center">
+          <p class="text-2xl font-semibold mb-4">Our team is ready to assist you</p>
+          <p class="text-white/80 mb-8">We respond to return requests within 24–48 hours</p>
+          <button onclick="window.location.href='mailto:returns@practicaltools.com'"
+            class="bg-white text-teal-800 font-semibold py-4 px-10 rounded-3xl hover:scale-105 transition-transform inline-flex items-center gap-x-3 mx-auto">
+            <i class="fa-solid fa-paper-plane"></i>
+            Start a Return
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="./js/main.js"></script>
+  <script src="./js/zzzzz.js"></script>
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const icon = document.getElementById('menu-icon');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        icon.classList.replace('fa-bars', 'fa-xmark');
+      } else {
+        menu.classList.add('hidden');
+        icon.classList.replace('fa-xmark', 'fa-bars');
+      }
+    }
+
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = 90;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - offset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+    }
+
+    window.onload = () => {
+      console.log('%c✅ Returns & Refunds Page Ready - Professional & Responsive', 'color:#0f766e; font-size:14px;');
+    };
+  </script>
+</body>
+
+</html>

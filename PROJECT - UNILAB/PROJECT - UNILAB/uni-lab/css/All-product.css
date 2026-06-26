@@ -1,0 +1,408 @@
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.products-page {
+  background: hsl(220deg 14% 92% / 30%);
+}
+
+.p-y {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  color: hsl(222 47% 11%);
+  font-family: sans-serif;
+  font-weight: 700;
+}
+
+.search-box {
+  gap: 1rem;
+  display: flex;
+}
+
+.search-input {
+  flex: 1 1 0%;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-input input {
+  padding-left: 2.5rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  padding-right: .75rem;
+  background-color: hsl(0 0% 100%);
+  border: 1px solid hsl(220 13% 88%);
+  border-radius: .5rem;
+  width: 100%;
+  height: 2.5rem;
+  display: flex;
+}
+
+.icon-search {
+  width: 1rem;
+  height: 1rem;
+  top: 30%;
+  position: absolute;
+  left: .75rem;
+}
+
+/* btn */
+.filter-button {
+  font-weight: 500;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  background-color: hsl(220 20% 97%);
+  color: hsl(222 47% 11%);
+  border: 1px solid #e2e2e2;
+  border-radius: .5rem;
+  white-space: nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  display: inline-flex;
+  padding: .5rem 1rem !important;
+  gap: .5rem;
+}
+
+.filter-button:hover {
+  background: hsl(45 93% 58%);
+}
+
+/* svg */
+.filter-select{
+  width: 1rem;
+  height: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .lg\:hidden {
+    display: none;
+  }
+}
+
+.hidden {
+  /* display: none; */
+}
+
+@media (min-width: 1024px) {
+  .lg\:block {
+    display: block;
+  }
+}
+
+.products-layout {
+  display: flex;
+  gap: 2rem;
+}
+
+.filter {
+  width: 18rem;
+}
+
+.sidebar {
+  margin-top: 10px;
+  background: hsl(0 0% 100%);
+  padding: 1.5rem;
+  border: 1px solid hsl(220 13% 88%);
+  border-radius: .75rem;
+  height: 290px;
+}
+
+.sidebar h3 {
+  font-weight: 600;
+  margin-bottom: 0 !important;
+}
+
+.filter-group {
+  margin-top: 2.5rem;
+}
+
+.filter-group label {
+  display: block;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.filter-group select,
+.filter-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: .5rem;
+  background-color: hsl(220 20% 97%);
+  border: 1px solid hsl(220 13% 88%);
+  font-size: .875rem;
+  line-height: 1.25rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
+
+
+
+  /* Responsive - products */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 2fr));
+  }
+
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .container {
+    max-width: 1400px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ====================== Filter Cart (Sidebar Filters) ====================== */
+.filter-cart {
+  position: fixed;
+  top: 0;
+  left: -100%;                    
+  bottom: 0;
+  z-index: 1100;
+  background: #f5f6f7;
+  border-right: 1px solid #000000;
+  width: 85%;                     
+  max-width: 380px;               
+  padding: 20px 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: left 0.35s ease-in-out;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);        
+  overflow-y: auto;    
+}
+
+.filter-cart.activee {
+  left: 0;
+}
+
+/* Top bar */
+.filter-cart .top_cart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.filter-cart .top_cart h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.filter-cart .top_cart .close_cart i {
+  cursor: pointer;
+  font-size: 28px;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.filter-cart .top_cart .close_cart i:hover {
+  color: #000;
+}
+
+/* Content */
+.filter-cart .items_in_cart {
+  flex: 1;
+  padding-top: 3.5rem;
+}
+
+/* Sidebar داخل الفلاتر */
+.sidebar-cart {
+  background: hsl(0, 0%, 100%);
+  padding: 1.25rem;
+  border: 1px solid #dcdde0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-cart h3 {
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+}
+
+.filter-group {
+  margin-bottom: 1.75rem;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.filter-group select,
+.filter-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ====================== Media Queries ====================== */
+
+/* Small Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .filter-cart {
+    width: 88%;
+    padding: 18px 14px 18px 18px;
+  }
+  
+  .sidebar-cart {
+    padding: 1.1rem;
+  }
+}
+
+/* Mobile to Tablet (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .filter-cart {
+    width: 75%;
+    max-width: 360px;
+    padding: 24px 18px;
+  }
+}
+
+/* Tablet / Small Laptop (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .filter-cart {
+    width: 42%;
+    max-width: 380px;
+    left: -42%;
+    padding: 1.75rem;
+  }
+
+  .filter-cart.activee {
+    left: 0;
+  }
+
+  .sidebar-cart {
+    padding: 1.5rem;
+  }
+
+  .filter-group {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Desktop / Laptop (1024px - 1399px) */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .filter-cart {
+    width: 36%;
+    max-width: 380px;
+    left: -36%;
+    padding: 2rem;
+  }
+
+  .filter-cart.activee {
+    left: 0;
+  }
+}
+
+/* Large Desktop & Big Monitors (≥ 1400px) */
+@media (min-width: 1400px) {
+  .filter-cart {
+    width: 320px;
+    max-width: 380px;
+    left: -340px;
+    padding: 2rem;
+  }
+
+  .filter-cart.activee {
+    left: 0;
+  }
+
+  .sidebar-cart {
+    padding: 1.75rem;
+  }
+}
+
+/* Extra Large Screens (اختياري - للشاشات العملاقة) */
+@media (min-width: 1920px) {
+  .filter-cart {
+    width: 300px;
+    left: -320px;
+  }
+}

@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+body {
+  font-family: "Inter", system-ui, sans-serif;
+}
+.product-image {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.thumbnail:hover {
+  border-color: #3b82f6;
+  transform: scale(1.05);
+}
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+}

@@ -1,0 +1,48 @@
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    * {
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);
+    }
+
+    .section-header::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 70px;
+      height: 4px;
+      background: #0f766e;
+      border-radius: 9999px;
+    }
+
+    .policy-card {
+      transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    .policy-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px -15px rgb(15 118 110 / 0.2);
+    }
+
+    .nav-link {
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #0f766e;
+      transform: translateY(-2px);
+    }
+
+    .icon-box {
+      transition: all 0.3s ease;
+    }

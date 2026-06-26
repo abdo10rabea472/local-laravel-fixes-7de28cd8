@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/Checkout.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* تأثيرات الحركة وظهور الخانات السلس لحقول الدفع وكود الخصم */
+    #vodafone-details,
+    #card-details,
+    #fawry-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+    }
+
+    #vodafone-details.active,
+    #card-details.active,
+    #fawry-details.active {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 10px;
+    }
+
+    /* أنيميشن منزلق خاص بحقل كود الخصم الاحترافي الجديد */
+    #coupon-accordion {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+      opacity: 0;
+    }
+
+    #coupon-accordion.open {
+      max-height: 100px;
+      opacity: 1;
+      margin-top: 12px;
+    }
+
+    .form-input-custom {
+      width: 100%;
+      height: 40px;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 14px;
+      background-color: #fff;
+    }
+
+    .form-input-custom:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 131, 246, 0.2);
+    }
+
+    .error-msg {
+      color: #ef4444;
+      font-size: 12px;
+      display: none;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10 w-full">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <div class="container py-8">
+      <div class="bg-muted/30 min-h-screen w-full">
+
+        <div class="flex items-center gap-4 mb-8">
+          <a class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium bg h-10 w-10"
+            href="./All-product.html">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-arrow-left h-5 w-5">
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+          </a>
+          <h1 class="text-3xl font-bold text-foreground">Checkout</h1>
+        </div>
+
+        <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mm">
+          <form class="w-full items-center px-7 pl-10" id="checkout-form">
+            <div class="bg-card rounded-xl border border-border p-6 mb-4">
+              <div class="flex items-center gap-2 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-truck h-5 w-5 text-muted-foreground">
+                  <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path>
+                  <path d="M15 18H9"></path>
+                  <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path>
+                  <circle cx="17" cy="18" r="2"></circle>
+                  <circle cx="7" cy="18" r="2"></circle>
+                </svg>
+                <h2 class="font-semibold text-lg">Shipping Information</h2>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="text-sm font-medium" for="firstName">First Name</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="firstName" placeholder="John" required>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm font-medium" for="lastName">Last Name</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="lastName" placeholder="Doe" required>
+                </div>
+                <div class="space-y-2 sm:col-span-2">
+                  <label class="text-sm font-medium" for="email">Email</label>
+                  <input type="email"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" id="email"
+                    placeholder="john@university.edu" required>
+                </div>
+                <div class="space-y-2 sm:col-span-2">
+                  <label class="text-sm font-medium" for="address">Address</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="address" placeholder="123 University Ave" required>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm font-medium" for="Phone_number">Phone Number</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="Phone_number" placeholder="01xxxxxxxxx" required>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm font-medium" for="city">City</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="city" placeholder="City" required>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm font-medium" for="zip">ZIP Code</label>
+                  <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    id="zip" placeholder="12345" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-card rounded-xl border border-border p-6">
+              <div class="payment-card grid gap-4 sm:grid-cols-1">
+                <h2 class="section-title">
+                  <i class="fa-solid fa-credit-card text-primary"></i>
+                  Payment Method
+                </h2>
+
+                <label class="method-option" id="label-vodafone">
+                  <input type="radio" name="paymentMethod" value="vodafone">
+                  <div class="icon-box">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                  </div>
+                  <div class="method-content">
+                    <h3>Vodafone Cash</h3>
+                    <p>Pay securely using your Vodafone Cash wallet</p>
+
+                    <div id="vodafone-details">
+                      <div class="pt-3 space-y-2">
+                        <label class="text-sm font-medium text-slate-700">Vodafone Cash Phone Number</label>
+                        <input type="text" id="v-phone" class="form-input-custom" placeholder="010xxxxxxxxx"
+                          maxlength="11">
+                        <p id="v-error" class="error-msg">Please enter a valid 11-digit Egyptian number (010, 011, 012,
+                          015).</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selection-check">
+                    <i class="fa-solid fa-circle-check fa-lg"></i>
+                  </div>
+                </label>
+
+                <label class="method-option" id="label-card">
+                  <input type="radio" name="paymentMethod" value="card">
+                  <div class="icon-box">
+                    <i class="fa-solid fa-credit-card"></i>
+                  </div>
+                  <div class="method-content">
+                    <h3>Credit / Debit Card</h3>
+                    <p>Pay with Visa, Mastercard, or Meeza</p>
+
+                    <div id="card-details">
+                      <div class="pt-3 space-y-3">
+                        <div class="space-y-1">
+                          <label class="text-sm font-medium text-slate-700">Card Number</label>
+                          <input type="text" id="card-num" class="form-input-custom" placeholder="4242 •••• •••• ••••"
+                            maxlength="19">
+                          <p id="card-num-error" class="error-msg">Please enter a valid 16-digit card number.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                          <div class="space-y-1">
+                            <label class="text-sm font-medium text-slate-700">Expiry Date</label>
+                            <input type="text" id="card-expiry" class="form-input-custom" placeholder="MM/YY"
+                              maxlength="5">
+                            <p id="card-expiry-error" class="error-msg">Use MM/YY format.</p>
+                          </div>
+                          <div class="space-y-1">
+                            <label class="text-sm font-medium text-slate-700">CVV</label>
+                            <input type="password" id="card-cvv" class="form-input-custom" placeholder="•••"
+                              maxlength="3">
+                            <p id="card-cvv-error" class="error-msg">Invalid CVV (3 digits).</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selection-check">
+                    <i class="fa-solid fa-circle-check fa-lg"></i>
+                  </div>
+                </label>
+
+                <label class="method-option" id="label-fawry">
+                  <input type="radio" name="paymentMethod" value="fawry">
+                  <div class="icon-box">
+                    <i class="fa-solid fa-money-bill-text"></i>
+                  </div>
+                  <div class="method-content">
+                    <h3>Fawry</h3>
+                    <p>Pay via any Fawry POS or retail outlet</p>
+
+                    <div id="fawry-details">
+                      <div class="pt-2 text-xs text-blue-600 bg-blue-50 p-3 rounded-lg border border-blue-100 mt-2">
+                        <i class="fa-solid fa-circle-info mr-1"></i>
+                        A unique Fawry reference code will be generated for your order upon confirming payment. You can
+                        use it to pay at any outlet within 48 hours.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="selection-check">
+                    <i class="fa-solid fa-circle-check fa-lg"></i>
+                  </div>
+                </label>
+
+                <label class="method-option" id="label-cod">
+                  <input type="radio" name="paymentMethod" value="cod">
+                  <div class="icon-box">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                  </div>
+                  <div class="method-content">
+                    <h3>Cash on Delivery</h3>
+                    <p>Pay in cash when your order arrives – no payment now</p>
+                  </div>
+                  <div class="selection-check">
+                    <i class="fa-solid fa-circle-check fa-lg"></i>
+                  </div>
+                </label>
+
+                <div class="trust-badges">
+                  <div class="badge-item"><i class="fa-solid fa-lock"></i><span>Secure Payment</span></div>
+                  <div class="badge-item"><i class="fa-solid fa-truck-fast"></i><span>Fast Delivery</span></div>
+                  <div class="badge-item"><i class="fa-solid fa-shield-halved"></i><span>Safe Checkout</span></div>
+                </div>
+
+                <a id="confirm-btn" type="button" class="btn-confirm" href="./payment_success.html" disabled>
+                  Confirm Payment
+                </a>
+              </div>
+            </div>
+          </form>
+
+          <div class="">
+            <div class="bg-card rounded-xl border border-border p-6 sticky top-24 shadow-sm">
+              <h2 class="font-semibold text-lg mb-4">Order Summary</h2>
+
+              <div class="space-y-4 mb-5">
+                <div class="flex gap-3">
+                  <div class="h-16 w-16 flex-shrink-0 rounded-lg bg-muted overflow-hidden">
+                    <img src="./imges/products/3Ring_Style_Syringe_1-450x450.jpg-removebg-preview.png"
+                      style="object-fit: cover;" alt="Oil Paint Master Set" class="h-full w-full object-cover">
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-sm line-clamp-1">Oil Paint Master Set</p>
+                    <p class="text-sm text-muted-foreground">Qty: 1</p>
+                  </div>
+                  <p class="font-medium">149.99 EGP</p>
+                </div>
+              </div>
+
+              <div class="border-t border-dashed border-border pt-4 space-y-2 text-sm">
+                <div class="flex justify-between"><span class="text-muted-foreground">Subtotal</span><span
+                    class="text-foreground font-medium">149.99 EGP</span></div>
+                <div class="flex justify-between"><span class="text-muted-foreground">Shipping</span><span
+                    class="text-emerald-600 font-medium">Free</span></div>
+                <div class="flex justify-between"><span class="text-muted-foreground">Tax</span><span
+                    class="text-foreground font-medium">12.00 EGP</span></div>
+
+                <div class="flex justify-between text-emerald-600 font-medium hidden" id="discount-row">
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-tag text-xs"></i> Promo Discount
+                  </span>
+                  <span id="discount-amount">-0.00 EGP</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2 border-t border-border">
+                <button type="button" id="toggle-coupon-btn"
+                  class="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center justify-between w-full focus:outline-none">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-percent text-xs"></i> Have a promo
+                    code?</span>
+                  <span id="accordion-arrow" class="text-xs transition-transform duration-200"><i
+                      class="fa-solid fa-chevron-down"></i></span>
+                </button>
+
+                <div id="coupon-accordion">
+                  <div class="flex gap-2">
+                    <input type="text" id="coupon-code"
+                      class="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm flex-1 uppercase tracking-wider focus:ring-1 focus:ring-blue-500"
+                      placeholder="e.g. SAVE10">
+                    <button type="button" id="apply-coupon-btn"
+                      class="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition shadow-sm">Apply</button>
+                  </div>
+                </div>
+                <p id="coupon-message" class="text-xs mt-2 font-medium hidden"></p>
+              </div>
+
+              <div class="border-t border-border mt-4 pt-4">
+                <div class="flex justify-between font-bold text-xl text-slate-900">
+                  <span>Total</span>
+                  <span id="total-price-display">161.99 EGP</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const radios = document.querySelectorAll('input[name="paymentMethod"]');
+      const options = document.querySelectorAll('.method-option');
+
+      const vodafoneDetails = document.getElementById('vodafone-details');
+      const cardDetails = document.getElementById('card-details');
+      const fawryDetails = document.getElementById('fawry-details');
+
+      const phoneInput = document.getElementById('v-phone');
+      const cardNumInput = document.getElementById('card-num');
+      const cardExpiryInput = document.getElementById('card-expiry');
+      const cardCvvInput = document.getElementById('card-cvv');
+      const confirmBtn = document.getElementById('confirm-btn');
+
+      const vError = document.getElementById('v-error');
+      const cardNumError = document.getElementById('card-num-error');
+      const cardExpiryError = document.getElementById('card-expiry-error');
+      const cardCvvError = document.getElementById('card-cvv-error');
+
+      // عناصر كود الخصم بالتنسيق الجديد
+      const toggleCouponBtn = document.getElementById('toggle-coupon-btn');
+      const couponAccordion = document.getElementById('coupon-accordion');
+      const arrowIcon = document.getElementById('accordion-arrow');
+      const couponInput = document.getElementById('coupon-code');
+      const applyCouponBtn = document.getElementById('apply-coupon-btn');
+      const couponMessage = document.getElementById('coupon-message');
+      const discountRow = document.getElementById('discount-row');
+      const discountAmountDisplay = document.getElementById('discount-amount');
+      const totalPriceDisplay = document.getElementById('total-price-display');
+
+      let originalTotal = 161.99;
+
+      // 1. فتح وإغلاق حقل كود الخصم بالأنيميشن المنزلق الاحترافي
+      toggleCouponBtn.addEventListener('click', function () {
+        couponAccordion.classList.toggle('open');
+        // تدوير السهم الصغير
+        if (couponAccordion.classList.contains('open')) {
+          arrowIcon.style.transform = 'rotate(180deg)';
+          setTimeout(() => couponInput.focus(), 200);
+        } else {
+          arrowIcon.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // منطق التحقق وتطبيق الأكواد التجريبية (NEW20 و SAVE10)
+      applyCouponBtn.addEventListener('click', function () {
+        const code = couponInput.value.trim().toUpperCase();
+
+        if (code === "") {
+          showCouponResponse("Please enter a coupon code.", "text-red-500 bg-red-50 p-2 rounded border border-red-200");
+          return;
+        }
+
+        if (code === "NEW20" || code === "SAVE10") {
+          let discountValue = code === "NEW20" ? 20.00 : 10.00;
+          let newTotal = originalTotal - discountValue;
+
+          discountAmountDisplay.innerText = `-${discountValue.toFixed(2)} EGP`;
+          totalPriceDisplay.innerText = `${newTotal.toFixed(2)} EGP`;
+
+          discountRow.classList.remove('hidden');
+          showCouponResponse(`🎉 Success! Promo code "${code}" applied (-${discountValue} EGP)`, "text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200");
+
+          // غلق قائمة الأكورديون بعد النجاح لإخفاء الحقل وحفظ المساحة
+          couponAccordion.classList.remove('open');
+          arrowIcon.style.transform = 'rotate(0deg)';
+          toggleCouponBtn.style.pointerEvents = 'none'; // تعطيل الضغط مجدداً
+          toggleCouponBtn.innerHTML = `<span class="text-emerald-600 flex items-center gap-2"><i class="fa-solid fa-circle-check"></i> Code "${code}" Active</span>`;
+        } else {
+          discountRow.classList.add('hidden');
+          totalPriceDisplay.innerText = `${originalTotal.toFixed(2)} EGP`;
+          showCouponResponse("⚠️ Invalid coupon code. Please check and try again.", "text-red-500 bg-red-50 p-2 rounded border border-red-200");
+        }
+      });
+
+      function showCouponResponse(msg, cssClasses) {
+        couponMessage.innerText = msg;
+        couponMessage.className = `text-xs mt-2 font-medium ${cssClasses}`;
+        couponMessage.classList.remove('hidden');
+      }
+
+      // 2. التحكم في فتح وإغلاق تبويبات طرق الدفع عند الاختيار
+      radios.forEach(radio => {
+        radio.addEventListener('change', function () {
+          options.forEach(opt => opt.classList.remove('selected'));
+          this.closest('.method-option').classList.add('selected');
+
+          vodafoneDetails.classList.remove('active');
+          cardDetails.classList.remove('active');
+          fawryDetails.classList.remove('active');
+
+          hideAllErrors();
+
+          if (this.value === 'vodafone') {
+            vodafoneDetails.classList.add('active');
+            setTimeout(() => phoneInput.focus(), 300);
+          } else if (this.value === 'card') {
+            cardDetails.classList.add('active');
+            setTimeout(() => cardNumInput.focus(), 300);
+          } else if (this.value === 'fawry') {
+            fawryDetails.classList.add('active');
+          }
+
+          validateForm();
+        });
+      });
+
+      // 3. تحسين مدخلات خانة الكاش وفلترتها (أرقام فقط)
+      phoneInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+        validateForm();
+      });
+
+      // 4. تنسيق رقم البطاقة تلقائياً (إضافة مسافة كل 4 أرقام)
+      cardNumInput.addEventListener('input', function () {
+        let txt = this.value.replace(/\s+/g, '').replace(/\D/g, '');
+        let matches = txt.match(/\d{4,16}/g);
+        let match = matches && matches[0] || '';
+        let parts = [];
+
+        for (let i = 0, len = match.length; i < len; i += 4) {
+          parts.push(match.substring(i, i + 4));
+        }
+        if (parts.length > 0) {
+          this.value = parts.join(' ');
+        } else {
+          this.value = txt;
+        }
+        validateForm();
+      });
+
+      // 5. تنسيق تاريخ انتهاء الكارت تلقائياً (إضافة علامة / بعد الشهر)
+      cardExpiryInput.addEventListener('input', function () {
+        let txt = this.value.replace(/\D/g, '');
+        if (txt.length >= 2) {
+          this.value = txt.substring(0, 2) + '/' + txt.substring(2, 4);
+        } else {
+          this.value = txt;
+        }
+        validateForm();
+      });
+
+      // 6. فلترة الـ CVV (أرقام فقط)
+      cardCvvInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+        validateForm();
+      });
+
+      function hideAllErrors() {
+        if (vError) vError.style.display = 'none';
+        if (cardNumError) cardNumError.style.display = 'none';
+        if (cardExpiryError) cardExpiryError.style.display = 'none';
+        if (cardCvvError) cardCvvError.style.display = 'none';
+      }
+
+      // 7. التحقق من صحة الفورم بالكامل (Form Validation)
+      function validateForm() {
+        const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked');
+
+        if (!selectedMethod) {
+          setButtonState(false);
+          return;
+        }
+
+        if (selectedMethod.value === 'cod' || selectedMethod.value === 'fawry') {
+          setButtonState(true);
+        }
+        else if (selectedMethod.value === 'vodafone') {
+          const phone = phoneInput.value;
+          const isPhoneValid = /^(010|011|012|015)\d{8}$/.test(phone);
+
+          if (phone.length > 0 && !isPhoneValid) {
+            vError.style.display = 'block';
+          } else {
+            vError.style.display = 'none';
+          }
+          setButtonState(isPhoneValid);
+        }
+        else if (selectedMethod.value === 'card') {
+          const rawCardNum = cardNumInput.value.replace(/\s+/g, '');
+          const expiry = cardExpiryInput.value;
+          const cvv = cardCvvInput.value;
+
+          const isCardValid = rawCardNum.length === 16;
+          const isExpiryValid = /^(0[1-12]|1[0-2])\/?([0-9]{2})$/.test(expiry) && expiry.length === 5;
+          const isCvvValid = cvv.length === 3;
+
+          cardNumError.style.display = (rawCardNum.length > 0 && !isCardValid) ? 'block' : 'none';
+          cardExpiryError.style.display = (expiry.length > 0 && !isExpiryValid) ? 'block' : 'none';
+          cardCvvError.style.display = (cvv.length > 0 && !isCvvValid) ? 'block' : 'none';
+
+          setButtonState(isCardValid && isExpiryValid && isCvvValid);
+        }
+      }
+
+      function setButtonState(enable) {
+        if (enable) {
+          confirmBtn.disabled = false;
+          confirmBtn.classList.add('enabled');
+        } else {
+          confirmBtn.disabled = true;
+          confirmBtn.classList.remove('enabled');
+        }
+      }
+
+      confirmBtn.addEventListener('click', function () {
+        if (this.classList.contains('enabled')) {
+          const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+          this.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+        }
+      });
+    });
+  </script>
+  <script src="./js/zzzzz.js"></script>
+</body>
+
+</html>

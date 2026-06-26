@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Frequently Asked Questions - Practical College Tools. Answers about lab equipment, shipping, returns, and more.">
+  <title>FAQs | Practical College Tools</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./css/FAQS-PAGE.css">
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Hero -->
+  <section class="hero-bg text-white">
+    <div class="container">
+      <div class="max-w-screen-2xl mx-auto px-6 py-20 lg:py-24">
+        <div class="max-w-3xl mx-auto text-center">
+          <div
+            class="inline-flex items-center gap-x-3 bg-white/20 backdrop-blur-md px-6 py-2.5 rounded-3xl text-sm font-medium mb-6">
+            <i class="fa-solid fa-circle-question"></i>
+            Got Questions?
+          </div>
+
+          <h1 class="text-5xl lg:text-7xl font-bold tracking-tighter leading-none mb-6">
+            Frequently Asked Questions
+          </h1>
+
+          <p class="text-xl text-white/90 max-w-2xl mx-auto">
+            Find quick answers about ordering lab equipment, shipping, returns, and more.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="max-w-screen-2xl mx-auto px-6 py-12">
+
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Search Bar -->
+      <div class="mb-12">
+        <div class="relative">
+          <input type="text" id="searchInput" onkeyup="filterFAQs()"
+            placeholder="Search questions... (e.g. shipping, payment, warranty)"
+            class="w-full bg-white border border-slate-200 focus:border-teal-500 rounded-3xl py-5 px-7 text-lg outline-none shadow-sm">
+          <i class="fa-solid fa-magnifying-glass absolute right-7 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        </div>
+      </div>
+
+      <!-- FAQs Accordion -->
+      <div class="space-y-6" id="faqContainer">
+
+        <!-- Question 1 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>How long does delivery take?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Standard delivery within Cairo and Giza takes 2–4 business days. Delivery to other governorates usually
+            takes 4–7 business days. Large or heavy lab equipment may take longer.
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Do you ship to universities and laboratories?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Yes! We offer special shipping and invoicing services for universities, research centers, and educational
+            institutions across Egypt. Please contact our B2B team for bulk orders and special pricing.
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>What payment methods do you accept?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            We accept: Vodafone Cash, Fawry, PayMob, credit/debit cards, and bank transfer. All payments are processed
+            through secure encrypted gateways.
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Do your products come with warranty?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Yes. Most laboratory equipment and instruments come with 1 to 3 years manufacturer warranty. Glassware and
+            consumables are covered for manufacturing defects only.
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Can I return an item if I changed my mind?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Yes, you can return most items within 30 days of delivery if they are in original unused condition with all
+            packaging. Return shipping fees are the customer's responsibility unless the item is defective.
+          </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Are the prices inclusive of VAT?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            All prices shown on the website include VAT (14%). No additional tax will be added at checkout.
+          </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Do you provide technical support after purchase?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Absolutely. Our technical team is available to help with installation, calibration, and usage of laboratory
+            equipment. Support is available via phone, WhatsApp, and email.
+          </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="policy-card bg-white rounded-3xl shadow-sm overflow-hidden">
+          <button onclick="toggleAccordion(this)"
+            class="faq-question w-full text-left px-8 py-7 flex items-center justify-between text-lg font-semibold">
+            <span>Can I get a quote for bulk orders?</span>
+            <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="accordion-content px-8 pb-8 text-slate-700 leading-relaxed">
+            Yes. We offer special pricing for universities, colleges, and research labs. Please send your requirements
+            to <strong>sales@practicaltools.com</strong> and we will reply within 24 hours.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+  
+  <script src="./js/main.js"></script>
+  <script src="./js/zzzzz.js"></script>
+
+  <script>
+    function toggleAccordion(button) {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('i');
+
+      if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+        content.style.maxHeight = "0px";
+        icon.style.transform = "rotate(0deg)";
+      } else {
+        // Close all others
+        document.querySelectorAll('.accordion-content').forEach(item => {
+          item.style.maxHeight = "0px";
+        });
+        document.querySelectorAll('.faq-question i').forEach(i => {
+          i.style.transform = "rotate(0deg)";
+        });
+
+        content.style.maxHeight = content.scrollHeight + "px";
+        icon.style.transform = "rotate(180deg)";
+      }
+    }
+
+    function filterFAQs() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const faqs = document.querySelectorAll('#faqContainer > div');
+
+      faqs.forEach(faq => {
+        const questionText = faq.querySelector('span').textContent.toLowerCase();
+        const answerText = faq.querySelector('.accordion-content').textContent.toLowerCase();
+
+        if (questionText.includes(searchTerm) || answerText.includes(searchTerm)) {
+          faq.style.display = 'block';
+        } else {
+          faq.style.display = 'none';
+        }
+      });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const icon = document.getElementById('menu-icon');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        icon.classList.replace('fa-bars', 'fa-xmark');
+      } else {
+        menu.classList.add('hidden');
+        icon.classList.replace('fa-xmark', 'fa-bars');
+      }
+    }
+
+    // Open first FAQ by default
+    window.onload = () => {
+      const firstButton = document.querySelector('.faq-question');
+      if (firstButton) {
+        const firstContent = firstButton.nextElementSibling;
+        firstContent.style.maxHeight = firstContent.scrollHeight + "px";
+        firstButton.querySelector('i').style.transform = "rotate(180deg)";
+      }
+
+      console.log('%c✅ FAQs Page Ready - Professional & Responsive', 'color:#0f766e; font-size:14px;');
+    };
+  </script>
+</body>
+
+</html>

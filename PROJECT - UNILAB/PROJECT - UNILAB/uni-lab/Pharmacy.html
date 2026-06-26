@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pharmacy</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/zzzzzz.css">
+  <!--  CSS -->
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- header of page  -->
+  <section class="page-header bg-gradient-to-r from-violet-600 to-indigo-600">
+    <div class="container">
+      <nav class="flex items-center gap-2 text-sm text-white/70 mb-6">
+        <a class="hover:text-white transition-colors" href="./index.html">Home</a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-chevron-right h-4 w-4">
+          <path d="m9 18 6-6-6-6"></path>
+        </svg>
+        <span class="text-white">Pharmacy</span>
+      </nav>
+      <div class="header-content">
+        <div class="icon-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-pill">
+            <path d="M10.5 2.5L3 10l7.5 7.5L18 10 10.5 2.5Z" />
+            <path d="M14.5 14.5L21 8" />
+            <path d="M8 8l7.5-7.5" />
+          </svg>
+        </div>
+        <div class="text">
+          <h1 class="text-3xl md:text-4xl font-bold">Pharmacy</h1>
+          <p class="text-white/80 mt-1">Professional pharmaceutical equipment, compounding tools &amp; medical supplies
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Accent -->
+  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-400/50 to-transparent">
+  </div>
+
+  <!-- products -->
+  <section class="products">
+    <div class="container p-y">
+      <div class="section-header">
+        <div
+          class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6  items-center gap-2 bg-slate-200/50 p-1.5 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)] border border-slate-200/20 backdrop-blur-md w-full">
+          <button
+            class="px-6 py-3 text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 bg-white text-slate-900 shadow-[0_4px_12px_rgba(0,0,0,0.05),0_1px_3px_rgba(0,0,0,0.02)] border border-slate-200/50 transform active:scale-95"
+            data-filter="all">
+            All Departments
+          </button>
+          <button
+            class="px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 rounded-xl transition-all duration-300 hover:text-violet-600 hover:bg-white/60 transform active:scale-95"
+            data-filter="pharmaceutical">
+            Clinical Pharmacy
+          </button>
+          <button
+            class="px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 rounded-xl transition-all duration-300 hover:text-indigo-600 hover:bg-white/60 transform active:scale-95"
+            data-filter="compounding">
+            Pharmaceutical Chemistry
+          </button>
+        </div>
+      </div>
+
+      <div class="cards grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <!-- SAVE 15% -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="1" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Surgical instruments
+              </span>
+              <div
+                class="absolute top-4 right-4 z-10 bg-gradient-to-br from-rose-500 to-red-600 text-white font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(244,63,94,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-6 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
+                SAVE 15%
+              </div>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/514DxPDgAJL._AC_SX679_.jpg" alt="Scalpel Sterile Blades">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span> Only 12 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Scalpel Sterile Blades</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">Box of 100 Scalpel
+                  Sterile Blades Carbon High-quality sterile scalpel blades designed for precision and safety in medical
+                  use and anatomy labs</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">598.00 <span
+                      class="text-[11px] font-extrabold text-violet-600 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- OUT -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/40 overflow-hidden opacity-75 transition-all duration-300"
+          data-id="2" data-category="medicine">
+          <div class="absolute inset-0 bg-slate-100/20 backdrop-blur-[1px] z-20 pointer-events-none"></div>
+          <a href="javascript:void(0)" class="block flex-1 flex flex-col cursor-not-allowed focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50/70 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white/80 text-slate-400 border border-slate-200/40 uppercase tracking-widest">
+                Training Tools
+              </span>
+              <span
+                class="absolute inset-0 m-auto h-fit w-fit z-30 px-4 py-2 text-xs font-black rounded-xl bg-slate-900/90 text-white shadow-xl uppercase tracking-widest backdrop-blur-sm border border-white/10 transform -rotate-3">
+                Sold Out
+              </span>
+              <img class="max-h-full max-w-full object-contain filter grayscale opacity-40"
+                src="./imges/products/Anatomy Model Set.jpg" alt="Anatomy Model Set">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-slate-50/30">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Out of Stock
+                  </span>
+                </div>
+                <h2 class="text-base font-extrabold text-slate-400 tracking-tight line-clamp-1">Anatomy Model Set</h2>
+                <p class="text-xs text-slate-400/80 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality 3D
+                  Anatomy Model Set designed for medical and healthcare students to better understand human body
+                  structures</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-300">
+                  <div class="flex text-slate-300 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-200/60">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-400 font-mono tracking-tight">7599.00 <span
+                      class="text-[11px] font-extrabold text-slate-300 ml-0.5">EGP</span></span>
+                </div>
+                <button disabled
+                  class="h-12 w-12 rounded-2xl bg-slate-100 text-slate-300 flex items-center justify-center border border-slate-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] cursor-not-allowed focus:outline-none">
+                  <i class="fa-solid fa-ban text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="3" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Diagnostic Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/N18893612A_1.avif" alt="Professional Stethoscope">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock (34 items)
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Professional Stethoscope</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality
+                  stethoscope designed for accurate auscultation of heart, lung, and body sounds, making it an essential
+                  tool for medical students</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1599.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- BEST SELLER -->
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(6,182,212,0.1)]"
+          data-id="4" data-category="medicine">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Diagnostic Tools
+              </span>
+              <div
+                class="absolute top-4 right-4 z-10 bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-[10px] px-2.5 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(245,158,11,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-2 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
+                BEST SELLER
+              </div>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/bp-apparatus-lcd-regular-velcro-cuff-battery-bpdg-034-diamond-original-imag6jp9d2dwkjyg.webp"
+                alt="BP Monitor">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Available in stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  BP Monitor</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A reliable digital blood
+                  pressure monitor designed for accurate and easy measurement of blood pressure at home or in clinical
+                  settings.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1299.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="5" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Clinical Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/71RNtfCLkxL._AC_SX679_.jpg" alt="Dental Anesthetic Injection">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping"></span> Critical Stock: 3 left
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Dental Anesthetic Injection</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality dental
+                  anesthetic injection containing Lidocaine, designed to provide fast and effective local anesthesia
+                  during dental procedures</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">700.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="6" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Clinical Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/download.jpeg" alt="Dental contra high speed">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Dental contra high speed</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">HA reference section
+                  that explains situations where certain dental treatments, procedures, or products should not be used
+                  due to potential risks to the patient.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1799.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="7" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Diagnostic Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/tweezerwal4_1024x.webp" alt="Dental Tweezers">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Dental Tweezers</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A precision dental
+                  instrument used for holding, transferring, and placing small materials during dental procedures such
+                  as cotton, gauze, and instruments inside the oral cavity.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">399.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div
+          class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-3 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.08),0_20px_40px_-20px_rgba(16,185,129,0.1)]"
+          data-id="8" data-category="dentistry">
+          <a href="./product.html" class="block flex-1 flex flex-col focus:outline-none">
+            <div
+              class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">
+              <span
+                class="absolute top-4 left-4 z-10 px-3 py-1.5 text-[10px] font-black rounded-lg bg-white text-violet-700 shadow-[0_4px_10px_rgba(0,0,0,0.05)] border border-slate-200/60 uppercase tracking-widest">
+                Training Tools
+              </span>
+              <img
+                class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1"
+                src="./imges/products/PHOTO-2026-04-12-14-23-32.jpg" alt="Endo training teeth">
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span
+                    class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70 flex items-center gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> In Stock
+                  </span>
+                </div>
+                <h2
+                  class="text-base font-extrabold text-slate-900 tracking-tight group-hover:text-violet-700 transition-colors duration-300 line-clamp-1">
+                  Endo training teeth</h2>
+                <p class="text-xs text-slate-500 mt-2 font-medium leading-relaxed line-clamp-2">A high-quality
+                  endodontic training model teeth set designed for practicing root canal procedures in a simulated
+                  clinical environment.</p>
+                <div class="flex items-center gap-1.5 mt-3 text-xs font-bold text-slate-600">
+                  <div class="flex text-amber-400 tracking-tighter">★★★★★</div>
+                  <span class="bg-slate-100 px-1.5 py-0.5 rounded text-[10px]">4.8 (124)</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
+                <div class="flex flex-col">
+                  <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                  <span class="text-xl font-black text-slate-900 font-mono tracking-tight">1299.00 <span
+                      class="text-[11px] font-extrabold text-violet-700 ml-0.5">EGP</span></span>
+                </div>
+                <button
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-b from-white to-violet-100 text-violet-600 flex items-center justify-center border border-slate-200 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),inset_0_-2px_4px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:from-violet-500 group-hover:to-violet-600 group-hover:text-white group-hover:border-violet-600 group-hover:shadow-[0_10px_20px_rgba(147,51,234,0.3)] group-hover:scale-105 active:scale-95 focus:outline-none"
+                  onclick="event.preventDefault(); addToCart(this);">
+                  <i class="fa-solid fa-cart-shopping text-sm transform group-hover:scale-110 transition-transform"></i>
+                </button>
+              </div>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- js -->
+  <script src="./js/zzzzz.js"></script>
+</body>
+
+</html>

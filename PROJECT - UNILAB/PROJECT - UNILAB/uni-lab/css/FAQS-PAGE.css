@@ -1,0 +1,36 @@
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);
+        }
+        
+        .faq-question {
+            transition: all 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .policy-card {
+            transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .policy-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px -12px rgb(15 118 110 / 0.15);
+        }

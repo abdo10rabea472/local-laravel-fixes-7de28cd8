@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Privacy Policy - Practical College Tools. We are committed to protecting your personal data with the highest security standards.">
+  <title>Privacy Policy | Practical College Tools</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="./css/praivacy-policy.css">
+  <link rel="stylesheet" href="./css/ss.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-bg text-white">
+    <div class="container">
+      <div class="max-w-screen-2xl mx-auto px-6 py-20 lg:py-24">
+        <div class="max-w-3xl mx-auto text-center">
+          <div
+            class="inline-flex items-center gap-x-3 bg-white/20 backdrop-blur-md px-6 py-2.5 rounded-3xl text-sm font-medium mb-6">
+            <i class="fa-solid fa-shield-halved"></i>
+            Your Privacy is Our Priority
+          </div>
+
+          <h1 class="text-5xl lg:text-7xl font-bold tracking-tighter leading-none mb-6">
+            Privacy Policy
+          </h1>
+
+          <p class="text-xl text-white/90 max-w-2xl mx-auto">
+            At <span class="font-semibold">Practical College Tools</span>, we are fully committed to protecting your
+            personal information with the highest standards of security and transparency.
+          </p>
+
+          <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-10 text-sm">
+            <div class="flex items-center gap-x-2">
+              <i class="fa-solid fa-circle-check text-emerald-400"></i>
+              <span>Last updated: April 15, 2026</span>
+            </div>
+            <div class="flex items-center gap-x-2">
+              <i class="fa-solid fa-globe"></i>
+              <span>Compliant with Egyptian Personal Data Protection Law</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="max-w-screen-2xl mx-auto px-6 py-12">
+
+    <!-- Table of Contents -->
+    <div class="bg-white rounded-3xl shadow-sm p-8 mb-12 border">
+      <h2 class="text-xl font-semibold mb-6 flex items-center gap-x-3">
+        <i class="fa-solid fa-list-check text-teal-700"></i>
+        Table of Contents
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <a onclick="scrollToSection('intro')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">01</span>
+          <span>Introduction</span>
+        </a>
+        <a onclick="scrollToSection('data-collection')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">02</span>
+          <span>Information We Collect</span>
+        </a>
+        <a onclick="scrollToSection('usage')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">03</span>
+          <span>How We Use Your Information</span>
+        </a>
+        <a onclick="scrollToSection('sharing')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">04</span>
+          <span>Sharing Your Information</span>
+        </a>
+        <a onclick="scrollToSection('cookies')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">05</span>
+          <span>Cookies & Tracking Technologies</span>
+        </a>
+        <a onclick="scrollToSection('security')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">06</span>
+          <span>Data Security</span>
+        </a>
+        <a onclick="scrollToSection('rights')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">07</span>
+          <span>Your Rights</span>
+        </a>
+        <a onclick="scrollToSection('changes')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">08</span>
+          <span>Changes to This Policy</span>
+        </a>
+        <a onclick="scrollToSection('contact')"
+          class="flex items-center gap-x-3 p-5 rounded-2xl hover:bg-teal-50 transition-all cursor-pointer">
+          <span class="font-mono text-teal-700 font-semibold">09</span>
+          <span>Contact Us</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Introduction -->
+    <section id="intro" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">01
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Introduction</h2>
+      </div>
+      <p class="text-lg leading-relaxed text-slate-700">
+        Welcome to <strong>Practical College Tools</strong>, your trusted online store for laboratory equipment,
+        scientific instruments, and practical tools for engineering, medical, pharmacy, and applied science colleges.
+      </p>
+      <p class="mt-6 text-lg leading-relaxed text-slate-700">
+        We are deeply committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, and
+        protect your personal information when you visit our website or make a purchase.
+      </p>
+    </section>
+
+    <!-- Information We Collect -->
+    <section id="data-collection" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">02
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Information We Collect</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-10">
+        <div>
+          <h3 class="font-semibold text-xl mb-4 flex items-center gap-2"><i class="fa-solid fa-user text-teal-600"></i>
+            Personal Information</h3>
+          <ul class="space-y-4 text-slate-700">
+            <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Full name, phone number, and
+              email address</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Shipping address (especially
+              for large lab equipment)</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> University / College details
+              (optional)</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-xl mb-4 flex items-center gap-2"><i
+              class="fa-solid fa-credit-card text-teal-600"></i> Payment Information</h3>
+          <p class="text-slate-700">We do not store your credit card details. All payments are securely processed
+            through trusted gateways (Vodafone Cash,
+            Cash on Delivery).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How We Use Your Information -->
+    <section id="usage" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">03
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">How We Use Your Information</h2>
+      </div>
+      <div class="space-y-8">
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">📦
+          </div>
+          <div>
+            <p class="font-medium text-lg">Processing and delivering your orders</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">📧
+          </div>
+          <div>
+            <p class="font-medium text-lg">Sending order confirmations, shipping updates, and receipts</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">📊
+          </div>
+          <div>
+            <p class="font-medium text-lg">Improving our website and product offerings based on your needs</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sharing -->
+    <section id="sharing" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">04
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Sharing Your Information</h2>
+      </div>
+      <p class="text-lg mb-8">We never sell or rent your personal data to third parties. We only share it in the
+        following limited cases:</p>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-50 p-7 rounded-3xl flex gap-4">
+          <i class="fa-solid fa-truck text-2xl text-teal-700 mt-1"></i>
+          <p>Shipping companies (DHL, Egypt Post) to deliver your orders</p>
+        </div>
+        <div class="bg-slate-50 p-7 rounded-3xl flex gap-4">
+          <i class="fa-solid fa-credit-card text-2xl text-teal-700 mt-1"></i>
+          <p>Secure payment gateways (no card details are stored by us)</p>
+        </div>
+        <div class="bg-slate-50 p-7 rounded-3xl flex gap-4">
+          <i class="fa-solid fa-server text-2xl text-teal-700 mt-1"></i>
+          <p>Analytics services (Google Analytics) in anonymized form</p>
+        </div>
+        <div class="bg-slate-50 p-7 rounded-3xl flex gap-4">
+          <i class="fa-solid fa-gavel text-2xl text-teal-700 mt-1"></i>
+          <p>Legal authorities only when legally required</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cookies -->
+    <section id="cookies" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">05
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Cookies & Tracking Technologies</h2>
+      </div>
+      <p class="text-lg text-slate-700">We use cookies to enhance your experience, remember your shopping cart, and
+        analyze website traffic. You can control cookies through your browser settings.</p>
+    </section>
+
+    <!-- Security -->
+    <section id="security" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">06
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Data Security</h2>
+      </div>
+      <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-12 text-center">
+        <i class="fa-solid fa-lock text-8xl text-emerald-600 mb-6"></i>
+        <p class="text-3xl font-semibold text-emerald-800">HTTPS Encryption + Advanced Security Measures</p>
+        <p class="mt-4 text-emerald-700 max-w-lg mx-auto">Your data is protected with industry-leading security and is
+          only accessible by authorized personnel.</p>
+      </div>
+    </section>
+
+    <!-- Your Rights -->
+    <section id="rights" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">07
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Your Rights</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-8 border rounded-3xl hover:border-teal-300 transition-colors">
+          <h4 class="font-semibold text-lg mb-2">Right to Access</h4>
+          <p class="text-slate-600">Request a copy of your personal data</p>
+        </div>
+        <div class="p-8 border rounded-3xl hover:border-teal-300 transition-colors">
+          <h4 class="font-semibold text-lg mb-2">Right to Rectification</h4>
+          <p class="text-slate-600">Correct any inaccurate information</p>
+        </div>
+        <div class="p-8 border rounded-3xl hover:border-teal-300 transition-colors">
+          <h4 class="font-semibold text-lg mb-2">Right to Erasure</h4>
+          <p class="text-slate-600">Request deletion of your data (subject to legal obligations)</p>
+        </div>
+        <div class="p-8 border rounded-3xl hover:border-teal-300 transition-colors">
+          <h4 class="font-semibold text-lg mb-2">Right to Object</h4>
+          <p class="text-slate-600">Object to processing for marketing purposes</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Changes -->
+    <section id="changes" class="policy-card bg-white rounded-3xl shadow-sm p-10 lg:p-14 mb-8">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div
+          class="w-10 h-10 bg-teal-100 text-teal-700 rounded-2xl flex items-center justify-center text-2xl font-bold">08
+        </div>
+        <h2 class="text-4xl font-semibold tracking-tight">Changes to This Policy</h2>
+      </div>
+      <p class="text-lg text-slate-700">We may update this Privacy Policy from time to time. Significant changes will be
+        notified via email or a prominent notice on our website.</p>
+    </section>
+
+    <!-- Contact Us -->
+    <section id="contact"
+      class="policy-card bg-gradient-to-br from-teal-700 to-teal-900 text-white rounded-3xl shadow-sm p-10 lg:p-14">
+      <div class="flex items-center gap-x-4 mb-8">
+        <div class="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center text-2xl font-bold">09</div>
+        <h2 class="text-4xl font-semibold tracking-tight text-white">Contact Us</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="space-y-8">
+          <div class="flex gap-x-5">
+            <i class="fa-solid fa-envelope text-3xl w-8"></i>
+            <div>
+              <p class="font-medium">Email</p>
+              <a href="mailto:privacy@practicaltools.com" class="hover:underline">UinlabMarket@practicaltools.com</a>
+            </div>
+          </div>
+          <div class="flex gap-x-5">
+            <i class="fa-solid fa-phone text-3xl w-8"></i>
+            <div>
+              <p class="font-medium">Phone</p>
+              <a href="tel:+201123456789" class="hover:underline">+20 1120160246</a>
+            </div>
+          </div>
+          <div class="flex gap-x-5">
+            <i class="fa-solid fa-location-dot text-3xl w-8"></i>
+            <div>
+              <p class="font-medium">Address</p>
+              <p>Cairo, Egypt</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-10 text-center flex flex-col justify-center">
+          <p class="text-2xl font-semibold mb-4">Our Privacy Team is here to help</p>
+          <p class="text-white/80 mb-8">We usually reply within 48 business hours</p>
+          <button onclick="window.location.href='mailto:privacy@practicaltools.com'"
+            class="bg-white text-teal-800 font-semibold py-4 px-10 rounded-3xl hover:scale-105 transition-transform inline-flex items-center gap-x-3 mx-auto">
+            <i class="fa-solid fa-paper-plane"></i>
+            Send Your Inquiry
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="./js/Privacy-Policy.js"></script>
+  <script src="./js/zzzzz.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+
+</html>

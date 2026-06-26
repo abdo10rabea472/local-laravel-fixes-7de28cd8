@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed - Receipt</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+    <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <!--  Styles -->
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <style>
+    /* تحسينات مخصصة للطباعة والتأثيرات الحركية */
+    @media print {
+      body {
+        background-color: #fff !important;
+        color: #000 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .print-shadow {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+    }
+
+    .timeline-dot::after {
+      content: '';
+      position: absolute;
+      background-color: #e2e8f0;
+      top: 24px;
+      bottom: -24px;
+      left: 11px;
+      width: 2px;
+    }
+
+    .timeline-item:last-child .timeline-dot::after {
+      display: none;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-zinc-50 min-h-screen font-['Inter'] text-zinc-800 antialiased selection:bg-zinc-900 selection:text-white">
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-12 max-w-3xl">
+
+    <div class="text-center mb-12 no-print">
+      <div
+        class="inline-flex items-center justify-center w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl mb-6 shadow-sm border border-emerald-100">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+          class="w-10 h-10">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+        </svg>
+      </div>
+      <p class="text-sm font-bold uppercase tracking-widest text-emerald-600 mb-1">Order Successfully Placed</p>
+      <p class="text-sm font-bold  tracking-widest text-emerald-600 mb-1">Thank you for shopping with UNI-LAB MARKET.
+        Your order has been placed successfully and is now being processed.</p>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight mb-3">Your tools are on the way!</h1>
+      <p class="text-zinc-500 max-w-md mx-auto text-sm sm:text-base">We've received your order and sent a detailed
+        digital receipt to <span class="font-semibold text-zinc-800">ahmed084@gmail.com</span></p>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-zinc-200 shadow-xl shadow-zinc-200/50 print-shadow overflow-hidden">
+
+      <div
+        class="p-6 sm:p-8 border-b border-zinc-100 bg-zinc-900 text-white flex flex-col sm:flex-row justify-between gap-6 items-start sm:items-center">
+        <div>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 block mb-1">Official Invoice</span>
+          <h2 class="text-xl font-bold font-mono tracking-tight text-white flex items-center gap-2">
+            Invoice <span class="text-zinc-400">#</span>HZ-98431
+          </h2>
+        </div>
+        <div class="flex flex-wrap gap-3 sm:text-right">
+          <div class="bg-zinc-800 border border-zinc-700 px-3 py-1.5 rounded-xl">
+            <p class="text-[10px] text-zinc-400 uppercase font-semibold">Date Paid</p>
+            <p class="text-xs font-bold">June 17, 2026</p>
+          </div>
+          <div class="bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 rounded-xl flex items-center">
+            <span class="text-emerald-400 text-xs font-extrabold tracking-wider uppercase">● Success</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 grid gap-6 sm:grid-cols-2 bg-zinc-50/60 border-b border-zinc-200/60">
+
+        <div class="bg-white p-5 rounded-2xl border border-zinc-200/80 shadow-sm">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5">
+            <i class="fa-solid fa-location-dot text-zinc-500"></i> Shipping Details
+          </h3>
+          <div class="text-sm space-y-1 text-zinc-600">
+            <p class="font-bold text-zinc-900 text-base" id="inv-name">Ahmed Khamis</p>
+            <p id="inv-address">123 University Ave, Floor 3</p>
+            <p id="inv-city" class="font-medium text-zinc-800">El Minya, Egypt</p>
+            <div class="pt-3 space-y-1 text-xs text-zinc-400 border-t border-zinc-100 mt-3">
+              <p><i class="fa-solid fa-phone text-zinc-400 w-4"></i> +20 1007970340</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-zinc-200/80 shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-3 flex items-center gap-1.5">
+              <i class="fa-solid fa-wallet text-zinc-500"></i> Payment Overview
+            </h3>
+            <div class="text-sm space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-zinc-500 text-xs">Method:</span>
+                <span
+                  class="inline-flex items-center gap-1 bg-zinc-900 text-white text-[11px] px-2.5 py-1 rounded-lg font-medium">
+                  <i class="fa-brands fa-cc-visa text-xs"></i> Visa Card
+                </span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-zinc-500 text-xs">Transaction ID:</span>
+                <span class="font-mono text-xs text-zinc-700 font-semibold">TXN-88421905X</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-zinc-100 flex items-center gap-2 text-xs text-zinc-400 font-medium">
+            <i class="fa-solid fa-shield text-emerald-600"></i> Secured & encrypted transaction
+          </div>
+        </div>
+
+      </div>
+
+      <div class="p-6 sm:p-8 border-b border-zinc-100 no-print">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-5">Order Tracking Status</h3>
+        <div class="grid grid-cols-3 gap-2 text-center text-xs relative">
+          <div class="space-y-2">
+            <div class="h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-200"></div>
+            <p class="font-bold text-zinc-900">Order Placed</p>
+            <p class="text-[10px] text-zinc-400">Just Now</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-2 rounded-full bg-zinc-200 relative overflow-hidden">
+              <div class="absolute inset-0 bg-emerald-500 animate-pulse w-1/3"></div>
+            </div>
+            <p class="font-semibold text-zinc-500">Processing</p>
+            <p class="text-[10px] text-zinc-400">In Progress</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-2 rounded-full bg-zinc-200"></div>
+            <p class="font-medium text-zinc-400">Out for Delivery</p>
+            <p class="text-[10px] text-zinc-400">Pending</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-4">Items Summary</h3>
+
+        <div class="space-y-3">
+          <div
+            class="flex items-center justify-between p-4 rounded-2xl border border-zinc-100 hover:border-zinc-200 transition bg-zinc-50/30">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 rounded-xl bg-white p-1 flex-shrink-0 border border-zinc-200/60 shadow-sm">
+                <img src="./imges/products/3Ring_Style_Syringe_1-450x450.jpg-removebg-preview.png" alt="Product"
+                  class="w-full h-full object-contain">
+              </div>
+              <div>
+                <p class="font-bold text-zinc-900 text-sm sm:text-base">Oil Paint Master Set</p>
+                <p class="text-xs text-zinc-400 font-semibold uppercase tracking-wider">College: Fine Arts</p>
+              </div>
+            </div>
+            <div class="text-right flex items-center gap-6">
+              <p class="text-xs text-zinc-400 font-bold">Qty: <span class="text-zinc-800 text-sm font-black">1</span>
+              </p>
+              <p class="font-extrabold text-zinc-900 text-sm sm:text-base">149.99 EGP</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 border-t border-zinc-200 pt-6 flex justify-end">
+          <div class="w-full sm:w-72 space-y-2.5 text-sm text-zinc-500">
+            <div class="flex justify-between items-center">
+              <span>Subtotal</span>
+              <span class="font-semibold text-zinc-900">149.99 EGP</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Shipping Fees</span>
+              <span class="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md text-xs">Free</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>VAT / Tax (14%)</span>
+              <span class="font-semibold text-zinc-900">12.00 EGP</span>
+            </div>
+
+            <div
+              class="flex justify-between items-center text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100/60 font-medium text-xs">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-tag"></i> Coupon Applied (SAVE10)</span>
+              <span class="font-bold">-10.00 EGP</span>
+            </div>
+
+            <div class="flex justify-between items-center font-bold text-zinc-900 pt-3 border-t border-zinc-200/80">
+              <span class="text-base">Total Amount</span>
+              <span class="text-2xl font-black text-zinc-900 tracking-tight">151.99 EGP</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div
+        class="bg-zinc-50 border-t border-zinc-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400 font-medium">
+        <p>If you have any questions, contact us at akhames084@gmail.com</p>
+        <p class="text-zinc-500 font-bold flex items-center gap-1"><i class="fa-solid fa-heart text-rose-500"></i>
+          Crafted for Excellence</p>
+      </div>
+
+    </div>
+
+    <div class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+      <a href="./All-product.html"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-bold text-zinc-600 hover:text-zinc-900 transition-all px-5 py-3 rounded-2xl bg-white border border-zinc-200 hover:border-zinc-300 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Continue Shopping
+      </a>
+
+      <button onclick="window.print()"
+        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-sm font-bold text-white bg-zinc-900 hover:bg-zinc-800 active:scale-[0.98] transition-all px-6 py-3 rounded-2xl shadow-md shadow-zinc-900/10">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+          class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+        Print or Save PDF Receipt
+      </button>
+    </div>
+
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>product</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/product.css">
+  <link rel="stylesheet" href="./css/ss.css">
+  <!-- tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+
+  <!-- Shopping Cart العنصر الرئيسي لسلة التسوق -->
+  <div class="cart">
+
+    <!-- الجزء العلوي من السلة: العنوان + زر الإغلاق -->
+    <div class="top_cart">
+
+      <!-- عنوان السلة مع أيقونة كيس التسوق -->
+      <h2 class="text flex items-center gap-2">
+
+        <!-- أيقونة Shopping Bag -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-shopping-bag h-5 w-5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+
+        Shopping Cart
+
+        <!-- عدد المنتجات في السلة -->
+        <span class="cart-count">(0)</span>
+      </h2>
+
+      <!-- زر إغلاق السلة -->
+      <span onclick="open_close_cart()" class="close_cart">
+        <!-- أيقونة إغلاق (X) من Font Awesome -->
+        <i class="fa-regular fa-circle-xmark"></i>
+      </span>
+
+    </div>
+
+    <!-- منطقة عرض المنتجات المضافة إلى السلة -->
+    <div class="items_in_cart">
+      <!-- هنا سيتم إضافة العناصر المشتراة باستخدام الجافاسكريبت -->
+    </div>
+
+    <!-- الجزء السفلي من السلة: الإجمالي + الأزرار -->
+    <div class="bottom_cart">
+
+      <!-- عرض المبلغ الإجمالي -->
+      <div class="total">
+        <p>TOTAL</p>
+        <!-- سعر الإجمالي -->
+        <p class="price_cart_toral">0 EGP</p>
+      </div>
+
+      <!-- منطقة الأزرار -->
+      <div class="button_cart">
+
+        <!-- زر الذهاب لإتمام الشراء (Checkout) -->
+        <a href="./Checkout.html" class="btn_cart btn">Checkout</a>
+
+        <!-- زر "التسوق أكثر" الذي يغلق السلة -->
+        <span onclick="open_close_cart()" class="btn_cart trans_bg btn">Shop More</span>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header class="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md shadow-sm">
+
+    <!-- حاوية رئيسية للتحكم في العرض والمسافات الجانبية -->
+    <div class="mx-auto px-10">
+
+      <!-- الصف العلوي داخل الهيدر (Logo + Navigation + Search + Icons) -->
+      <div class="flex h-16 items-center justify-between">
+
+        <!-- Logo الخاص بالموقع -->
+        <a href="./index.html" class="flex items-center gap-3">
+          <div class="logo-box w-70 h-10 flex items-center justify-center">
+            <!-- صورة اللوجو -->
+            <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="Logo"
+              class="h-10 w-auto drop-shadow-sm">
+          </div>
+        </a>
+
+        <!-- قائمة التنقل للشاشات الكبيرة (Desktop Navigation) -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+
+          <!-- Shop by College Dropdown Menu -->
+          <div class="group relative">
+
+            <!-- زر القائمة المنسدلة -->
+            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 transition-colors py-4">
+              Shop by College
+              <!-- أيقونة السهم الذي يدور عند الـ hover -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:rotate-180"
+                fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- القائمة المنسدلة Dropdown -->
+            <div
+              class="absolute left-0 top-full mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+              <div class="grid grid-cols-1 gap-1 px-2">
+                <a href="./Medicine.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🏥 <span class="font-medium">Medicine</span>
+                </a>
+                <a href="./Engineering.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  ⚙️ <span class="font-medium">Engineering</span>
+                </a>
+                <a href="./Fine art.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🎨 <span class="font-medium">Fine Arts</span>
+                </a>
+                <a href="./Nursing.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  👩‍⚕️ <span class="font-medium">Nursing</span>
+                </a>
+                <a href="./Pharmacy.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💊 <span class="font-medium">Pharmacy</span>
+                </a>
+                <a href="./Sciences.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  🔬 <span class="font-medium">Sciences</span>
+                </a>
+                <a href="./Computer Science.html"
+                  class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 rounded-xl text-gray-700 hover:text-gray-900 transition-colors">
+                  💻 <span class="font-medium">Computer Science</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- رابط All Products -->
+          <a href="./All-product.html" class="text-gray-600 hover:text-gray-900 transition-colors">All Products</a>
+        </nav>
+
+        <!-- شريط البحث (Search Bar) - يظهر فقط على الشاشات المتوسطة والكبيرة -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-8">
+          <div class="relative w-full">
+            <!-- أيقونة البحث -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <!-- حقل الإدخال للبحث -->
+            <input type="search"
+              class="w-full h-11 pl-11 pr-4 bg-gray-100 border border-gray-200 focus:border-violet-400 focus:bg-white rounded-2xl text-sm outline-none transition-all"
+              placeholder="Search products, tools, kits...">
+          </div>
+        </div>
+
+        <!-- الجزء الأيمن: Login + Logout + Cart + Mobile Menu -->
+        <div class="flex items-center gap-2">
+
+          <!-- زر Login -->
+          <a href="./Sign-in.html"
+            class="hidden sm:flex items-center gap-2 px-5 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="10" r="3"></circle>
+              <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"></path>
+            </svg>
+            <span>Login</span>
+          </a>
+
+          <!-- زر Logout -->
+          <a href="./index.html"
+            class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-2xl transition-all">
+            Logout <i class="fa-solid fa-right-from-bracket"></i>
+          </a>
+
+          <!-- زر سلة التسوق -->
+          <button class="relative p-3 hover:bg-gray-100 rounded-2xl transition-all group" onclick="open_close_cart()">
+            <!-- أيقونة السلة -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <!-- عداد المنتجات في السلة -->
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-violet-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow">0</span>
+          </button>
+
+          <!-- زر قائمة الموبايل (Mobile Menu Button) -->
+          <button id="mobile-menu-btn" class="md:hidden p-3 hover:bg-gray-100 rounded-2xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- قائمة التنقل للموبايل (Mobile Menu) -->
+    <div id="mobile-menu" class="md:hidden hidden border-t bg-white">
+      <div class="container mx-auto px-4 py-6 space-y-6">
+
+        <!-- شريط بحث في الموبايل -->
+        <div class="relative">
+          <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input type="search"
+            class="w-full h-12 pl-11 pr-4 bg-gray-100 border border-gray-200 rounded-2xl text-sm outline-none"
+            placeholder="Search products...">
+        </div>
+
+        <!-- روابط التنقل في الموبايل -->
+        <nav class="flex flex-col gap-2">
+          <a href="./Medicine.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🏥 <span class="font-medium">Medicine</span>
+          </a>
+          <a href="./Engineering.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            ⚙️ <span class="font-medium">Engineering</span>
+          </a>
+          <a href="./Fine art.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🎨 <span class="font-medium">Fine Arts</span>
+          </a>
+          <a href="./Nursing.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            👩‍⚕️ <span class="font-medium">Nursing</span>
+          </a>
+          <a href="./Pharmacy.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💊 <span class="font-medium">Pharmacy</span>
+          </a>
+          <a href="./Sciences.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            🔬 <span class="font-medium">Sciences</span>
+          </a>
+          <a href="./Computer Science.html"
+            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 rounded-2xl text-gray-700">
+            💻 <span class="font-medium">Computer Science</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="bg-slate-50 min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-4 py-12">
+
+      <nav
+        class="flex flex-wrap items-center gap-2 text-sm bg-white/80 backdrop-blur-md px-5 py-4 rounded-2xl shadow-sm border border-gray-100 mb-10">
+
+        <a href="./index.html"
+          class="flex items-center gap-2 text-gray-500 hover:text-blue-600 font-medium transition-all duration-300 group">
+
+          <i class="fa-solid fa-house text-[13px] group-hover:scale-110 transition-transform"></i>
+          <span>Home</span>
+        </a>
+
+        <i class="fa-solid fa-chevron-right text-[10px] text-gray-300"></i>
+
+        <a href="./All-product.html" class="text-gray-500 hover:text-blue-600 font-medium transition-all duration-300">
+          Products
+        </a>
+
+        <i class="fa-solid fa-chevron-right text-[10px] text-gray-300"></i>
+
+        <span
+          class="text-gray-900 font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full truncate max-w-[220px]">
+          BP Monitor
+        </span>
+
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+        <!-- Images Section -->
+        <div class="space-y-6">
+          <div class="relative rounded-3xl overflow-hidden bg-white shadow-xl border border-slate-200">
+            <img id="mainImage" src="./imges/products/3Ring_Style_Syringe_1-450x450.jpg-removebg-preview.png"
+              alt="3-Ring Style Syringe" class="product-image w-full h-auto object-contain bg-slate-50">
+
+            <!-- Category Badge -->
+            <div
+              class="absolute top-6 left-6 bg-emerald-600 text-white text-sm font-bold px-5 py-2 rounded-2xl shadow-lg">
+              Diagnostic Tools
+            </div>
+          </div>
+
+          <!-- Thumbnails -->
+          <div class="grid grid-cols-4 gap-4">
+            <img onclick="changeImage(this)" src="./imges/products/514DxPDgAJL._AC_SX679_.jpg"
+              class="thumbnail w-full aspect-square object-contain rounded-2xl border-2 border-transparent hover:border-emerald-300 cursor-pointer transition-all">
+            <img onclick="changeImage(this)" src="./imges/products/71RNtfCLkxL._AC_SX679_.jpg"
+              class="thumbnail w-full aspect-square object-contain rounded-2xl border-2 border-transparent hover:border-emerald-300 cursor-pointer transition-all">
+            <img onclick="changeImage(this)" src="./imges/products/Anatomy Model Set.jpg"
+              class="thumbnail w-full aspect-square object-contain rounded-2xl border-2 border-transparent hover:border-emerald-300 cursor-pointer transition-all">
+            <img onclick="changeImage(this)" src="./imges/products/tweezerwal4_1024x.webp"
+              class="thumbnail w-full aspect-square object-contain rounded-2xl border-2 border-transparent hover:border-emerald-300 cursor-pointer transition-all">
+          </div>
+        </div>
+
+        <!-- Product Information -->
+        <div class="space-y-8">
+          <div>
+            <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-2xl mb-3">
+              Surgical Instruments
+            </span>
+            <h1 class="text-4xl font-bold text-slate-900 leading-tight">3-Ring Style Syringe</h1>
+          </div>
+
+          <!-- Price & Rating -->
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-4xl font-black text-slate-900">299 <span
+                  class="text-2xl font-normal text-slate-500">EGP</span></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="flex text-amber-400 text-2xl">★★★★☆</div>
+              <span class="text-slate-500 text-sm">(124 reviews)</span>
+            </div>
+          </div>
+
+          <!-- Short Description -->
+          <p class="text-slate-600 leading-relaxed text-lg">
+            High-quality 3-ring disposable syringe designed for precise medical injections and laboratory use.
+            Ergonomic design with excellent control and safety.
+          </p>
+
+          <!-- Quantity & Add to Cart -->
+          <div class="flex items-center gap-6">
+            <div class="flex items-center border border-slate-300 rounded-3xl bg-white">
+              <button onclick="changeQty(-1)"
+                class="w-12 h-12 flex items-center justify-center text-2xl font-light text-slate-600 hover:text-slate-900 transition">-</button>
+              <span id="quantity" class="w-12 text-center text-xl font-medium">1</span>
+              <button onclick="changeQty(1)"
+                class="w-12 h-12 flex items-center justify-center text-2xl font-light text-slate-600 hover:text-slate-900 transition">+</button>
+            </div>
+
+            <button onclick="addToCart()" data-id="1"
+              class="add-btn flex-1 bg-emerald-600 hover:bg-emerald-700 transition-all text-white font-semibold py-4 rounded-3xl text-lg shadow-lg shadow-emerald-500/30 active:scale-95 mb-1">
+              Add to Cart
+            </button>
+          </div>
+
+          <!-- Buy Now -->
+          <a href="./Checkout.html">
+            <button onclick="buyNow()"
+              class="w-full bg-slate-900 hover:bg-black transition-all text-white font-semibold py-4 rounded-3xl text-lg mt-2 shadow-lg shadow-slate-900/30 active:scale-95">
+              Buy Now
+            </button>
+          </a>
+
+          <!-- Quick Features -->
+          <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200">
+            <div class="text-center">
+              <i class="fa-solid fa-truck text-3xl text-emerald-500 mb-3"></i>
+              <p class="text-sm font-medium text-slate-600">Free Shipping</p>
+            </div>
+            <div class="text-center">
+              <i class="fa-solid fa-shield-halved text-3xl text-emerald-500 mb-3"></i>
+              <p class="text-sm font-medium text-slate-600">2-Year Warranty</p>
+            </div>
+            <div class="text-center">
+              <i class="fa-solid fa-rotate text-3xl text-emerald-500 mb-3"></i>
+              <p class="text-sm font-medium text-slate-600">14-Day Return</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Specifications -->
+      <div class="mt-16 bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+        <div class="border-b border-slate-100 pb-6 mb-6">
+          <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-3">
+            <span class="h-7 w-1 bg-emerald-500 rounded-full"></span>
+            Full Technical Specifications
+          </h2>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-slate-100">
+          <table class="w-full text-left">
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="py-5 px-8 font-semibold text-slate-500 w-1/3">Brand</td>
+                <td class="py-5 px-8 font-medium">UNILAB Standard Instruments</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="py-5 px-8 font-semibold text-slate-500">Material</td>
+                <td class="py-5 px-8 font-medium">Medical Grade Plastic + Stainless Steel Plunger</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="py-5 px-8 font-semibold text-slate-500">Capacity</td>
+                <td class="py-5 px-8 font-medium">10ml / 20ml</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors bg-slate-50/50">
+                <td class="py-5 px-8 font-semibold text-slate-500">Packaging</td>
+                <td class="py-5 px-8 font-medium">Individually sterile packaged</td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="py-5 px-8 font-semibold text-slate-500">Recommended Uses</td>
+                <td class="py-5 px-8 font-medium">Medical injections, lab use, student training</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <!-- container - footer -->
+    <div class="container">
+      <!-- About -->
+      <div class="footer-about">
+        <img src="./imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png" alt="logo">
+        <p>
+          Your one-stop shop for professional educational tools and equipment.
+          Supporting students in Medicine, Engineering, and Fine Arts.
+        </p>
+      </div>
+      <!-- Colleges -->
+      <div class="footer-col">
+        <h5>Colleges</h5>
+        <ul>
+          <li><a href="./Medicine.html">Medicine</a></li>
+          <li><a href="./Engineering.html">Engineering</a></li>
+          <li><a href="./Fine art.html">Fine Arts</a></li>
+        </ul>
+      </div>
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="./All-product.html">All product</a></li>
+          <li><a href="./Checkout.html">Checkout</a></li>
+          <li><a href="./Sign-in.html">sign-in</a></li>
+        </ul>
+      </div>
+      <!-- Services -->
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="./Privacy-Policy.html">Privacy Policy</a></li>
+          <li><a href="./Return-Refunds.html">Returns & Refunds</a></li>
+          <li><a href="./FAQs-page.html">FAQs</a></li>
+        </ul>
+      </div>
+      <!-- Contact & Social -->
+      <div class="footer-col">
+        <h5>Contact Us</h5>
+        <div class="social-icons">
+          <ul>
+            <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a class="instagram" href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a class="linkedin" href="#"><i class="fab fa-linkedin-in"></i></a></li>
+          </ul>
+        </div>
+        <div class="contact-info">
+          <ul>
+            <li>Email: ahmedkhamis@gmail.com</li>
+            <li>Phone: 01007970340</li>
+            <li>El Minya, Egypt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- email -->
+    <div class="copyright">
+      © 2026 AHMED KHAMEIS. All rights reserved.
+    </div>
+  </footer>
+
+
+  <script src="./js/product.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+
+</html>
