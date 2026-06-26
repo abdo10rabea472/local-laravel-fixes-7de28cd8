@@ -22,12 +22,14 @@ class PaymentService
      */
     public function pay(Order $order, PaymentGateway $gateway): array
     {
+        $driverName = $this->canonicalDriver($gateway->driver);
+
         if (! $gateway->is_active) {
             return ['ok' => false, 'message' => 'بوابة الدفع غير مفعلة.'];
         }
 
         // Cash on Delivery — built-in driver, no external call.
-        if ($gateway->driver === 'cod') {
+        if ($driverName === 'cod') {
             $alreadyHandled = $order->payment_status === 'cod_pending';
 
             $order->forceFill([
@@ -52,11 +54,16 @@ class PaymentService
             return ['ok' => false, 'message' => 'مكتبة بوابات الدفع غير مثبتة. شغّل: composer require nafezly/payments dev-master'];
         }
 
+        $configError = $this->validateRequiredConfig($gateway);
+        if ($configError) {
+            return ['ok' => false, 'message' => $configError];
+        }
+
         try {
             $this->applyRuntimeConfig($gateway);
 
             /** @var \Nafezly\Payments\Interfaces\PaymentInterface $driver */
-            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($gateway->driver);
+            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
 
             $response = $driver
                 ->setUserId((string) ($order->user_id ?? $order->id))
@@ -83,11 +90,6 @@ class PaymentService
                     'order_id' => $order->id,
                     'response' => $response,
                 ]);
-                $order->forceFill([
-                    'payment_gateway'  => $gateway->code,
-                    'payment_status'   => 'failed',
-                    'payment_response' => $response,
-                ])->save();
                 return ['ok' => false, 'message' => $msg];
             }
 
@@ -111,10 +113,6 @@ class PaymentService
                 'order_id' => $order->id,
                 'error'    => $e->getMessage(),
             ]);
-            $order->forceFill([
-                'payment_gateway' => $gateway->code,
-                'payment_status'  => 'failed',
-            ])->save();
             return ['ok' => false, 'message' => 'تعذر بدء عملية الدفع: ' . $e->getMessage()];
         }
     }
@@ -134,7 +132,9 @@ class PaymentService
             return ['success' => false, 'message' => 'بوابة الدفع غير موجودة.'];
         }
 
-        if ($gateway->driver === 'cod') {
+        $driverName = $this->canonicalDriver($gateway->driver);
+
+        if ($driverName === 'cod') {
             return ['success' => true, 'message' => 'تم تأكيد الدفع عند الاستلام.'];
         }
 
@@ -144,7 +144,7 @@ class PaymentService
 
         try {
             $this->applyRuntimeConfig($gateway);
-            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($gateway->driver);
+            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
             $result = $driver->verify($request);
 
             // Try to update order
@@ -153,18 +153,26 @@ class PaymentService
                 Order::where('payment_reference', $reference)
                     ->orWhere('order_number', $reference)
                     ->limit(1)
-                    ->each(function (Order $order) use ($result, $gateway) {
+                    ->each(function (Order $order) use (&$result, $gateway) {
                         $wasPaid = $order->payment_status === 'paid';
                         $paidNow = (bool) ($result['success'] ?? false);
 
+                        $result['order_id'] = $order->id;
+
+                        if (! $paidNow) {
+                            $this->rejectUnpaidOrder($order, $result['message'] ?? 'payment verification failed');
+                            return;
+                        }
+
                         $order->forceFill([
-                            'payment_status'   => $paidNow ? 'paid' : 'failed',
+                            'payment_status'   => 'paid',
                             'payment_response' => $result,
-                            'paid_at'          => $paidNow ? now() : $order->paid_at,
-                            'status'           => $paidNow ? 'paid' : $order->status,
+                            'paid_at'          => now(),
+                            'status'           => 'paid',
                         ])->save();
 
-                        if ($paidNow && ! $wasPaid) {
+                        if (! $wasPaid) {
+                            $this->clearCartForOrder($order);
                             $this->sendPlacedMailOnce($order);
                             $this->dispatchShipmentIfNeeded($order);
                         }
@@ -189,12 +197,14 @@ class PaymentService
      */
     public function testConnection(PaymentGateway $gateway): array
     {
-        if ($gateway->driver === 'cod') {
+        $driverName = $this->canonicalDriver($gateway->driver);
+
+        if ($driverName === 'cod') {
             return ['ok' => true, 'message' => '✓ الدفع عند الاستلام (COD) جاهز — لا يحتاج إلى اتصال خارجي.'];
         }
 
         // 1) Required config keys per driver
-        $required = $this->requiredKeysFor($gateway->driver);
+        $required = $this->requiredKeysFor($driverName);
         $cfg = array_change_key_case((array) $gateway->config, CASE_UPPER);
         $missing = [];
         foreach ($required as $key) {
@@ -216,7 +226,7 @@ class PaymentService
 
         try {
             $this->applyRuntimeConfig($gateway);
-            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($gateway->driver);
+            $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
         } catch (\Throwable $e) {
             return ['ok' => false, 'message' => '❌ تعذر تحميل البوابة: ' . $e->getMessage()];
         }
@@ -237,6 +247,8 @@ class PaymentService
     /** Map of required config keys per driver. */
     protected function requiredKeysFor(string $driver): array
     {
+        $driver = $this->canonicalDriver($driver);
+
         return [
             'Paymob'       => ['PAYMOB_API_KEY','PAYMOB_INTEGRATION_ID','PAYMOB_IFRAME_ID','PAYMOB_HMAC'],
             'PaymobWallet' => ['PAYMOB_API_KEY','PAYMOB_WALLET_INTEGRATION_ID','PAYMOB_HMAC'],
@@ -266,7 +278,7 @@ class PaymentService
     protected function liveCredentialCheck(PaymentGateway $gateway, array $cfg): ?array
     {
         try {
-            switch ($gateway->driver) {
+            switch ($this->canonicalDriver($gateway->driver)) {
                 case 'Paymob':
                     $resp = \Illuminate\Support\Facades\Http::timeout(15)
                         ->acceptJson()
@@ -335,6 +347,133 @@ class PaymentService
             $key = strtoupper($key);
             config()->set("nafezly-payments.$key", $value);
         }
+    }
+
+    protected function canonicalDriver(?string $driver): string
+    {
+        $driver = trim((string) $driver);
+        $map = [
+            'cod' => 'cod',
+            'paymob' => 'Paymob',
+            'paymobwallet' => 'PaymobWallet',
+            'fawry' => 'Fawry',
+            'kashier' => 'Kashier',
+            'hyperpay' => 'HyperPay',
+            'paypal' => 'PayPal',
+            'stripe' => 'Stripe',
+            'tap' => 'Tap',
+            'opay' => 'Opay',
+            'paytabs' => 'PayTabs',
+            'thawani' => 'Thawani',
+            'telr' => 'Telr',
+            'clickpay' => 'ClickPay',
+            'binance' => 'Binance',
+            'nowpayments' => 'NowPayments',
+            'payeer' => 'Payeer',
+            'perfectmoney' => 'PerfectMoney',
+        ];
+
+        return $map[strtolower($driver)] ?? $driver;
+    }
+
+    protected function validateRequiredConfig(PaymentGateway $gateway): ?string
+    {
+        $driver = $this->canonicalDriver($gateway->driver);
+        $cfg = array_change_key_case((array) $gateway->config, CASE_UPPER);
+        $missing = [];
+
+        foreach ($this->requiredKeysFor($driver) as $key) {
+            if (empty($cfg[strtoupper($key)])) {
+                $missing[] = $key;
+            }
+        }
+
+        if (! empty($missing)) {
+            return 'إعدادات بوابة الدفع ناقصة. أدخل: ' . implode(', ', $missing);
+        }
+
+        if (in_array($driver, ['Paymob', 'PaymobWallet'], true)) {
+            $apiKey = trim((string) ($cfg['PAYMOB_API_KEY'] ?? ''));
+            if ($apiKey === '' || mb_strlen($apiKey) < 40) {
+                return 'PAYMOB_API_KEY غير صحيح أو غير كامل. انسخ API Key كامل من لوحة Paymob ثم احفظ الإعدادات.';
+            }
+        }
+
+        return null;
+    }
+
+    public function rejectUnpaidOrder(Order $order, string $reason = ''): void
+    {
+        if ($order->trashed()) {
+            return;
+        }
+
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($order, $reason) {
+                $order->loadMissing('items');
+                $stockService = app(\App\Services\StockService::class);
+
+                foreach ($order->items as $item) {
+                    if (! $item->product_id || (int) $item->quantity <= 0) {
+                        continue;
+                    }
+
+                    $product = \App\Models\Product::whereKey($item->product_id)->lockForUpdate()->first();
+                    if ($product) {
+                        $stockService->apply(
+                            $product,
+                            (int) $item->quantity,
+                            'payment_failed',
+                            'Order',
+                            $order->id,
+                            'فشل/إلغاء الدفع للطلب ' . $order->order_number
+                        );
+                    }
+                }
+
+                if ($order->coupon_code) {
+                    $coupon = \App\Models\Coupon::where('code', $order->coupon_code)->lockForUpdate()->first();
+                    if ($coupon) {
+                        \App\Models\CouponRedemption::where('coupon_id', $coupon->id)
+                            ->where('email', strtolower(trim((string) $order->email)))
+                            ->latest('id')
+                            ->limit(1)
+                            ->delete();
+
+                        if ((int) $coupon->used_count > 0) {
+                            $coupon->decrement('used_count');
+                        }
+                    }
+                }
+
+                $order->forceFill([
+                    'status' => 'cancelled',
+                    'payment_status' => 'failed',
+                    'payment_response' => array_filter([
+                        'rejected_reason' => $reason,
+                        'rejected_at' => now()->toIso8601String(),
+                    ]),
+                    'cancelled_at' => now(),
+                ])->save();
+
+                $order->delete();
+            });
+        } catch (\Throwable $e) {
+            Log::error('payment.reject_order.failed', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        cache()->forget('admin.orders.stats');
+    }
+
+    public function clearCartForOrder(Order $order): void
+    {
+        \App\Models\CartItem::query()
+            ->when($order->user_id, fn ($q) => $q->where('user_id', $order->user_id))
+            ->when(! $order->user_id, fn ($q) => $q->where('session_id', session()->getId()))
+            ->delete();
     }
 
     protected function looksLikeGatewayError(?string $html): bool
