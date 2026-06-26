@@ -3,8 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "node -e \"require('fs').rmSync('public/hot',{force:true})\" && vite build && node -e \"require('fs').rmSync('public/hot',{force:true})\"",
-        "build:dev": "node -e \"require('fs').rmSync('public/hot',{force:true})\" && vite build --mode development && node -e \"require('fs').rmSync('public/hot',{force:true})\"",
+        "build": "node -e \"require('fs').rmSync('public/hot',{force:true})\" && vite build && node -e \"const fs=require('fs'),p=require('path');fs.mkdirSync('dist',{recursive:true});function cp(s,d){for(const e of fs.readdirSync(s,{withFileTypes:true})){const S=p.join(s,e.name),D=p.join(d,e.name);if(e.isDirectory()){fs.mkdirSync(D,{recursive:true});cp(S,D)}else fs.copyFileSync(S,D)}}if(fs.existsSync('public/build'))cp('public/build','dist')\" && node -e \"require('fs').rmSync('public/hot',{force:true})\"",
+        "build:dev": "node -e \"require('fs').rmSync('public/hot',{force:true})\" && vite build --mode development && node -e \"const fs=require('fs'),p=require('path');fs.mkdirSync('dist',{recursive:true});function cp(s,d){for(const e of fs.readdirSync(s,{withFileTypes:true})){const S=p.join(s,e.name),D=p.join(d,e.name);if(e.isDirectory()){fs.mkdirSync(D,{recursive:true});cp(S,D)}else fs.copyFileSync(S,D)}}if(fs.existsSync('public/build'))cp('public/build','dist')\" && node -e \"require('fs').rmSync('public/hot',{force:true})\"",
         "dev": "vite"
 
 
