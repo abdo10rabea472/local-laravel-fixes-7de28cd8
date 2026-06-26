@@ -1,27 +1,40 @@
 @extends('account.layout')
 @section('account_content')
-<h1 class="text-2xl font-black text-slate-900 mb-6">مراجعاتي</h1>
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+    <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-violet-50/50 to-transparent">
+        <h1 class="font-black text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-star text-amber-500"></i> مراجعاتي
+        </h1>
+        <span class="text-xs font-bold text-slate-500">{{ $reviews->total() }} مراجعة</span>
+    </div>
+</div>
+
 <div class="space-y-3">
     @forelse($reviews as $r)
-    <div class="bg-white p-4 rounded-2xl border border-slate-200">
+    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-violet-200 transition">
         <div class="flex items-center justify-between">
-            <span class="text-amber-500 text-lg">@for($i=0;$i<$r->rating;$i++)★@endfor<span class="text-slate-300">@for($i=0;$i<5-$r->rating;$i++)★@endfor</span></span>
+            <span class="text-amber-500 text-lg tracking-tight">@for($i=0;$i<$r->rating;$i++)★@endfor<span class="text-slate-300">@for($i=0;$i<5-$r->rating;$i++)★@endfor</span></span>
             @php $sc = ['pending'=>'amber','approved'=>'emerald','rejected'=>'rose'][$r->status]; @endphp
-            <span class="px-2 py-1 text-xs bg-{{ $sc }}-50 text-{{ $sc }}-700 rounded-full font-bold">
+            <span class="px-3 py-1 text-xs bg-{{ $sc }}-50 text-{{ $sc }}-700 rounded-full font-bold">
                 {{ ['pending'=>'قيد المراجعة','approved'=>'معتمدة','rejected'=>'مرفوضة'][$r->status] }}
             </span>
         </div>
-        @if($r->title)<h3 class="font-bold mt-1">{{ $r->title }}</h3>@endif
-        <p class="text-sm text-slate-700 mt-1">{{ $r->body }}</p>
-        <a href="{{ route('product.show', $r->product->slug) }}" class="text-xs text-violet-600 mt-2 inline-block">{{ $r->product->name }} ←</a>
+        @if($r->title)<h3 class="font-black text-slate-900 mt-2">{{ $r->title }}</h3>@endif
+        <p class="text-sm text-slate-700 mt-1 leading-relaxed">{{ $r->body }}</p>
+        <a href="{{ route('product.show', $r->product->slug) }}" class="inline-flex items-center gap-1 text-xs text-violet-600 font-bold mt-3 hover:underline">
+            <i class="fa-solid fa-box text-[10px]"></i> {{ $r->product->name }}
+        </a>
         @if($r->admin_reply)
-        <div class="mt-3 p-3 bg-violet-50 rounded-xl text-sm">
+        <div class="mt-3 p-3 bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-100 rounded-xl text-sm">
             <b class="text-violet-700">رد الإدارة:</b> {{ $r->admin_reply }}
         </div>
         @endif
     </div>
     @empty
-    <div class="bg-white p-10 text-center text-slate-400 rounded-2xl">لا توجد مراجعات بعد.</div>
+    <div class="bg-white p-12 text-center rounded-2xl border border-slate-200">
+        <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 grid place-items-center text-2xl mx-auto mb-3"><i class="fa-solid fa-star"></i></div>
+        <p class="text-slate-500">لا توجد مراجعات بعد.</p>
+    </div>
     @endforelse
 </div>
 <div class="mt-4">{{ $reviews->links() }}</div>
