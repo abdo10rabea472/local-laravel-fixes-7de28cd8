@@ -184,6 +184,7 @@
 <script>
     const REVENUE_LABELS = @json($revenueLabels);
     const REVENUE_DATA   = @json($revenueSeries);
+    const ORDERS_DATA    = @json($ordersSeries);
     const CATEGORY_LABELS = @json($categoryStats->pluck('category_name'));
     const CATEGORY_DATA   = @json($categoryStats->pluck('count'));
 
@@ -201,18 +202,29 @@
                 type: 'line',
                 data: {
                     labels: REVENUE_LABELS,
-                    datasets: [{
-                        label: 'الإيرادات (ج.م)',
-                        data: REVENUE_DATA,
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34,197,94,0.08)',
-                        fill: true, tension: 0.3, borderWidth: 3,
-                        pointBackgroundColor: '#22c55e',
-                    }]
+                    datasets: [
+                        {
+                            label: 'الأرباح المحققة (ج.م)',
+                            data: REVENUE_DATA,
+                            borderColor: '#22c55e',
+                            backgroundColor: 'rgba(34,197,94,0.08)',
+                            fill: true, tension: 0.35, borderWidth: 3,
+                            pointBackgroundColor: '#22c55e', pointRadius: 4,
+                        },
+                        {
+                            label: 'الطلبات المحجوزة',
+                            data: ORDERS_DATA,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'transparent',
+                            borderDash: [6,4],
+                            fill: false, tension: 0.35, borderWidth: 2,
+                            pointBackgroundColor: '#3b82f6', pointRadius: 3,
+                        }
+                    ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { font: { family: 'Cairo' }, color: textColor } } },
+                    plugins: { legend: { position: 'top', align: 'start', labels: { font: { family: 'Cairo' }, color: textColor, usePointStyle: true, boxWidth: 8 } } },
                     scales: {
                         x: { grid: { color: 'transparent' }, ticks: { font: { family: 'Cairo' }, color: textColor } },
                         y: { grid: { color: gridColor },    ticks: { font: { family: 'Cairo' }, color: textColor } }
