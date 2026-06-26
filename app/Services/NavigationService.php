@@ -11,7 +11,7 @@ class NavigationService
 {
     public static function getData(): array
     {
-        return Cache::remember('nav_data', 3600, function () {
+        return Cache::remember('nav_data', 86400, function () {
             $colleges = Category::query()
                 ->roots()
                 ->active()
@@ -28,36 +28,51 @@ class NavigationService
                 ])
                 ->get();
 
-            $headerMenu = HeaderMenuItem::root()
-                ->byLocation('header_primary')
-                ->active()
-                ->with(['children' => fn ($q) => $q->active()->orderBy('position')])
+            // Fetch all header/footer menu items in a single query, then group in PHP.
+            // This replaces 3 separate queries with 1.
+            $allMenuItems = HeaderMenuItem::query()
+                ->whereIn('location', ['header_primary', 'header_top', 'footer'])
+                ->where('status', true)
+                ->orderBy('parent_id')
                 ->orderBy('position')
                 ->get();
 
-            $topMenu = HeaderMenuItem::root()
-                ->byLocation('header_top')
-                ->active()
-                ->with(['children' => fn ($q) => $q->active()->orderBy('position')])
-                ->orderBy('position')
-                ->get();
+            [$roots, $childrenByParent] = self::groupMenuItems($allMenuItems);
 
-            $footerMenu = HeaderMenuItem::root()
-                ->byLocation('footer')
-                ->active()
-                ->with(['children' => fn ($q) => $q->active()->orderBy('position')])
-                ->orderBy('position')
-                ->get();
+            $build = function (string $location) use ($roots, $childrenByParent) {
+                return collect($roots[$location] ?? [])->map(function ($item) use ($childrenByParent) {
+                    $item->setRelation('children', collect($childrenByParent[$item->id] ?? []));
+                    return $item;
+                })->values();
+            };
 
             return [
                 'colleges' => $colleges,
                 'totalProducts' => Product::active()->count(),
                 'totalColleges' => $colleges->count(),
-                'headerMenu' => $headerMenu,
-                'topMenu' => $topMenu,
-                'footerMenu' => $footerMenu,
+                'headerMenu' => $build('header_primary'),
+                'topMenu' => $build('header_top'),
+                'footerMenu' => $build('footer'),
             ];
         });
+    }
+
+    /**
+     * Split menu items into root items grouped by location plus a children map
+     * keyed by parent id. Children inherit the parent's location implicitly.
+     */
+    private static function groupMenuItems($items): array
+    {
+        $roots = [];
+        $children = [];
+        foreach ($items as $item) {
+            if ($item->parent_id === null) {
+                $roots[$item->location][] = $item;
+            } else {
+                $children[$item->parent_id][] = $item;
+            }
+        }
+        return [$roots, $children];
     }
 
     public static function clearCache(): void
@@ -65,5 +80,9 @@ class NavigationService
         Cache::forget('nav_data');
         Cache::forget('main_categories');
         Cache::forget('homepage_stats');
+        Cache::forget('active_coupons_list');
+        Cache::forget('admin.dashboard.product_stats');
+        Cache::forget('admin.dashboard.category_stats');
+        Cache::forget('admin.dashboard.total_categories');
     }
 }

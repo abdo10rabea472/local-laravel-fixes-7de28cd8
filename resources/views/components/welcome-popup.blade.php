@@ -1,5 +1,6 @@
 @php
 use App\Models\Coupon;
+use Illuminate\Support\Facades\Cache;
 
 $enabled = site_setting('welcome_popup_enabled', '1') === '1';
 $title = site_setting('welcome_popup_title', 'Welcome to UNI-LAB MARKET');
@@ -7,8 +8,22 @@ $message = site_setting('welcome_popup_message', 'Get an exclusive discount on y
 $buttonText = site_setting('welcome_popup_button_text', 'Shop Now');
 $image = site_setting_url('welcome_popup_image');
 
-// Pick a random active coupon if any
-$coupon = Coupon::active()->inRandomOrder()->first();
+// Avoid hitting the DB at all when the popup is disabled.
+$coupon = null;
+if ($enabled) {
+    // Cache the small list of active coupons for 5 minutes and randomise in PHP.
+    // This eliminates a per-request `ORDER BY RAND()` against the coupons table.
+    $activeCoupons = Cache::remember('active_coupons_list', 300, function () {
+        return Coupon::active()
+            ->select(['id', 'code', 'type', 'value'])
+            ->get()
+            ->all();
+    });
+    if (! empty($activeCoupons)) {
+        $coupon = $activeCoupons[array_rand($activeCoupons)];
+    }
+}
+
 $code = $coupon?->code ?? site_setting('welcome_popup_discount_code', '');
 $percent = $coupon
     ? ($coupon->type === 'percent' ? (int) $coupon->value : 0)
@@ -20,6 +35,7 @@ $discountLabel = $coupon
         : number_format($fixedAmount, 0) . ' EGP OFF your order')
     : ($percent > 0 ? $percent . '% OFF your first order' : '');
 @endphp
+
 
 
 @if($enabled)

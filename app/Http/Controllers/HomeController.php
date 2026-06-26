@@ -17,6 +17,7 @@ class HomeController extends Controller
             ->with([
                 'category:id,name,slug',
                 'images' => fn ($q) => $q->select(['id', 'product_id', 'thumb', 'medium', 'image'])->orderBy('sort_order'),
+                'activeDiscount',
             ])
             ->limit((int) \App\Models\SiteSetting::get('featured_limit', 8))
             ->get();
@@ -27,7 +28,9 @@ class HomeController extends Controller
             ->with([
                 'category:id,name,slug',
                 'images' => fn ($q) => $q->select(['id', 'product_id', 'thumb', 'medium', 'image'])->orderBy('sort_order'),
+                'activeDiscount',
             ]);
+
 
         if (request()->filled('search')) {
             $search = request('search');
@@ -58,6 +61,11 @@ class HomeController extends Controller
                 'departments' => Category::whereNotNull('parent_id')->active()->count(),
             ];
         });
+
+        // Settings are served from SiteSetting's permanent cache (one query first
+        // time, in-memory thereafter), so individual ::get() calls below are O(1).
+
+
 
         $hero = [
             'title' => \App\Models\SiteSetting::get('hero_title', 'Professional Tools for Future Professionals'),
