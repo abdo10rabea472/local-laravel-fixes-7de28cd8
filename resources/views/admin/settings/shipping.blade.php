@@ -42,13 +42,13 @@
                 <p class="text-xs text-slate-500 mt-0.5">تفعيل ميزة الشحن المجاني عند تجاوز قيمة معينة.</p>
             </div>
         </div>
-        <form method="POST" action="{{ route('admin.settings.shipping.threshold') }}" class="p-6 space-y-5">
+        <form method="POST" action="{{ route('admin.settings.shipping.threshold') }}" enctype="multipart/form-data" class="p-6 space-y-5">
             @csrf @method('PUT')
 
             <label class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer">
                 <div>
                     <p class="font-bold text-slate-800 text-sm">تفعيل الحد الأدنى للشحن المجاني</p>
-                    <p class="text-xs text-slate-500 mt-1">عند تعطيله يتم احتساب الشحن حسب الدولة والمنطقة فقط.</p>
+                    <p class="text-xs text-slate-500 mt-1">عند تعطيله يتم احتساب الشحن حسب الدولة والمنطقة فقط، ولن يظهر شريط الهيدر ولا النموذج المنبثق.</p>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" name="free_shipping_enabled" value="1" class="sr-only peer" {{ $freeShippingEnabled ? 'checked' : '' }}>
@@ -61,12 +61,66 @@
                     <label class="text-xs font-bold text-slate-500">الحد الأدنى للشحن المجاني (EGP)</label>
                     <input type="number" min="0" step="0.01" name="free_shipping_threshold" value="{{ $freeThreshold }}" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm">
                 </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-5 space-y-5">
+                <h4 class="text-sm font-bold text-slate-800">طرق العرض للزائر</h4>
+
+                <label class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer">
+                    <div>
+                        <p class="font-bold text-slate-800 text-sm">إظهار شريط الشحن المجاني في الهيدر</p>
+                        <p class="text-xs text-slate-500 mt-1">يعرض جملة "Free shipping on orders over ..." أعلى الصفحات.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="free_shipping_show_in_header" value="1" class="sr-only peer" {{ $freeShippingShowInHeader ? 'checked' : '' }}>
+                        <div class="w-11 h-6 bg-slate-300 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform peer-checked:after:translate-x-5"></div>
+                    </label>
+                </label>
+
+                <label class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer">
+                    <div>
+                        <p class="font-bold text-slate-800 text-sm">إظهار نموذج إعلاني منبثق للشحن المجاني</p>
+                        <p class="text-xs text-slate-500 mt-1">يظهر للزائر أول مرة، ويعاد ظهوره بعد 24 ساعة (مثل نموذج كود الخصم).</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="free_shipping_popup_enabled" value="1" class="sr-only peer" {{ $freeShippingPopupEnabled ? 'checked' : '' }}>
+                        <div class="w-11 h-6 bg-slate-300 rounded-full peer peer-checked:bg-emerald-500 transition-colors after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-transform peer-checked:after:translate-x-5"></div>
+                    </label>
+                </label>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500">عنوان النموذج المنبثق</label>
+                        <input type="text" name="free_shipping_popup_title" value="{{ $freeShippingPopupTitle }}" maxlength="150" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500">صورة النموذج المنبثق</label>
+                        <input type="file" name="free_shipping_popup_image" accept="image/*" class="w-full text-sm">
+                        @if(site_setting_url('free_shipping_popup_image'))
+                            <div class="flex items-center gap-3 mt-2">
+                                <img src="{{ site_setting_url('free_shipping_popup_image') }}" alt="" class="h-16 w-auto object-cover rounded-lg border border-slate-100">
+                                <label class="flex items-center gap-2 text-xs text-rose-600">
+                                    <input type="checkbox" name="remove_free_shipping_popup_image" value="1"> حذف الصورة
+                                </label>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500">رسالة النموذج المنبثق</label>
+                    <textarea name="free_shipping_popup_message" rows="3" maxlength="500" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">{{ $freeShippingPopupMessage }}</textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
                 <button type="submit" class="h-11 px-6 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors shadow-md shadow-emerald-500/20">
-                    حفظ
+                    حفظ الإعدادات
                 </button>
             </div>
         </form>
     </div>
+
 
     {{-- ─────────────── Countries + Regions ─────────────── --}}
     <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">

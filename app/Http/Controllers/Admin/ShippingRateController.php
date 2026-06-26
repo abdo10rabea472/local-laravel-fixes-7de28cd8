@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\ShippingCountry;
 use App\Models\ShippingRegion;
 use App\Models\SiteSetting;
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ShippingRateController extends Controller
 {
+    public function __construct(private ImageService $imageService)
+    {
+    }
+
     public function index(): View
     {
         $countries = ShippingCountry::with('regions')->orderBy('position')->orderBy('name')->get();
@@ -22,9 +27,14 @@ class ShippingRateController extends Controller
             'countries' => $countries,
             'freeShippingEnabled' => $freeShippingEnabled,
             'freeThreshold' => $freeThreshold,
+            'freeShippingShowInHeader' => SiteSetting::get('free_shipping_show_in_header', '1') === '1',
+            'freeShippingPopupEnabled' => SiteSetting::get('free_shipping_popup_enabled', '0') === '1',
+            'freeShippingPopupTitle' => SiteSetting::get('free_shipping_popup_title', 'Free Shipping Available!'),
+            'freeShippingPopupMessage' => SiteSetting::get('free_shipping_popup_message', 'Enjoy free shipping on all orders above our minimum threshold.'),
             'activeTab' => 'shipping',
         ]);
     }
+
 
     // ───── Countries ─────
     public function storeCountry(Request $request): RedirectResponse
@@ -112,12 +122,34 @@ class ShippingRateController extends Controller
     {
         $data = $request->validate([
             'free_shipping_threshold' => 'nullable|numeric|min:0',
+            'free_shipping_popup_title' => 'nullable|string|max:150',
+            'free_shipping_popup_message' => 'nullable|string|max:500',
+            'free_shipping_popup_image' => 'nullable|image|max:4096',
         ]);
 
-        $enabled = $request->boolean('free_shipping_enabled');
-
-        $this->saveSetting('free_shipping_enabled', $enabled ? '1' : '0', 'تفعيل الشحن المجاني');
+        $this->saveSetting('free_shipping_enabled', $request->boolean('free_shipping_enabled') ? '1' : '0', 'تفعيل الشحن المجاني');
         $this->saveSetting('free_shipping_threshold', (string) ($data['free_shipping_threshold'] ?? '0'), 'حد الشحن المجاني');
+        $this->saveSetting('free_shipping_show_in_header', $request->boolean('free_shipping_show_in_header') ? '1' : '0', 'إظهار الشحن المجاني في الهيدر');
+        $this->saveSetting('free_shipping_popup_enabled', $request->boolean('free_shipping_popup_enabled') ? '1' : '0', 'تفعيل نموذج الشحن المجاني');
+        $this->saveSetting('free_shipping_popup_title', (string) ($data['free_shipping_popup_title'] ?? ''), 'عنوان نموذج الشحن المجاني');
+        $this->saveSetting('free_shipping_popup_message', (string) ($data['free_shipping_popup_message'] ?? ''), 'رسالة نموذج الشحن المجاني');
+
+        // Image handling
+        $imageSetting = SiteSetting::firstOrNew(['key' => 'free_shipping_popup_image']);
+        if ($request->hasFile('free_shipping_popup_image')) {
+            if ($imageSetting->value) {
+                $this->imageService->deletePaths($imageSetting->value);
+            }
+            $imageSetting->value = $this->imageService->storeSettingImage($request->file('free_shipping_popup_image'), 'free_shipping_popup_image');
+            $imageSetting->type = 'image';
+            $imageSetting->label = $imageSetting->label ?: 'صورة نموذج الشحن المجاني';
+            $imageSetting->group = 'shipping';
+            $imageSetting->save();
+        } elseif ($request->boolean('remove_free_shipping_popup_image') && $imageSetting->value) {
+            $this->imageService->deletePaths($imageSetting->value);
+            $imageSetting->value = null;
+            $imageSetting->save();
+        }
 
         SiteSetting::clearCache();
 
@@ -133,3 +165,4 @@ class ShippingRateController extends Controller
         $setting->save();
     }
 }
+
