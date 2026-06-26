@@ -31,6 +31,16 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        @if(session('error'))
+            <div class="mb-5 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">
+                <i class="fa-solid fa-circle-exclamation mt-1"></i>
+                <div>
+                    <strong class="block text-sm font-black">لم يتم الدفع</strong>
+                    <p class="mt-1 text-sm leading-relaxed">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
         <div id="checkout-empty" class="hidden text-center py-20 bg-white rounded-3xl border border-slate-200">
             <i class="fa-solid fa-cart-shopping text-5xl text-slate-300 mb-4"></i>
             <h2 class="text-xl font-bold text-slate-800">Your cart is empty</h2>
@@ -608,7 +618,6 @@
                 return;
             }
             window.UL?.toast('جاري تحويلك لبوابة الدفع...', 'success');
-            if (typeof window.clearCart === 'function') { try { await window.clearCart(); } catch (_) {} }
             window.location.href = json.redirect;
         } catch (e) {
             confirmBtn.disabled = false;
