@@ -539,7 +539,7 @@
         } catch (e) {
             confirmBtn.disabled = false;
             confirmBtn.textContent = 'Confirm Order';
-            alert('تعذّر إتمام الطلب. حاول لاحقاً.');
+            (window.UL ? window.UL.toast('تعذّر إتمام الطلب. حاول لاحقاً.', 'error') : alert('تعذّر إتمام الطلب. حاول لاحقاً.'));
         }
     });
 })();
