@@ -608,62 +608,115 @@
         }
     });
 
-    // Aramex live rate
-    const aramexBtn = document.getElementById('aramex-rate-btn');
-    const aramexResult = document.getElementById('aramex-rate-result');
-    aramexBtn?.addEventListener('click', async () => {
-        const countrySel = document.getElementById('shipping-country');
-        const countryOpt = countrySel?.options[countrySel.selectedIndex];
+    // ===== Auto live shipping rate (no button) =====
+    const carrierSel = document.getElementById('shipping-carrier');
+    const rateStatus = document.getElementById('carrier-rate-status');
+
+    function setRateStatus(text, kind) {
+        if (!rateStatus) return;
+        if (!text) { rateStatus.classList.add('hidden'); return; }
+        rateStatus.classList.remove('hidden');
+        rateStatus.textContent = text;
+        rateStatus.className = 'mt-2 text-xs font-semibold ' + ({
+            loading: 'text-slate-500',
+            ok: 'text-emerald-700 font-bold',
+            error: 'text-rose-600',
+        }[kind] || 'text-slate-500');
+    }
+
+    const codeMap = { 'Egypt':'EG','مصر':'EG','Saudi Arabia':'SA','UAE':'AE','United Arab Emirates':'AE','Kuwait':'KW','Qatar':'QA','Jordan':'JO','Bahrain':'BH','Oman':'OM' };
+    let rateTimer = null;
+    let lastSig = '';
+
+    async function autoFetchRate() {
+        if (!carrierSel) return;
+        const opt = carrierSel.options[carrierSel.selectedIndex];
+        const code = (opt?.dataset?.code || '').toLowerCase();
+        const cid = carrierSel.value;
+        if (!cid) { setRateStatus('', null); return; }
+
+        // Address completeness
+        const countryEl = document.getElementById('shipping-country');
+        const countryOpt = countryEl?.options[countryEl.selectedIndex];
         const countryName = countryOpt?.textContent?.trim() || '';
-        const cityEl = document.querySelector('[name="city"], #shipping-city');
-        const addrEl = document.querySelector('[name="address"], #shipping-address');
-        const zipEl  = document.querySelector('[name="postcode"], [name="postal_code"], #shipping-postcode');
-        const city = cityEl?.value?.trim() || '';
-        const addr = addrEl?.value?.trim() || '';
-        if (!countryName || !city || !addr) {
-            aramexResult.classList.remove('hidden');
-            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
-            aramexResult.textContent = 'أكمل بيانات العنوان أولاً (الدولة، المدينة، العنوان).';
+        const city = (document.querySelector('[name="city"], #shipping-city')?.value || '').trim();
+        const addr = (document.querySelector('[name="address"], #shipping-address')?.value || '').trim();
+        const zip  = (document.querySelector('[name="postcode"], [name="postal_code"], #shipping-postcode')?.value || '').trim();
+
+        if (!countryName || !city || !addr || !cart || cart.length === 0) {
+            // Fallback to default carrier cost so total reflects the choice
+            const fallback = parseFloat(opt?.dataset?.cost || '0') || 0;
+            shippingCost = fallback;
+            updateTotalsDisplay();
+            setRateStatus('أكمل بيانات العنوان لحساب السعر الفعلي', null);
             return;
         }
-        if (!cart || cart.length === 0) {
-            aramexResult.classList.remove('hidden');
-            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
-            aramexResult.textContent = 'السلة فارغة.';
+
+        const sig = [cid, countryName, city, addr, zip, cart.length].join('|');
+        if (sig === lastSig) return;
+        lastSig = sig;
+
+        // For non-aramex carriers, just use the default cost.
+        if (code !== 'aramex') {
+            shippingCost = parseFloat(opt?.dataset?.cost || '0') || 0;
+            updateTotalsDisplay();
+            setRateStatus('✓ تم تطبيق سعر الشحن الافتراضي', 'ok');
             return;
         }
-        // 2-letter code mapping: try common ones, else EG
-        const codeMap = { 'Egypt':'EG','مصر':'EG','Saudi Arabia':'SA','UAE':'AE','United Arab Emirates':'AE','Kuwait':'KW','Qatar':'QA','Jordan':'JO','Bahrain':'BH','Oman':'OM' };
+
         const cc = codeMap[countryName] || 'EG';
-        aramexBtn.disabled = true; aramexBtn.textContent = '...';
+        setRateStatus('جاري حساب سعر الشحن…', 'loading');
         try {
             const res = await fetch('{{ route('checkout.aramex-rate') }}', {
                 method: 'POST',
                 headers: { 'Content-Type':'application/json', 'Accept':'application/json', 'X-CSRF-TOKEN': csrfToken },
                 body: JSON.stringify({
-                    country_code: cc, city, line1: addr, postal_code: zipEl?.value || '',
+                    country_code: cc, city, line1: addr, postal_code: zip,
                     cart: cart.map(i => ({ id: i.id, quantity: i.quantity || 1 })),
                 }),
             });
             const json = await res.json();
-            aramexResult.classList.remove('hidden');
             if (json.ok) {
-                const amt = (json.data?.amount ?? 0).toFixed(2);
-                aramexResult.className = 'mt-2 text-xs font-bold text-emerald-700';
-                aramexResult.textContent = `✓ Aramex: ${amt} ${json.data?.currency || 'EGP'}`;
+                shippingCost = parseFloat(json.data?.amount || 0);
+                updateTotalsDisplay();
+                setRateStatus(`✓ سعر الشحن: ${shippingCost.toFixed(2)} ${json.data?.currency || 'EGP'}`, 'ok');
             } else {
-                aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
-                aramexResult.textContent = json.message || 'تعذر الحساب.';
+                setRateStatus(json.message || 'تعذّر حساب سعر الشحن.', 'error');
             }
         } catch (e) {
-            aramexResult.classList.remove('hidden');
-            aramexResult.className = 'mt-2 text-xs font-semibold text-rose-600';
-            aramexResult.textContent = 'تعذر الاتصال بالخادم.';
-        } finally {
-            aramexBtn.disabled = false;
-            aramexBtn.innerHTML = '<i class="fa-solid fa-calculator ml-1"></i> احسب الشحن';
+            setRateStatus('تعذّر الاتصال بالخادم.', 'error');
         }
-    });
+    }
+
+    function updateTotalsDisplay() {
+        const st = subtotal();
+        const discount = Math.min(discountAmount, st);
+        const total = Math.max(0, st + shippingCost - discount);
+        const shippingEl = document.getElementById('shipping-display');
+        if (shippingEl) {
+            shippingEl.textContent = shippingCost.toLocaleString() + ' EGP';
+            shippingEl.className = 'font-bold text-slate-900';
+        }
+        if (subtotalEl) subtotalEl.textContent = st.toLocaleString() + ' EGP';
+        if (totalEl)    totalEl.textContent    = total.toLocaleString() + ' EGP';
+    }
+
+    function debouncedRate() {
+        clearTimeout(rateTimer);
+        rateTimer = setTimeout(autoFetchRate, 400);
+    }
+
+    // Bind change listeners
+    carrierSel?.addEventListener('change', () => { lastSig = ''; debouncedRate(); });
+    ['shipping-country','shipping-region','shipping-city','shipping-address','shipping-postcode']
+        .forEach(id => {
+            const el = document.getElementById(id);
+            el?.addEventListener('change', debouncedRate);
+            el?.addEventListener('input', debouncedRate);
+        });
+    document.querySelectorAll('[name="city"],[name="address"],[name="postcode"],[name="postal_code"]')
+        .forEach(el => { el.addEventListener('input', debouncedRate); });
 })();
+
 </script>
 @endpush
