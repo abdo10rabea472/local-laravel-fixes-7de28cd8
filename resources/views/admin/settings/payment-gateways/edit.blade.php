@@ -129,15 +129,69 @@
                 </div>
             @endif
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
-                <a href="{{ route('admin.settings.payment-gateways.index') }}" class="h-11 px-5 inline-flex items-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors">
-                    إلغاء
-                </a>
-                <button type="submit" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition-colors shadow-md shadow-indigo-500/20">
-                    <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ الإعدادات
+            <div class="flex flex-wrap justify-between items-center gap-2 pt-4 border-t border-slate-100">
+                <button type="button" id="btn-test-gateway"
+                        data-url="{{ route('admin.settings.payment-gateways.test', $gateway) }}"
+                        class="h-11 px-5 inline-flex items-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold rounded-xl text-sm transition-colors">
+                    <i class="fa-solid fa-plug ml-1"></i>
+                    <span class="btn-label">اختبار الاتصال الحقيقي بالبوابة</span>
                 </button>
+                <div class="flex gap-2">
+                    <a href="{{ route('admin.settings.payment-gateways.index') }}" class="h-11 px-5 inline-flex items-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-colors">
+                        إلغاء
+                    </a>
+                    <button type="submit" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition-colors shadow-md shadow-indigo-500/20">
+                        <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ الإعدادات
+                    </button>
+                </div>
             </div>
+
+            <div id="test-result" class="hidden p-4 rounded-2xl text-sm whitespace-pre-line"></div>
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('btn-test-gateway');
+    const box = document.getElementById('test-result');
+    if (!btn) return;
+    const label = btn.querySelector('.btn-label');
+    const originalLabel = label.textContent;
+
+    btn.addEventListener('click', async function () {
+        btn.disabled = true;
+        label.textContent = 'جاري الاختبار...';
+        box.className = 'p-4 rounded-2xl text-sm whitespace-pre-line bg-slate-50 border border-slate-200 text-slate-600';
+        box.textContent = '⏳ جاري الاتصال الفعلي بالبوابة والتحقق من المفاتيح المحفوظة حاليًا...';
+        box.classList.remove('hidden');
+
+        try {
+            const res = await fetch(btn.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            const data = await res.json();
+            if (data.ok) {
+                box.className = 'p-4 rounded-2xl text-sm whitespace-pre-line bg-emerald-50 border border-emerald-200 text-emerald-800';
+            } else {
+                box.className = 'p-4 rounded-2xl text-sm whitespace-pre-line bg-rose-50 border border-rose-200 text-rose-800';
+            }
+            box.textContent = data.message || (data.ok ? 'تم الاتصال بنجاح.' : 'فشل الاختبار.');
+        } catch (e) {
+            box.className = 'p-4 rounded-2xl text-sm whitespace-pre-line bg-rose-50 border border-rose-200 text-rose-800';
+            box.textContent = '❌ خطأ في الاتصال: ' + e.message;
+        } finally {
+            btn.disabled = false;
+            label.textContent = originalLabel;
+        }
+    });
+});
+</script>
+@endpush
 @endsection
