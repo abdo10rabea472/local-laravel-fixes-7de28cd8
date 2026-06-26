@@ -5,8 +5,9 @@
 @endpush
 
 @section('content')
-<section class="products-page bg-slate-50 min-h-screen py-8 sm:py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="products-page bg-slate-50 min-h-screen py-6 sm:py-8">
+    <div class="w-full px-3 sm:px-5 lg:px-8 2xl:px-12">
+
         <div class="mb-8">
             <h1 class="text-3xl sm:text-4xl font-black text-slate-900">{{ $pageTitle }}</h1>
             <p class="text-slate-500 mt-2">{{ $pageSubtitle ?: ($products->total() . ' products across all colleges') }}</p>
@@ -32,10 +33,11 @@
             <button type="submit" class="h-11 px-5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-2xl text-sm">Search</button>
         </form>
 
-        <div class="flex gap-8">
+        <div class="flex gap-5">
             {{-- Sidebar --}}
-            <aside id="filter-sidebar" class="hidden lg:block w-72 shrink-0">
-                <div class="sticky top-28 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+            <aside id="filter-sidebar" class="hidden lg:block w-60 shrink-0">
+                <div class="sticky top-28 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+
                     <div class="flex items-center gap-2 mb-6">
                         <span class="flex h-7 w-7 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
                             <i class="fa-solid fa-filter text-xs"></i>
@@ -135,11 +137,12 @@
                 </form>
 
                 @if($products->isNotEmpty())
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 sm:gap-4">
                     @foreach($products as $product)
-                        @include('components.product-card', ['product' => $product])
+                        @include('products.partials.compact-card', ['product' => $product])
                     @endforeach
                 </div>
+
                 <div class="mt-10 flex justify-center">{{ $products->links() }}</div>
                 @else
                 <div class="text-center py-20 bg-white rounded-3xl border border-slate-200">
