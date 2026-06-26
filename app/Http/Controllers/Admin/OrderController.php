@@ -41,7 +41,7 @@ class OrderController extends Controller
 
         $orders = $q->paginate(20)->withQueryString();
 
-        $stats = Cache()->remember('admin.orders.stats', 60, function () {
+        $stats = cache()->remember('admin.orders.stats', 60, function () {
             return [
                 'total' => Order::count(),
                 'pending' => Order::where('status', 'pending')->count(),
@@ -116,7 +116,7 @@ class OrderController extends Controller
             ]);
         });
 
-        Cache()->forget('admin.orders.stats');
+        cache()->forget('admin.orders.stats');
 
         if (! empty($data['notify'])) {
             $this->safeMail($order->fresh(), $data['status']);
@@ -151,7 +151,7 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         $order->delete();
-        Cache()->forget('admin.orders.stats');
+        cache()->forget('admin.orders.stats');
         return back()->with('success', 'تم حذف الطلب.');
     }
 
