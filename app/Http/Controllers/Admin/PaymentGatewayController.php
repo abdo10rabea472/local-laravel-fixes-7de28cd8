@@ -27,6 +27,16 @@ class PaymentGatewayController extends Controller
             }
         }
 
+        if ($gateway->code === 'paymob' && empty($gateway->config['PAYMOB_WALLET_INTEGRATION_ID'])) {
+            $wallet = PaymentGateway::where('code', 'paymob_wallet')->first();
+            if ($wallet && ! empty($wallet->config['PAYMOB_WALLET_INTEGRATION_ID'])) {
+                $gateway->config = array_merge((array) $gateway->config, [
+                    'PAYMOB_WALLET_INTEGRATION_ID' => $wallet->config['PAYMOB_WALLET_INTEGRATION_ID'],
+                    'PAYMOB_WALLET_ENABLED' => $wallet->is_active ? '1' : '0',
+                ]);
+            }
+        }
+
         return view('admin.settings.payment-gateways.edit', compact('gateway'));
     }
 
@@ -56,6 +66,10 @@ class PaymentGatewayController extends Controller
             'allowed_countries' => $allowed ?: null,
             'config'            => array_filter($data['config'] ?? [], fn ($v) => $v !== null && $v !== ''),
         ]);
+
+        if ($gateway->code === 'paymob') {
+            PaymentGateway::where('code', 'paymob_wallet')->update(['is_active' => false]);
+        }
 
         return back()->with('success', 'تم حفظ إعدادات البوابة.');
     }
