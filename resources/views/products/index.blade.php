@@ -5,8 +5,9 @@
 @endpush
 
 @section('content')
-<section class="products-page bg-slate-50 min-h-screen py-8 sm:py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="products-page bg-slate-50 min-h-screen py-6 sm:py-8">
+    <div class="w-full px-3 sm:px-5 lg:px-8 2xl:px-12">
+
         <div class="mb-8">
             <h1 class="text-3xl sm:text-4xl font-black text-slate-900">{{ $pageTitle }}</h1>
             <p class="text-slate-500 mt-2">{{ $pageSubtitle ?: ($products->total() . ' products across all colleges') }}</p>
