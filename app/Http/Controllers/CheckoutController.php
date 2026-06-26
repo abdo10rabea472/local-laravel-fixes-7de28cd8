@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Coupon;
+use App\Models\ProductDiscount;
 use App\Models\CouponRedemption;
 use App\Models\ShippingCountry;
 use Illuminate\Http\JsonResponse;
