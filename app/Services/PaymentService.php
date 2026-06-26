@@ -28,14 +28,18 @@ class PaymentService
 
         // Cash on Delivery — built-in driver, no external call.
         if ($gateway->driver === 'cod') {
+            $alreadyHandled = $order->payment_status === 'cod_pending';
+
             $order->forceFill([
                 'payment_gateway'   => 'cod',
                 'payment_status'    => 'cod_pending',
                 'payment_reference' => 'COD-' . $order->order_number,
             ])->save();
 
-            $this->sendPlacedMailOnce($order);
-            $this->dispatchShipmentIfNeeded($order);
+            if (! $alreadyHandled) {
+                $this->sendPlacedMailOnce($order);
+                $this->dispatchShipmentIfNeeded($order);
+            }
 
             return [
                 'ok'           => true,
@@ -358,10 +362,16 @@ class PaymentService
 
         $decoded = json_decode(trim($html), true);
         if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-            return $decoded['detail']
+            $message = $decoded['detail']
                 ?? $decoded['message']
                 ?? $decoded['error']
                 ?? (isset($decoded['errors']) ? json_encode($decoded['errors'], JSON_UNESCAPED_UNICODE) : null);
+
+            if ($message === 'Authentication credentials were not provided.') {
+                return 'بيانات Paymob غير صحيحة أو ناقصة. أدخل PAYMOB_API_KEY من Developers > API Key وليس Public/Secret Key.';
+            }
+
+            return $message;
         }
 
         return null;
