@@ -11,8 +11,36 @@
         </button>
     </div>
 
+    {{-- Aramex one-click install --}}
+    <div class="rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 p-5 flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center text-xl font-bold">A</div>
+            <div>
+                <h3 class="font-bold text-slate-800">Aramex</h3>
+                <p class="text-xs text-slate-600">
+                    @if(!$aramexInstalled)
+                        <span class="text-rose-600 font-semibold">SDK غير مثبت.</span> شغّل: <code class="bg-white px-2 py-0.5 rounded">composer require octw/aramex</code>
+                    @elseif(!$aramexConfigured)
+                        <span class="text-amber-700 font-semibold">SDK مثبت لكن غير مهيّأ.</span> انشر التهيئة: <code class="bg-white px-2 py-0.5 rounded">php artisan vendor:publish --provider="Octw\Aramex\AramexServiceProvider"</code>
+                    @else
+                        <span class="text-emerald-700 font-semibold">✓ جاهز.</span> اضغط الزر لإنشاء/تحديث شركة Aramex.
+                    @endif
+                </p>
+            </div>
+        </div>
+        <form method="POST" action="{{ route('admin.shipping-carriers.install-aramex') }}">
+            @csrf
+            <button class="px-4 py-2 rounded-xl bg-orange-600 text-white text-sm font-bold hover:bg-orange-700">
+                <i class="fa-solid fa-bolt ml-1"></i> تفعيل Aramex
+            </button>
+        </form>
+    </div>
+
     @if(session('success'))
         <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">{{ session('error') }}</div>
     @endif
 
     {{-- Form Modal --}}
