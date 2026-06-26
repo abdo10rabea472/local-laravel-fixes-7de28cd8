@@ -86,6 +86,24 @@
                         </div>
                     </div>
 
+                    {{-- Aramex live rate --}}
+                    <div class="border-t border-slate-100 pt-5">
+                        <div class="flex items-center justify-between gap-3 flex-wrap">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold text-xs">A</span>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Aramex Shipping</p>
+                                    <p class="text-[11px] text-slate-500">احسب سعر شحن Aramex لعنوانك</p>
+                                </div>
+                            </div>
+                            <button type="button" id="aramex-rate-btn" class="px-3 py-2 text-xs font-bold rounded-xl bg-orange-100 text-orange-700 hover:bg-orange-200">
+                                <i class="fa-solid fa-calculator ml-1"></i> احسب الشحن
+                            </button>
+                        </div>
+                        <p id="aramex-rate-result" class="hidden mt-2 text-xs font-semibold"></p>
+                    </div>
+
+
                     <div class="border-t border-slate-100 pt-6">
                         <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
                             <i class="fa-solid fa-credit-card text-violet-600"></i> Payment Method
