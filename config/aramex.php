@@ -10,6 +10,7 @@
 return [
 
     'testing_mode' => env('ARAMEX_TESTING_MODE', true),
+    'environment'  => env('ARAMEX_ENVIRONMENT', 'TEST'), // TEST | LIVE
 
     'ClientInfo' => [
         'UserName'           => env('ARAMEX_USERNAME', 'testingapi@aramex.com'),
