@@ -204,9 +204,6 @@
         localStorage.setItem('cart', JSON.stringify(cart));
         document.dispatchEvent(new CustomEvent('cart:updated'));
     }
-        localStorage.setItem('cart', JSON.stringify(cart));
-        document.dispatchEvent(new CustomEvent('cart:updated'));
-    }
 
     function refreshView() {
         if (cart.length === 0) {
@@ -217,6 +214,7 @@
             contentEl.classList.remove('hidden');
             renderItems();
         }
+        syncCouponAvailability();
     }
 
     refreshView();
