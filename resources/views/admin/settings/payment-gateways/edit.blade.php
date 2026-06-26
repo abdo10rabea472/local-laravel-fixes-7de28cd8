@@ -3,7 +3,7 @@
 @php
     $fieldsByDriver = [
         'cod'          => [],
-        'Paymob'       => ['PAYMOB_API_KEY','PAYMOB_INTEGRATION_ID','PAYMOB_IFRAME_ID','PAYMOB_HMAC','PAYMOB_CURRENCY'],
+        'Paymob'       => ['PAYMOB_API_KEY','PAYMOB_INTEGRATION_ID','PAYMOB_IFRAME_ID','PAYMOB_HMAC','PAYMOB_CURRENCY','PAYMOB_WALLET_ENABLED','PAYMOB_WALLET_INTEGRATION_ID'],
         'PaymobWallet' => ['PAYMOB_API_KEY','PAYMOB_WALLET_INTEGRATION_ID','PAYMOB_HMAC','PAYMOB_CURRENCY'],
         'Fawry'        => ['FAWRY_URL','FAWRY_SECRET','FAWRY_MERCHANT'],
         'Kashier'      => ['KASHIER_ACCOUNT_KEY','KASHIER_IFRAME_KEY','KASHIER_TOKEN','KASHIER_URL','KASHIER_MODE','KASHIER_CURRENCY','KASHIER_WEBHOOK_URL'],
@@ -103,13 +103,26 @@
             @if(!empty($fields))
                 <div class="border-t border-slate-100 pt-6">
                     <h4 class="text-sm font-bold text-slate-800 mb-1">إعدادات البوابة</h4>
-                    <p class="text-xs text-slate-500 mb-4">تُحفظ هذه الإعدادات بشكل مستقل لكل بوابة ولا تشترك مع غيرها.</p>
+                    <p class="text-xs text-slate-500 mb-4">Paymob الآن كارد واحد: البطاقة تستخدم IFRAME، والمحافظ تظهر فقط عند تفعيلها هنا.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($fields as $field)
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-slate-500 font-mono">{{ $field }}</label>
-                                <input name="config[{{ $field }}]" value="{{ old('config.'.$field, $gateway->configValue($field)) }}" autocomplete="off"
-                                       class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono focus:border-indigo-400 focus:bg-white focus:outline-none transition">
+                                @if($field === 'PAYMOB_WALLET_ENABLED')
+                                    <select name="config[{{ $field }}]" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:border-indigo-400 focus:bg-white focus:outline-none transition">
+                                        <option value="0" @selected(old('config.'.$field, $gateway->configValue($field, '0')) !== '1')>إيقاف المحافظ</option>
+                                        <option value="1" @selected(old('config.'.$field, $gateway->configValue($field, '0')) === '1')>تفعيل المحافظ</option>
+                                    </select>
+                                @else
+                                    <input name="config[{{ $field }}]" value="{{ old('config.'.$field, $gateway->configValue($field)) }}" autocomplete="off"
+                                           placeholder="{{ $field === 'PAYMOB_IFRAME_ID' ? 'اكتب IFRAME ID الخاص ببطاقات Paymob' : ($field === 'PAYMOB_WALLET_INTEGRATION_ID' ? 'Integration ID الخاص بالمحافظ' : '') }}"
+                                           class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono focus:border-indigo-400 focus:bg-white focus:outline-none transition">
+                                @endif
+                                @if($field === 'PAYMOB_IFRAME_ID')
+                                    <p class="text-[11px] text-slate-400">هذا هو IFRAME ID الخاص ببطاقات Paymob.</p>
+                                @elseif($field === 'PAYMOB_WALLET_INTEGRATION_ID')
+                                    <p class="text-[11px] text-slate-400">يُستخدم فقط عند تفعيل المحافظ.</p>
+                                @endif
                             </div>
                         @endforeach
                     </div>
