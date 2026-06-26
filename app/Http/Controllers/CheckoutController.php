@@ -107,6 +107,13 @@ class CheckoutController extends Controller
         $userId = Auth::id();
         $result = $coupon->validateFor($serverCart, $userId, $data['email'] ?? null, $data['phone'] ?? null);
 
+        AuditLog::record($result['ok'] ? 'checkout.coupon.applied' : 'checkout.coupon.rejected', [
+            'code' => $coupon->code,
+            'items' => count($serverCart),
+            'discount' => $result['discount'] ?? 0,
+            'reason' => $result['ok'] ? null : ($result['message'] ?? null),
+        ], $userId ? 'user' : 'guest', $userId);
+
         return response()->json(array_merge($result, [
             'code' => $coupon->code,
             'type' => $coupon->type,
@@ -193,9 +200,20 @@ class CheckoutController extends Controller
                 }
             });
         } catch (\Throwable $e) {
+            AuditLog::record('checkout.order.failed', [
+                'items' => array_sum($requested),
+                'distinct' => count($requested),
+                'coupon' => ! empty($data['code']) ? strtoupper($data['code']) : null,
+                'reason' => $e->getMessage(),
+            ], Auth::id() ? 'user' : 'guest', Auth::id());
             return response()->json(['ok' => false, 'message' => $e->getMessage()], 422);
         }
 
+        AuditLog::record('checkout.order.placed', [
+            'items' => array_sum($requested),
+            'distinct' => count($requested),
+            'coupon' => ! empty($data['code']) ? strtoupper($data['code']) : null,
+        ], Auth::id() ? 'user' : 'guest', Auth::id());
 
         return response()->json([
             'ok' => true,
