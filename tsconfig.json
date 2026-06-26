@@ -2,8 +2,10 @@
   "compilerOptions": {
     "noEmit": true,
     "skipLibCheck": true,
-    "allowJs": false
+    "allowJs": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler"
   },
-  "include": [],
-  "exclude": ["**/*"]
+  "files": ["vite.config.js"]
 }
