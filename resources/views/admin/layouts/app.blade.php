@@ -124,12 +124,12 @@
                                 <i class="fas {{ $item['icon'] }} text-gray-400 w-5"></i>
                                 <span>{{ $item['title'] }}</span>
                             </div>
-                            <i id="arrow-sub-{{ $idx }}" class="fas fa-chevron-left text-xs transition-transform duration-200 {{ $anyChildActive ? '-rotate-90' : '' }}"></i>
+                            <i id="arrow-sub-{{ $idx }}" class="fas fa-chevron-right text-xs transition-transform duration-200 {{ $anyChildActive ? 'rotate-90' : '' }}"></i>
                         </button>
-                        <div id="sub-{{ $idx }}" class="{{ $anyChildActive ? 'flex' : 'hidden' }} flex-col space-y-1 pr-2 border-r border-gray-100 dark:border-gray-800">
+                        <div id="sub-{{ $idx }}" class="{{ $anyChildActive ? 'flex' : 'hidden' }} flex-col space-y-1 pl-2 border-l border-gray-100 dark:border-gray-800">
                             @foreach($item['children'] as $child)
                                 <a href="{{ $r($child['route']) }}"
-                                   class="flex items-center gap-2 py-2 pr-9 pl-4 text-sm rounded-lg transition-colors
+                                   class="flex items-center gap-2 py-2 pl-9 pr-4 text-sm rounded-lg transition-colors
                                           {{ $isActiveRoute($child['route']) ? 'bg-primary-50 text-primary-600 dark:bg-dark-800 dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-white' }}">
                                     <i class="fas fa-circle text-[6px]"></i> {{ $child['title'] }}
                                 </a>
