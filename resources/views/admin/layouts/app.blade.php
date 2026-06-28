@@ -42,43 +42,43 @@
 
 @php
     $admin = auth('admin')->user();
-    $adminName = $admin->name ?? 'المدير';
+    $adminName = $admin->name ?? 'Admin';
     $r = fn($name) => \Illuminate\Support\Facades\Route::has($name) ? route($name) : '#';
 
     $menu = [
-        ['title' => 'لوحة التحكم', 'icon' => 'fa-chart-pie', 'route' => 'admin.dashboard'],
-        ['title' => 'إدارة المنتجات', 'icon' => 'fa-boxes', 'children' => [
-            ['title' => 'جميع المنتجات',       'route' => 'admin.products.index'],
-            ['title' => 'إضافة منتج جديد',     'route' => 'admin.products.create'],
-            ['title' => 'التصنيفات الرئيسيّة', 'route' => 'admin.colleges.index'],
-            ['title' => 'التصنيفات الفرعيّة',  'route' => 'admin.subcategories.index'],
-            ['title' => 'خصومات المنتجات',     'route' => 'admin.product-discounts.index'],
+        ['title' => 'Dashboard', 'icon' => 'fa-chart-pie', 'route' => 'admin.dashboard'],
+        ['title' => 'Product Management', 'icon' => 'fa-boxes', 'children' => [
+            ['title' => 'All Products',         'route' => 'admin.products.index'],
+            ['title' => 'Add New Product',      'route' => 'admin.products.create'],
+            ['title' => 'Main Categories',      'route' => 'admin.colleges.index'],
+            ['title' => 'Subcategories',        'route' => 'admin.subcategories.index'],
+            ['title' => 'Product Discounts',    'route' => 'admin.product-discounts.index'],
         ]],
-        ['title' => 'الطلبات والمبيعات', 'icon' => 'fa-shopping-cart', 'route' => 'admin.orders.index'],
-        ['title' => 'إدارة العملاء',     'icon' => 'fa-users',         'route' => 'admin.customers.index'],
-        ['title' => 'مجموعات العملاء',   'icon' => 'fa-layer-group',   'route' => 'admin.customer-groups.index'],
-        ['title' => 'المخزون والإمدادات', 'icon' => 'fa-warehouse', 'children' => [
-            ['title' => 'إدارة المخزون',  'route' => 'admin.stock.index'],
-            ['title' => 'سجل المخزون',    'route' => 'admin.stock.history'],
-            ['title' => 'شركات الشحن',    'route' => 'admin.shipping-carriers.index'],
-            ['title' => 'المرتجعات',      'route' => 'admin.returns.index'],
+        ['title' => 'Orders & Sales', 'icon' => 'fa-shopping-cart', 'route' => 'admin.orders.index'],
+        ['title' => 'Customers',      'icon' => 'fa-users',         'route' => 'admin.customers.index'],
+        ['title' => 'Customer Groups','icon' => 'fa-layer-group',   'route' => 'admin.customer-groups.index'],
+        ['title' => 'Stock & Supply', 'icon' => 'fa-warehouse', 'children' => [
+            ['title' => 'Stock Management', 'route' => 'admin.stock.index'],
+            ['title' => 'Stock History',    'route' => 'admin.stock.history'],
+            ['title' => 'Shipping Carriers','route' => 'admin.shipping-carriers.index'],
+            ['title' => 'Returns',          'route' => 'admin.returns.index'],
         ]],
-        ['title' => 'المراجعات والتقييمات', 'icon' => 'fa-star',          'route' => 'admin.reviews.index'],
-        ['title' => 'الكوبونات والخصومات',  'icon' => 'fa-ticket-alt',    'route' => 'admin.coupons.index'],
-        ['title' => 'التقارير المتقدمة', 'icon' => 'fa-chart-line', 'children' => [
-            ['title' => 'تحليلات المبيعات', 'route' => 'admin.reports.analytics'],
-            ['title' => 'تقرير المبيعات',   'route' => 'admin.reports.sales'],
-            ['title' => 'تقارير المخزون',   'route' => 'admin.reports.inventory'],
-            ['title' => 'تقارير الكوبونات', 'route' => 'admin.reports.coupons'],
+        ['title' => 'Reviews & Ratings', 'icon' => 'fa-star',          'route' => 'admin.reviews.index'],
+        ['title' => 'Coupons & Discounts','icon' => 'fa-ticket-alt',   'route' => 'admin.coupons.index'],
+        ['title' => 'Advanced Reports', 'icon' => 'fa-chart-line', 'children' => [
+            ['title' => 'Sales Analytics',  'route' => 'admin.reports.analytics'],
+            ['title' => 'Sales Report',     'route' => 'admin.reports.sales'],
+            ['title' => 'Inventory Reports','route' => 'admin.reports.inventory'],
+            ['title' => 'Coupon Reports',   'route' => 'admin.reports.coupons'],
         ]],
-        ['title' => 'إدارة المحتوى', 'icon' => 'fa-newspaper', 'children' => [
-            ['title' => 'المقالات',          'route' => 'admin.blog.index'],
-            
-            ['title' => 'الأسئلة الشائعة',   'route' => 'admin.faqs.index'],
-            ['title' => 'رسائل التواصل',     'route' => 'admin.messages.index'],
-            ['title' => 'مشتركو النشرة',     'route' => 'admin.subscribers.index'],
+        ['title' => 'Content Management', 'icon' => 'fa-newspaper', 'children' => [
+            ['title' => 'Blog Posts',       'route' => 'admin.blog.index'],
+
+            ['title' => 'FAQs',             'route' => 'admin.faqs.index'],
+            ['title' => 'Contact Messages', 'route' => 'admin.messages.index'],
+            ['title' => 'Newsletter Subscribers', 'route' => 'admin.subscribers.index'],
         ]],
-        ['title' => 'الإعدادات العامة', 'icon' => 'fa-sliders-h', 'route' => 'admin.settings.index'],
+        ['title' => 'General Settings', 'icon' => 'fa-sliders-h', 'route' => 'admin.settings.index'],
     ];
 
 
