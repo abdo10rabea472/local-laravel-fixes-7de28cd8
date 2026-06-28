@@ -71,7 +71,7 @@ class AdminNotificationController extends Controller
 
         // تقييمات جديدة
         if (Schema::hasTable('reviews')) {
-            $reviews = Review::where('approved', false)->latest()->limit(3)
+            $reviews = Review::where('status', 'pending')->latest()->limit(3)
                 ->get(['id', 'rating', 'product_id', 'created_at']);
             foreach ($reviews as $rv) {
                 $items[] = [
