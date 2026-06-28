@@ -92,7 +92,11 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-1">Canonical URL</label>
-                    <input name="canonical_url" type="url" value="{{ old('canonical_url', $post->canonical_url) }}" placeholder="https://..." class="w-full px-3 py-2 border rounded-lg" dir="ltr">
+                    <div class="flex items-stretch" dir="ltr">
+                        <span class="inline-flex items-center px-3 bg-slate-100 border border-l-0 border-slate-300 rounded-l-lg text-xs text-slate-600 font-mono">{{ rtrim(url('/'), '/') }}/</span>
+                        <input name="canonical_url" type="text" value="{{ old('canonical_url', $post->canonical_url) }}" placeholder="blog/your-slug" class="flex-1 px-3 py-2 border rounded-r-lg font-mono text-sm" dir="ltr">
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1">اكتب المسار فقط بعد رابط الموقع. اتركه فارغًا لاستخدام رابط المقال الافتراضي.</p>
                 </div>
             </div>
 
