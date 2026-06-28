@@ -61,7 +61,7 @@
     {{-- ============ ARTICLE BODY ============ --}}
     <section class="max-w-3xl mx-auto px-6 lg:px-8">
         <article class="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-indigo-600 prose-img:rounded-2xl">
-            {!! $post->body !!}
+            {!! $post->content !!}
         </article>
     </section>
 
