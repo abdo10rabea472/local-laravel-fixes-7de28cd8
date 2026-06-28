@@ -31,6 +31,7 @@ class SiteSettingController extends Controller
             'images' => ['title' => 'الصور', 'subtitle' => 'شعار الموقع، الخلفيات، والصور الافتراضية.'],
             'contact' => ['title' => 'معلومات التواصل', 'subtitle' => 'بيانات التواصل والعنوان.'],
             'ai' => ['title' => 'نماذج الذكاء الاصطناعي', 'subtitle' => 'أضف أي مزود AI متوافق مع OpenAI (Base URL + API Key + Model).'],
+            'mail' => ['title' => 'إعدادات البريد (SMTP)', 'subtitle' => 'تُحفظ مباشرة في ملف .env وتُستخدم لإرسال البريد.'],
             default => ['title' => 'إعدادات الموقع', 'subtitle' => ''],
         };
 
