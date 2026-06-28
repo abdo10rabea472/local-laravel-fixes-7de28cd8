@@ -22,11 +22,8 @@
                 @if($p)
                 <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
                     <a href="{{ route('product.show', $p->slug) }}" class="block aspect-square bg-slate-100">
-                        @if($p->images->first())
-                            <img src="{{ asset('storage/'.$p->images->first()->path) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-slate-300"><i class="fas fa-image text-4xl"></i></div>
-                        @endif
+                        <img src="{{ $p->images->first() ? asset('storage/'.$p->images->first()->path) : (site_setting_url('default_product_image') ?: asset('imges/products/default.jpg')) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
+
                     </a>
                     <div class="p-4">
                         <a href="{{ route('product.show', $p->slug) }}" class="font-semibold text-slate-800 line-clamp-2 hover:text-violet-600">{{ $p->name }}</a>

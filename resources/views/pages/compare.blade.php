@@ -33,9 +33,8 @@
                             @foreach($products as $p)
                                 <th class="p-4 min-w-[200px]">
                                     <div class="aspect-square bg-slate-100 rounded-lg mb-2 overflow-hidden">
-                                        @if($p->images->first())
-                                            <img src="{{ asset('storage/'.$p->images->first()->path) }}" class="w-full h-full object-cover">
-                                        @endif
+                                        <img src="{{ $p->images->first() ? asset('storage/'.$p->images->first()->path) : (site_setting_url('default_product_image') ?: asset('imges/products/default.jpg')) }}" alt="{{ $p->name }}" class="w-full h-full object-cover">
+
                                     </div>
                                     <a href="{{ route('product.show', $p->slug) }}" class="text-slate-800 hover:text-violet-600 block">{{ $p->name }}</a>
                                     <form method="POST" action="{{ route('compare.remove') }}" class="mt-2">

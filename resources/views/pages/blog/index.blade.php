@@ -25,11 +25,8 @@
     <div class="max-w-6xl mx-auto px-4">
         <a href="{{ route('blog.show', $featured->slug) }}" class="group grid md:grid-cols-2 gap-8 items-center bg-gradient-to-br from-slate-50 to-violet-50 rounded-3xl p-6 md:p-10 hover:shadow-xl transition-all">
             <div class="aspect-video rounded-2xl overflow-hidden bg-slate-200">
-                @if($featured->image)
-                    <img src="{{ asset('storage/'.$featured->image) }}" alt="{{ $featured->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                @else
-                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-200 to-indigo-200"><i class="fas fa-newspaper text-6xl text-violet-400"></i></div>
-                @endif
+                <img src="{{ $featured->image_url }}" alt="{{ $featured->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+
             </div>
             <div>
                 <span class="inline-block px-3 py-1 bg-violet-600 text-white text-xs font-bold rounded-full mb-3">⭐ مقال مميز</span>
@@ -66,11 +63,8 @@
                     @foreach($posts as $post)
                     <article class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col">
                         <a href="{{ route('blog.show', $post->slug) }}" class="block aspect-video bg-slate-100 overflow-hidden relative">
-                            @if($post->image)
-                                <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-100 to-indigo-100"><i class="fas fa-newspaper text-5xl text-violet-300"></i></div>
-                            @endif
+                            <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+
                             @if($post->category)
                                 <span class="absolute top-3 right-3 px-3 py-1 bg-white/95 backdrop-blur text-violet-700 text-xs font-bold rounded-full shadow">{{ $post->category->name }}</span>
                             @endif
@@ -122,11 +116,8 @@
                     <li>
                         <a href="{{ route('blog.show', $p->slug) }}" class="flex gap-3 group">
                             <div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
-                                @if($p->image)
-                                    <img src="{{ asset('storage/'.$p->image) }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center bg-violet-50"><i class="fas fa-newspaper text-violet-300"></i></div>
-                                @endif
+                                <img src="{{ $p->image_url }}" alt="{{ $p->title }}" class="w-full h-full object-cover">
+
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h4 class="text-sm font-semibold text-slate-800 line-clamp-2 group-hover:text-violet-700 transition">{{ $p->title }}</h4>
