@@ -95,14 +95,14 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">مخطط الإيرادات والمبيعات المتقدم</h3>
+                <h3 class="text-base font-bold">Revenue & Sales Trend</h3>
                 <i class="fas fa-ellipsis-h text-gray-400 cursor-pointer"></i>
             </div>
             <div class="h-72"><canvas id="revenueChart"></canvas></div>
         </div>
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">توزيع مبيعات الأقسام (الكليات)</h3>
+                <h3 class="text-base font-bold">Sales by Category</h3>
             </div>
             <div class="h-72 flex items-center justify-center"><canvas id="categoryChart"></canvas></div>
         </div>
