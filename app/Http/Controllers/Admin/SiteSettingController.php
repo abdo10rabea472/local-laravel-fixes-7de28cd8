@@ -18,7 +18,7 @@ class SiteSettingController extends Controller
     public function index(Request $request): View
     {
         $tab = $request->get('tab', 'general');
-        $allowedTabs = ['general', 'images', 'contact'];
+        $allowedTabs = ['general', 'images', 'contact', 'ai'];
 
         if (! in_array($tab, $allowedTabs, true)) {
             $tab = 'general';
@@ -30,6 +30,7 @@ class SiteSettingController extends Controller
             'general' => ['title' => 'معلومات الموقع', 'subtitle' => 'اسم الموقع، اللون الأساسي، ورسالة الترحيب.'],
             'images' => ['title' => 'الصور', 'subtitle' => 'شعار الموقع، الخلفيات، والصور الافتراضية.'],
             'contact' => ['title' => 'معلومات التواصل', 'subtitle' => 'بيانات التواصل والعنوان.'],
+            'ai' => ['title' => 'نماذج الذكاء الاصطناعي', 'subtitle' => 'أضف أي مزود AI متوافق مع OpenAI (Base URL + API Key + Model).'],
             default => ['title' => 'إعدادات الموقع', 'subtitle' => ''],
         };
 
@@ -75,6 +76,50 @@ class SiteSettingController extends Controller
         return redirect()->route('admin.settings.index', ['tab' => $tab])->with('success', 'تم حفظ الإعدادات بنجاح.');
     }
 
+    public function testAi(Request $request)
+    {
+        $data = $request->validate([
+            'base_url' => ['required','url'],
+            'api_key'  => ['required','string'],
+            'model'    => ['required','string'],
+        ]);
+
+        $base = rtrim($data['base_url'], '/');
+        $endpoint = str_ends_with($base, '/chat/completions') ? $base : $base.'/chat/completions';
+
+        try {
+            $resp = \Illuminate\Support\Facades\Http::withToken($data['api_key'])
+                ->acceptJson()
+                ->timeout(20)
+                ->post($endpoint, [
+                    'model' => $data['model'],
+                    'messages' => [['role' => 'user', 'content' => 'ping']],
+                    'max_tokens' => 5,
+                ]);
+
+            if ($resp->successful()) {
+                $reply = data_get($resp->json(), 'choices.0.message.content', '');
+                return response()->json([
+                    'ok' => true,
+                    'message' => 'تم الاتصال بنجاح ✅',
+                    'reply' => is_string($reply) ? mb_substr($reply, 0, 200) : '',
+                ]);
+            }
+
+            return response()->json([
+                'ok' => false,
+                'message' => 'فشل الاتصال (HTTP '.$resp->status().')',
+                'error' => data_get($resp->json(), 'error.message', $resp->body()),
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'خطأ أثناء الاتصال',
+                'error' => $e->getMessage(),
+            ], 200);
+        }
+    }
+
     private function defaultLabel(string $key): string
     {
         return match ($key) {
@@ -96,6 +141,11 @@ class SiteSettingController extends Controller
             'welcome_popup_discount_percent' => 'نسبة خصم الترحيب',
             'welcome_popup_button_text' => 'نص زر الترحيب',
             'welcome_popup_image' => 'صورة نموذج الترحيب',
+            'ai_provider_name' => 'اسم مزود AI',
+            'ai_base_url' => 'رابط الـ API (Base URL)',
+            'ai_api_key' => 'مفتاح الـ API',
+            'ai_model' => 'اسم النموذج',
+            'ai_enabled' => 'تفعيل الذكاء الاصطناعي',
             default => $key,
         };
     }
