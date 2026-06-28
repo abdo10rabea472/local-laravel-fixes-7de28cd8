@@ -95,7 +95,7 @@
 
     {{-- Sidebar --}}
     <aside id="sidebar"
-           class="fixed inset-y-0 right-0 z-50 flex flex-col w-64 bg-white dark:bg-dark-900 border-l border-gray-200 dark:border-gray-800 transition-transform duration-300 transform translate-x-full lg:translate-x-0 lg:static lg:inset-auto">
+           class="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-white dark:bg-dark-900 border-r border-gray-200 dark:border-gray-800 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto">
 
         {{-- Logo --}}
         <div class="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
