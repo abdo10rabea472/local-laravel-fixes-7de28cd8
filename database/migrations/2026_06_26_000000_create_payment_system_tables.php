@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         // 1) Shipping defaults on the user profile
         Schema::table('users', function (Blueprint $table) {
-            if (! Schema::hasColumn('users', 'shipping_country'))   $table->string('shipping_country', 100)->nullable()->after('phone');
+            if (! Schema::hasColumn('users', 'shipping_country'))   $table->string('shipping_country', 100)->nullable();
             if (! Schema::hasColumn('users', 'shipping_region'))    $table->string('shipping_region', 100)->nullable()->after('shipping_country');
             if (! Schema::hasColumn('users', 'shipping_city'))      $table->string('shipping_city', 100)->nullable()->after('shipping_region');
             if (! Schema::hasColumn('users', 'shipping_address'))   $table->string('shipping_address', 255)->nullable()->after('shipping_city');
