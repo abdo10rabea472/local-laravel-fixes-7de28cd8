@@ -29,7 +29,10 @@
                             @endif
                         </td>
                         <td class="p-3 text-center whitespace-nowrap">
-                            <a href="{{ route('admin.blog.edit', $p) }}" class="text-primary-600 hover:underline text-xs font-bold">تعديل</a>
+                            @if($p->published_at)
+                                <a href="{{ route('blog.show', $p->slug) }}" target="_blank" class="text-emerald-600 hover:underline text-xs font-bold"><i class="fa-solid fa-eye"></i> عرض</a>
+                            @endif
+                            <a href="{{ route('admin.blog.edit', $p) }}" class="text-primary-600 hover:underline text-xs font-bold mr-2">تعديل</a>
                             <form action="{{ route('admin.blog.destroy', $p) }}" method="POST" class="inline" onsubmit="return confirm('حذف المقال؟')">
                                 @csrf @method('DELETE')
                                 <button class="text-rose-600 hover:underline text-xs font-bold mr-2">حذف</button>
