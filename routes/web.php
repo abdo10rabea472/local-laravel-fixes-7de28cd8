@@ -344,3 +344,20 @@ Route::middleware('auth')->prefix('wishlist')->name('wishlist.')->group(function
     Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
     Route::delete('/{wishlist}', [WishlistController::class, 'destroy'])->name('destroy');
 });
+
+// Locale & currency switchers (cookie-based; redirects back)
+Route::get('/locale/{code}', function (string $code) {
+    $svc = app(\App\Services\LanguageService::class);
+    if ($svc->exists($code)) {
+        cookie()->queue(cookie()->forever('locale', $code));
+    }
+    return back();
+})->name('locale.switch');
+
+Route::get('/currency/{code}', function (string $code) {
+    $svc = app(\App\Services\CurrencyService::class);
+    if ($svc->find($code)) {
+        cookie()->queue(cookie()->forever('currency', strtoupper($code)));
+    }
+    return back();
+})->name('currency.switch');
