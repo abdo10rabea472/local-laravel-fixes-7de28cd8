@@ -149,13 +149,13 @@
             <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 space-y-1">
                 <a href="{{ url('/') }}" target="_blank"
                    class="flex items-center gap-3 py-2.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800 rounded-lg transition-colors">
-                    <i class="fas fa-globe text-gray-400 w-5"></i><span>زيارة المتجر</span>
+                    <i class="fas fa-globe text-gray-400 w-5"></i><span>Visit Store</span>
                 </a>
                 <form method="POST" action="{{ $r('admin.logout') }}">
                     @csrf
                     <button type="submit"
                             class="w-full flex items-center gap-3 py-2.5 px-4 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors">
-                        <i class="fas fa-sign-out-alt text-red-500 w-5"></i><span>تسجيل الخروج</span>
+                        <i class="fas fa-sign-out-alt text-red-500 w-5"></i><span>Logout</span>
                     </button>
                 </form>
             </div>
