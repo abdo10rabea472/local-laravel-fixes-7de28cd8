@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class BlogPost extends Model
@@ -92,5 +93,15 @@ class BlogPost extends Model
             $query->whereNull('published_at')
                 ->orWhere('published_at', '<=', now());
         });
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class)->latest();
+    }
+
+    public function approvedComments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class)->where('approved', true)->latest();
     }
 }

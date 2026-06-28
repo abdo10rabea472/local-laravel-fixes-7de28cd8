@@ -312,6 +312,8 @@ Route::get('/offers', [OffersController::class, 'index'])->name('offers');
 // Blog (public)
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/blog/{slug}/comments', [BlogController::class, 'storeComment'])
+    ->middleware('throttle:10,1')->name('blog.comments.store');
 
 // FAQ dynamic (override existing static)
 Route::get('/faqs-dynamic', [FaqController::class, 'index'])->name('faqs.dynamic');

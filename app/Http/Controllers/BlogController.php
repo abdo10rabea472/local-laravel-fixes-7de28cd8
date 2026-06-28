@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogComment;
 use App\Models\BlogPost;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -24,13 +25,17 @@ class BlogController extends Controller
 
         $posts = $query->latest('published_at')->paginate(9)->withQueryString();
         $categories = Category::whereHas('blogPosts')->orderBy('name')->get(['id','name','slug']);
+        $featured = BlogPost::published()->latest('published_at')->first();
+        $popular = BlogPost::published()->orderByDesc('views')->limit(5)->get(['id','title','slug','image','views','published_at']);
 
-        return view('pages.blog.index', compact('posts', 'categories'));
+        return view('pages.blog.index', compact('posts', 'categories', 'featured', 'popular'));
     }
 
     public function show(string $slug)
     {
-        $post = BlogPost::published()->with('category:id,name,slug')->where('slug', $slug)->firstOrFail();
+        $post = BlogPost::published()
+            ->with(['category:id,name,slug', 'approvedComments'])
+            ->where('slug', $slug)->firstOrFail();
         $post->increment('views');
 
         $related = BlogPost::published()
@@ -54,5 +59,29 @@ class BlogController extends Controller
         ];
 
         return view('pages.blog.show', compact('post', 'related', 'seo'));
+    }
+
+    public function storeComment(Request $request, string $slug)
+    {
+        $post = BlogPost::where('slug', $slug)->firstOrFail();
+
+        $user = auth()->user();
+
+        $data = $request->validate([
+            'name'  => [$user ? 'nullable' : 'required', 'string', 'max:120'],
+            'email' => [$user ? 'nullable' : 'required', 'email', 'max:160'],
+            'body'  => ['required','string','min:3','max:2000'],
+        ]);
+
+        BlogComment::create([
+            'blog_post_id' => $post->id,
+            'user_id'      => $user?->id,
+            'name'         => $user?->name ?: ($data['name'] ?? 'زائر'),
+            'email'        => $user?->email ?: ($data['email'] ?? null),
+            'body'         => $data['body'],
+            'approved'     => true,
+        ]);
+
+        return back()->with('success', 'تم نشر تعليقك. شكراً لمشاركتك!')->withFragment('comments');
     }
 }
