@@ -112,40 +112,40 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">آخر الطلبات الواردة</h3>
-                <a href="{{ route('admin.orders.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">عرض الكل</a>
+                <h3 class="text-base font-bold">Recent Orders</h3>
+                <a href="{{ route('admin.orders.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">View all</a>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
+                <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="text-gray-400 border-b border-gray-100 dark:border-gray-800">
-                            <th class="pb-3 font-medium">رقم الطلب</th>
-                            <th class="pb-3 font-medium">العميل</th>
-                            <th class="pb-3 font-medium">المجموع</th>
-                            <th class="pb-3 font-medium">الحالة</th>
+                            <th class="pb-3 font-medium">Order #</th>
+                            <th class="pb-3 font-medium">Customer</th>
+                            <th class="pb-3 font-medium">Total</th>
+                            <th class="pb-3 font-medium">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         @forelse($recentOrders as $order)
                             @php
                                 $statusMap = [
-                                    'pending'    => ['قيد الانتظار', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
-                                    'paid'       => ['مدفوع',        'bg-blue-50 text-blue-600 dark:bg-blue-950/30'],
-                                    'processing' => ['قيد المعالجة', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
-                                    'shipped'    => ['تم الشحن',     'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30'],
-                                    'delivered'  => ['تم التسليم',   'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'],
-                                    'cancelled'  => ['ملغى',         'bg-red-50 text-red-600 dark:bg-red-950/30'],
+                                    'pending'    => ['Pending',    'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
+                                    'paid'       => ['Paid',       'bg-blue-50 text-blue-600 dark:bg-blue-950/30'],
+                                    'processing' => ['Processing', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
+                                    'shipped'    => ['Shipped',    'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30'],
+                                    'delivered'  => ['Delivered',  'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'],
+                                    'cancelled'  => ['Cancelled',  'bg-red-50 text-red-600 dark:bg-red-950/30'],
                                 ];
                                 [$label, $cls] = $statusMap[$order->status] ?? [$order->status, 'bg-gray-50 text-gray-600 dark:bg-dark-800'];
                             @endphp
                             <tr>
                                 <td class="py-3 font-semibold text-primary-600">#{{ $order->order_number ?? $order->id }}</td>
-                                <td class="py-3 font-medium">{{ optional($order->user)->name ?? 'زائر' }}</td>
-                                <td class="py-3">{{ $fmt($order->total) }} ج.م</td>
+                                <td class="py-3 font-medium">{{ optional($order->user)->name ?? 'Guest' }}</td>
+                                <td class="py-3">{{ $fmt($order->total) }} EGP</td>
                                 <td class="py-3"><span class="px-2 py-1 text-xs font-medium rounded-md {{ $cls }}">{{ $label }}</span></td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">لا توجد طلبات بعد</td></tr>
+                            <tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">No orders yet</td></tr>
                         @endforelse
                     </tbody>
                 </table>
