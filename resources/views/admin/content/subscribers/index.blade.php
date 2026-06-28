@@ -74,6 +74,15 @@
                 </div>
                 <input type="hidden" name="blog_post_id" id="blog_post_id">
 
+                <div class="flex items-center gap-2 text-[11px] text-gray-400">
+                    <span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span>
+                    <span>أو الصق رابط المقال</span>
+                    <span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span>
+                </div>
+                <input type="url" name="post_url" id="postUrl" placeholder="https://site.com/blog/article-slug"
+                       class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none" dir="ltr">
+
+
                 <div id="selectedPost" class="hidden p-3 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl text-xs">
                     <div class="font-bold text-violet-900 dark:text-violet-200" id="selectedTitle"></div>
                     <a id="selectedUrl" href="#" target="_blank" class="text-violet-600 dark:text-violet-400 break-all underline"></a>
@@ -134,9 +143,14 @@
                     if (!results.contains(e.target) && e.target !== input) results.classList.add('hidden');
                 });
                 window.confirmSend = function(){
-                    if (!hidden.value) { alert('اختر مقالاً أولاً'); return false; }
+                    const url = document.getElementById('postUrl').value.trim();
+                    if (!hidden.value && !url) { alert('اختر مقالاً أو ألصق رابطاً'); return false; }
                     return confirm('سيتم إرسال المقال إلى جميع المشتركين المفعّلين. متابعة؟');
                 };
+                document.getElementById('postUrl').addEventListener('input', e => {
+                    btn.disabled = !(hidden.value || e.target.value.trim());
+                });
+
             })();
             </script>
         </x-admin.card>
