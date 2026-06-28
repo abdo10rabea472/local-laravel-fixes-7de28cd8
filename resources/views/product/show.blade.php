@@ -12,7 +12,38 @@
     $displayPrice = $product->effective_price;
     $college = $product->category?->parent;
     $accent = $college?->primary_color ?? '#6366f1';
+    $reviewsAvg = round((float) $product->reviews()->approved()->avg('rating'), 1);
+    $reviewsCount = (int) $product->reviews()->approved()->count();
 @endphp
+
+@push('styles')
+@if($reviewsCount > 0)
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Product',
+    'name' => $product->name,
+    'image' => [$imageUrl],
+    'description' => $product->short_description ?: $product->description,
+    'sku' => $product->sku,
+    'offers' => [
+        '@type' => 'Offer',
+        'price' => number_format((float)$displayPrice, 2, '.', ''),
+        'priceCurrency' => 'EGP',
+        'availability' => $product->isInStock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        'url' => url()->current(),
+    ],
+    'aggregateRating' => [
+        '@type' => 'AggregateRating',
+        'ratingValue' => $reviewsAvg,
+        'reviewCount' => $reviewsCount,
+        'bestRating' => 5,
+        'worstRating' => 1,
+    ],
+], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endif
+@endpush
 
 <main class="bg-slate-50 min-h-screen py-8 sm:py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,6 +87,16 @@
                     <span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full mb-3">Featured</span>
                     @endif
                     <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">{{ $product->name }}</h1>
+                    <div class="flex items-center gap-2 mt-2">
+                        @php $full = (int) round($reviewsAvg); @endphp
+                        <span class="text-amber-500 text-lg leading-none" aria-label="{{ $reviewsAvg }} من 5">@for($i=0;$i<$full;$i++)★@endfor<span class="text-slate-300">@for($i=0;$i<5-$full;$i++)★@endfor</span></span>
+                        @if($reviewsCount > 0)
+                            <span class="text-sm font-bold text-slate-700">{{ number_format($reviewsAvg, 1) }}</span>
+                            <a href="#reviews" class="text-xs text-slate-500 hover:text-violet-600">({{ $reviewsCount }} مراجعة)</a>
+                        @else
+                            <a href="#reviews" class="text-xs text-slate-400 hover:text-violet-600">لا توجد مراجعات بعد</a>
+                        @endif
+                    </div>
                     @if($product->sku)<p class="text-sm text-slate-400 mt-2">SKU: {{ $product->sku }}</p>@endif
                 </div>
 
