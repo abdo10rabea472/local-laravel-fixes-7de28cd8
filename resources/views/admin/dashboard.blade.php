@@ -1,10 +1,10 @@
 @extends('admin.layouts.app')
 
-@section('title', 'لوحة التحكم')
+@section('title', 'Dashboard')
 
 @section('content')
 @php
-    $adminName = optional(auth('admin')->user())->name ?? 'المدير';
+    $adminName = optional(auth('admin')->user())->name ?? 'Admin';
     $fmt = fn($n) => number_format((float) $n);
 
     // حساب نسب التغير (آخر 7 أيام مقابل السابقة) من بيانات حقيقية
@@ -39,15 +39,15 @@
     {{-- Page header --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">نظرة عامة على النظام</h1>
-            <p class="text-sm text-gray-500 mt-1">مرحباً بك مجدداً، {{ $adminName }}. إليك أداء متجرك لهذا اليوم.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">System Overview</h1>
+            <p class="text-sm text-gray-500 mt-1">Welcome back, {{ $adminName }}. Here's your store performance today.</p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" class="bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-                <i class="fas fa-calendar-alt"></i> آخر 30 يومًا
+                <i class="fas fa-calendar-alt"></i> Last 30 days
             </button>
             <a href="{{ route('admin.products.create') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg shadow-primary-500/20 flex items-center gap-2">
-                <i class="fas fa-plus"></i> إضافة منتج
+                <i class="fas fa-plus"></i> Add Product
             </a>
         </div>
     </div>
@@ -56,17 +56,17 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex justify-between items-start">
             <div>
-                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">إجمالي المبيعات</span>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($totalSales) }} ج.م</h3>
-                <span class="text-xs {{ $sC }} font-semibold flex items-center gap-1 mt-2"><i class="fas {{ $sI }}"></i> {{ $sT }} منذ الأسبوع الماضي</span>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Sales</span>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($totalSales) }} EGP</h3>
+                <span class="text-xs {{ $sC }} font-semibold flex items-center gap-1 mt-2"><i class="fas {{ $sI }}"></i> {{ $sT }} vs last week</span>
             </div>
             <div class="p-3 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 rounded-xl"><i class="fas fa-wallet text-xl"></i></div>
         </div>
 
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex justify-between items-start">
             <div>
-                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">الطلبات المكتملة</span>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($completedOrders) }} طلب</h3>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Completed Orders</span>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($completedOrders) }} orders</h3>
                 <span class="text-xs {{ $oC }} font-semibold flex items-center gap-1 mt-2"><i class="fas {{ $oI }}"></i> {{ $oT }}</span>
             </div>
             <div class="p-3 bg-blue-50 dark:bg-blue-950/30 text-blue-600 rounded-xl"><i class="fas fa-shopping-bag text-xl"></i></div>
@@ -74,8 +74,8 @@
 
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex justify-between items-start">
             <div>
-                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">العملاء المشتركين</span>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($totalCustomers) }} عميل</h3>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Registered Customers</span>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($totalCustomers) }} customers</h3>
                 <span class="text-xs {{ $cC }} font-semibold flex items-center gap-1 mt-2"><i class="fas {{ $cI }}"></i> {{ $cT }}</span>
             </div>
             <div class="p-3 bg-purple-50 dark:bg-purple-950/30 text-purple-600 rounded-xl"><i class="fas fa-users text-xl"></i></div>
@@ -83,9 +83,9 @@
 
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex justify-between items-start">
             <div>
-                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">مخزون منخفض التنبيه</span>
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($lowStockCount + $outOfStockCount) }} منتجاً</h3>
-                <span class="text-xs text-amber-500 font-semibold flex items-center gap-1 mt-2"><i class="fas fa-exclamation-circle"></i> يحتاج إعادة ملء فوراً</span>
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Low Stock Alerts</span>
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ $fmt($lowStockCount + $outOfStockCount) }} products</h3>
+                <span class="text-xs text-amber-500 font-semibold flex items-center gap-1 mt-2"><i class="fas fa-exclamation-circle"></i> Needs restocking soon</span>
             </div>
             <div class="p-3 bg-amber-50 dark:bg-amber-950/30 text-amber-600 rounded-xl"><i class="fas fa-exclamation-triangle text-xl"></i></div>
         </div>
@@ -95,14 +95,14 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">مخطط الإيرادات والمبيعات المتقدم</h3>
+                <h3 class="text-base font-bold">Revenue & Sales Trend</h3>
                 <i class="fas fa-ellipsis-h text-gray-400 cursor-pointer"></i>
             </div>
             <div class="h-72"><canvas id="revenueChart"></canvas></div>
         </div>
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">توزيع مبيعات الأقسام (الكليات)</h3>
+                <h3 class="text-base font-bold">Sales by Category</h3>
             </div>
             <div class="h-72 flex items-center justify-center"><canvas id="categoryChart"></canvas></div>
         </div>
@@ -112,40 +112,40 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold">آخر الطلبات الواردة</h3>
-                <a href="{{ route('admin.orders.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">عرض الكل</a>
+                <h3 class="text-base font-bold">Recent Orders</h3>
+                <a href="{{ route('admin.orders.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">View all</a>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-right text-sm">
+                <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="text-gray-400 border-b border-gray-100 dark:border-gray-800">
-                            <th class="pb-3 font-medium">رقم الطلب</th>
-                            <th class="pb-3 font-medium">العميل</th>
-                            <th class="pb-3 font-medium">المجموع</th>
-                            <th class="pb-3 font-medium">الحالة</th>
+                            <th class="pb-3 font-medium">Order #</th>
+                            <th class="pb-3 font-medium">Customer</th>
+                            <th class="pb-3 font-medium">Total</th>
+                            <th class="pb-3 font-medium">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         @forelse($recentOrders as $order)
                             @php
                                 $statusMap = [
-                                    'pending'    => ['قيد الانتظار', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
-                                    'paid'       => ['مدفوع',        'bg-blue-50 text-blue-600 dark:bg-blue-950/30'],
-                                    'processing' => ['قيد المعالجة', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
-                                    'shipped'    => ['تم الشحن',     'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30'],
-                                    'delivered'  => ['تم التسليم',   'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'],
-                                    'cancelled'  => ['ملغى',         'bg-red-50 text-red-600 dark:bg-red-950/30'],
+                                    'pending'    => ['Pending',    'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
+                                    'paid'       => ['Paid',       'bg-blue-50 text-blue-600 dark:bg-blue-950/30'],
+                                    'processing' => ['Processing', 'bg-amber-50 text-amber-600 dark:bg-amber-950/30'],
+                                    'shipped'    => ['Shipped',    'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30'],
+                                    'delivered'  => ['Delivered',  'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30'],
+                                    'cancelled'  => ['Cancelled',  'bg-red-50 text-red-600 dark:bg-red-950/30'],
                                 ];
                                 [$label, $cls] = $statusMap[$order->status] ?? [$order->status, 'bg-gray-50 text-gray-600 dark:bg-dark-800'];
                             @endphp
                             <tr>
                                 <td class="py-3 font-semibold text-primary-600">#{{ $order->order_number ?? $order->id }}</td>
-                                <td class="py-3 font-medium">{{ optional($order->user)->name ?? 'زائر' }}</td>
-                                <td class="py-3">{{ $fmt($order->total) }} ج.م</td>
+                                <td class="py-3 font-medium">{{ optional($order->user)->name ?? 'Guest' }}</td>
+                                <td class="py-3">{{ $fmt($order->total) }} EGP</td>
                                 <td class="py-3"><span class="px-2 py-1 text-xs font-medium rounded-md {{ $cls }}">{{ $label }}</span></td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">لا توجد طلبات بعد</td></tr>
+                            <tr><td colspan="4" class="py-6 text-center text-gray-400 text-sm">No orders yet</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -154,8 +154,8 @@
 
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold text-red-600 flex items-center gap-2"><i class="fas fa-boxes"></i> المنتجات أوشكت على النفاد</h3>
-                <a href="{{ route('admin.stock.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">إدارة المخزن</a>
+                <h3 class="text-base font-bold text-red-600 flex items-center gap-2"><i class="fas fa-boxes"></i> Low Stock Products</h3>
+                <a href="{{ route('admin.stock.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">Manage stock</a>
             </div>
             <div class="space-y-3">
                 @forelse($lowStockProducts as $p)
@@ -169,58 +169,58 @@
                                 <p class="text-xs text-gray-400">{{ optional($p->category)->name ?? '—' }}</p>
                             </div>
                         </div>
-                        <span class="text-xs px-2 py-1 font-bold rounded bg-red-50 text-red-600 dark:bg-red-950/30">متبقي {{ $p->stock }}</span>
+                        <span class="text-xs px-2 py-1 font-bold rounded bg-red-50 text-red-600 dark:bg-red-950/30">{{ $p->stock }} left</span>
                     </div>
                 @empty
-                    <div class="text-center text-sm text-gray-400 py-6">لا توجد منتجات منخفضة المخزون</div>
+                    <div class="text-center text-sm text-gray-400 py-6">No low-stock products</div>
                 @endforelse
             </div>
         </div>
     </div>
 
-    {{-- إحصاءات اليوم + أفضل المنتجات مبيعًا --}}
+    {{-- Today's stats + Top-selling products --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {{-- اليوم --}}
+        {{-- Today --}}
         <div class="bg-gradient-to-br from-primary-600 to-indigo-700 text-white p-5 rounded-2xl shadow-lg lg:col-span-1">
-            <h3 class="font-bold text-base mb-4 flex items-center gap-2"><i class="fas fa-bolt"></i> إحصاءات اليوم</h3>
+            <h3 class="font-bold text-base mb-4 flex items-center gap-2"><i class="fas fa-bolt"></i> Today's Stats</h3>
             <div class="space-y-3">
                 <div class="flex items-center justify-between bg-white/10 rounded-xl p-3">
-                    <span class="text-xs opacity-90">طلبات اليوم</span>
+                    <span class="text-xs opacity-90">Orders today</span>
                     <span class="text-2xl font-black">{{ $todayStats['orders'] ?? 0 }}</span>
                 </div>
                 <div class="flex items-center justify-between bg-white/10 rounded-xl p-3">
-                    <span class="text-xs opacity-90">إيرادات اليوم</span>
-                    <span class="text-2xl font-black">{{ number_format($todayStats['revenue'] ?? 0) }} ج.م</span>
+                    <span class="text-xs opacity-90">Revenue today</span>
+                    <span class="text-2xl font-black">{{ number_format($todayStats['revenue'] ?? 0) }} EGP</span>
                 </div>
                 <div class="flex items-center justify-between bg-white/10 rounded-xl p-3">
-                    <span class="text-xs opacity-90">عملاء جدد</span>
+                    <span class="text-xs opacity-90">New customers</span>
                     <span class="text-2xl font-black">{{ $todayStats['new_customers'] ?? 0 }}</span>
                 </div>
             </div>
         </div>
 
-        {{-- الأكثر مبيعًا --}}
+        {{-- Top sellers --}}
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm lg:col-span-2">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2"><i class="fas fa-trophy text-amber-500"></i> الأكثر مبيعًا</h3>
-                <a href="{{ route('admin.products.index') }}" class="text-xs text-primary-600 hover:underline">كل المنتجات</a>
+                <h3 class="font-bold text-gray-900 dark:text-white text-base flex items-center gap-2"><i class="fas fa-trophy text-amber-500"></i> Best Sellers</h3>
+                <a href="{{ route('admin.products.index') }}" class="text-xs text-primary-600 hover:underline">All products</a>
             </div>
             <div class="space-y-2">
                 @forelse($topProducts ?? [] as $idx => $tp)
                     <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-dark-800 transition-colors">
                         <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-400 to-orange-500 text-white grid place-items-center font-black text-sm">{{ $idx + 1 }}</div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ $tp->name ?? 'منتج محذوف' }}</p>
-                            <p class="text-xs text-gray-500">{{ (int)$tp->qty }} قطعة مباعة</p>
+                            <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ $tp->name ?? 'Deleted product' }}</p>
+                            <p class="text-xs text-gray-500">{{ (int)$tp->qty }} units sold</p>
                         </div>
-                        <div class="text-left">
-                            <p class="text-sm font-black text-emerald-600">{{ number_format((float)$tp->revenue, 0) }} ج.م</p>
+                        <div class="text-right">
+                            <p class="text-sm font-black text-emerald-600">{{ number_format((float)$tp->revenue, 0) }} EGP</p>
                         </div>
                     </div>
                 @empty
                     <div class="text-center text-sm text-gray-400 py-8">
                         <i class="fas fa-chart-line text-3xl mb-2 block opacity-40"></i>
-                        لا توجد مبيعات بعد
+                        No sales yet
                     </div>
                 @endforelse
             </div>
@@ -253,7 +253,7 @@
                     labels: REVENUE_LABELS,
                     datasets: [
                         {
-                            label: 'الأرباح المحققة (ج.م)',
+                            label: 'Revenue (EGP)',
                             data: REVENUE_DATA,
                             borderColor: '#22c55e',
                             backgroundColor: 'rgba(34,197,94,0.08)',
@@ -261,7 +261,7 @@
                             pointBackgroundColor: '#22c55e', pointRadius: 4,
                         },
                         {
-                            label: 'الطلبات المحجوزة',
+                            label: 'Orders',
                             data: ORDERS_DATA,
                             borderColor: '#3b82f6',
                             backgroundColor: 'transparent',
@@ -273,10 +273,10 @@
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', align: 'start', labels: { font: { family: 'Cairo' }, color: textColor, usePointStyle: true, boxWidth: 8 } } },
+                    plugins: { legend: { position: 'top', align: 'start', labels: { font: { family: 'Inter' }, color: textColor, usePointStyle: true, boxWidth: 8 } } },
                     scales: {
-                        x: { grid: { color: 'transparent' }, ticks: { font: { family: 'Cairo' }, color: textColor } },
-                        y: { grid: { color: gridColor },    ticks: { font: { family: 'Cairo' }, color: textColor } }
+                        x: { grid: { color: 'transparent' }, ticks: { font: { family: 'Inter' }, color: textColor } },
+                        y: { grid: { color: gridColor },    ticks: { font: { family: 'Inter' }, color: textColor } }
                     }
                 }
             });
@@ -293,7 +293,7 @@
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Cairo' }, color: textColor } } }
+                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Inter' }, color: textColor } } }
                 }
             });
         }

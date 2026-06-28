@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="light">
+<html lang="en" dir="ltr" class="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'لوحة التحكم') | UNI-LAB MARKET</title>
+    <title>@yield('title', 'Dashboard') | UNI-LAB MARKET</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -22,13 +22,13 @@
         })();
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <style>
-        body { font-family: 'Cairo', sans-serif; }
+        body { font-family: 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
@@ -42,43 +42,43 @@
 
 @php
     $admin = auth('admin')->user();
-    $adminName = $admin->name ?? 'المدير';
+    $adminName = $admin->name ?? 'Admin';
     $r = fn($name) => \Illuminate\Support\Facades\Route::has($name) ? route($name) : '#';
 
     $menu = [
-        ['title' => 'لوحة التحكم', 'icon' => 'fa-chart-pie', 'route' => 'admin.dashboard'],
-        ['title' => 'إدارة المنتجات', 'icon' => 'fa-boxes', 'children' => [
-            ['title' => 'جميع المنتجات',       'route' => 'admin.products.index'],
-            ['title' => 'إضافة منتج جديد',     'route' => 'admin.products.create'],
-            ['title' => 'التصنيفات الرئيسيّة', 'route' => 'admin.colleges.index'],
-            ['title' => 'التصنيفات الفرعيّة',  'route' => 'admin.subcategories.index'],
-            ['title' => 'خصومات المنتجات',     'route' => 'admin.product-discounts.index'],
+        ['title' => 'Dashboard', 'icon' => 'fa-chart-pie', 'route' => 'admin.dashboard'],
+        ['title' => 'Product Management', 'icon' => 'fa-boxes', 'children' => [
+            ['title' => 'All Products',         'route' => 'admin.products.index'],
+            ['title' => 'Add New Product',      'route' => 'admin.products.create'],
+            ['title' => 'Main Categories',      'route' => 'admin.colleges.index'],
+            ['title' => 'Subcategories',        'route' => 'admin.subcategories.index'],
+            ['title' => 'Product Discounts',    'route' => 'admin.product-discounts.index'],
         ]],
-        ['title' => 'الطلبات والمبيعات', 'icon' => 'fa-shopping-cart', 'route' => 'admin.orders.index'],
-        ['title' => 'إدارة العملاء',     'icon' => 'fa-users',         'route' => 'admin.customers.index'],
-        ['title' => 'مجموعات العملاء',   'icon' => 'fa-layer-group',   'route' => 'admin.customer-groups.index'],
-        ['title' => 'المخزون والإمدادات', 'icon' => 'fa-warehouse', 'children' => [
-            ['title' => 'إدارة المخزون',  'route' => 'admin.stock.index'],
-            ['title' => 'سجل المخزون',    'route' => 'admin.stock.history'],
-            ['title' => 'شركات الشحن',    'route' => 'admin.shipping-carriers.index'],
-            ['title' => 'المرتجعات',      'route' => 'admin.returns.index'],
+        ['title' => 'Orders & Sales', 'icon' => 'fa-shopping-cart', 'route' => 'admin.orders.index'],
+        ['title' => 'Customers',      'icon' => 'fa-users',         'route' => 'admin.customers.index'],
+        ['title' => 'Customer Groups','icon' => 'fa-layer-group',   'route' => 'admin.customer-groups.index'],
+        ['title' => 'Stock & Supply', 'icon' => 'fa-warehouse', 'children' => [
+            ['title' => 'Stock Management', 'route' => 'admin.stock.index'],
+            ['title' => 'Stock History',    'route' => 'admin.stock.history'],
+            ['title' => 'Shipping Carriers','route' => 'admin.shipping-carriers.index'],
+            ['title' => 'Returns',          'route' => 'admin.returns.index'],
         ]],
-        ['title' => 'المراجعات والتقييمات', 'icon' => 'fa-star',          'route' => 'admin.reviews.index'],
-        ['title' => 'الكوبونات والخصومات',  'icon' => 'fa-ticket-alt',    'route' => 'admin.coupons.index'],
-        ['title' => 'التقارير المتقدمة', 'icon' => 'fa-chart-line', 'children' => [
-            ['title' => 'تحليلات المبيعات', 'route' => 'admin.reports.analytics'],
-            ['title' => 'تقرير المبيعات',   'route' => 'admin.reports.sales'],
-            ['title' => 'تقارير المخزون',   'route' => 'admin.reports.inventory'],
-            ['title' => 'تقارير الكوبونات', 'route' => 'admin.reports.coupons'],
+        ['title' => 'Reviews & Ratings', 'icon' => 'fa-star',          'route' => 'admin.reviews.index'],
+        ['title' => 'Coupons & Discounts','icon' => 'fa-ticket-alt',   'route' => 'admin.coupons.index'],
+        ['title' => 'Advanced Reports', 'icon' => 'fa-chart-line', 'children' => [
+            ['title' => 'Sales Analytics',  'route' => 'admin.reports.analytics'],
+            ['title' => 'Sales Report',     'route' => 'admin.reports.sales'],
+            ['title' => 'Inventory Reports','route' => 'admin.reports.inventory'],
+            ['title' => 'Coupon Reports',   'route' => 'admin.reports.coupons'],
         ]],
-        ['title' => 'إدارة المحتوى', 'icon' => 'fa-newspaper', 'children' => [
-            ['title' => 'المقالات',          'route' => 'admin.blog.index'],
-            
-            ['title' => 'الأسئلة الشائعة',   'route' => 'admin.faqs.index'],
-            ['title' => 'رسائل التواصل',     'route' => 'admin.messages.index'],
-            ['title' => 'مشتركو النشرة',     'route' => 'admin.subscribers.index'],
+        ['title' => 'Content Management', 'icon' => 'fa-newspaper', 'children' => [
+            ['title' => 'Blog Posts',       'route' => 'admin.blog.index'],
+
+            ['title' => 'FAQs',             'route' => 'admin.faqs.index'],
+            ['title' => 'Contact Messages', 'route' => 'admin.messages.index'],
+            ['title' => 'Newsletter Subscribers', 'route' => 'admin.subscribers.index'],
         ]],
-        ['title' => 'الإعدادات العامة', 'icon' => 'fa-sliders-h', 'route' => 'admin.settings.index'],
+        ['title' => 'General Settings', 'icon' => 'fa-sliders-h', 'route' => 'admin.settings.index'],
     ];
 
 
@@ -95,7 +95,7 @@
 
     {{-- Sidebar --}}
     <aside id="sidebar"
-           class="fixed inset-y-0 right-0 z-50 flex flex-col w-64 bg-white dark:bg-dark-900 border-l border-gray-200 dark:border-gray-800 transition-transform duration-300 transform translate-x-full lg:translate-x-0 lg:static lg:inset-auto">
+           class="fixed inset-y-0 left-0 z-50 flex flex-col w-64 bg-white dark:bg-dark-900 border-r border-gray-200 dark:border-gray-800 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto">
 
         {{-- Logo --}}
         <div class="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
@@ -124,12 +124,12 @@
                                 <i class="fas {{ $item['icon'] }} text-gray-400 w-5"></i>
                                 <span>{{ $item['title'] }}</span>
                             </div>
-                            <i id="arrow-sub-{{ $idx }}" class="fas fa-chevron-left text-xs transition-transform duration-200 {{ $anyChildActive ? '-rotate-90' : '' }}"></i>
+                            <i id="arrow-sub-{{ $idx }}" class="fas fa-chevron-right text-xs transition-transform duration-200 {{ $anyChildActive ? 'rotate-90' : '' }}"></i>
                         </button>
-                        <div id="sub-{{ $idx }}" class="{{ $anyChildActive ? 'flex' : 'hidden' }} flex-col space-y-1 pr-2 border-r border-gray-100 dark:border-gray-800">
+                        <div id="sub-{{ $idx }}" class="{{ $anyChildActive ? 'flex' : 'hidden' }} flex-col space-y-1 pl-2 border-l border-gray-100 dark:border-gray-800">
                             @foreach($item['children'] as $child)
                                 <a href="{{ $r($child['route']) }}"
-                                   class="flex items-center gap-2 py-2 pr-9 pl-4 text-sm rounded-lg transition-colors
+                                   class="flex items-center gap-2 py-2 pl-9 pr-4 text-sm rounded-lg transition-colors
                                           {{ $isActiveRoute($child['route']) ? 'bg-primary-50 text-primary-600 dark:bg-dark-800 dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-white' }}">
                                     <i class="fas fa-circle text-[6px]"></i> {{ $child['title'] }}
                                 </a>
@@ -149,13 +149,13 @@
             <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 space-y-1">
                 <a href="{{ url('/') }}" target="_blank"
                    class="flex items-center gap-3 py-2.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800 rounded-lg transition-colors">
-                    <i class="fas fa-globe text-gray-400 w-5"></i><span>زيارة المتجر</span>
+                    <i class="fas fa-globe text-gray-400 w-5"></i><span>Visit Store</span>
                 </a>
                 <form method="POST" action="{{ $r('admin.logout') }}">
                     @csrf
                     <button type="submit"
                             class="w-full flex items-center gap-3 py-2.5 px-4 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors">
-                        <i class="fas fa-sign-out-alt text-red-500 w-5"></i><span>تسجيل الخروج</span>
+                        <i class="fas fa-sign-out-alt text-red-500 w-5"></i><span>Logout</span>
                     </button>
                 </form>
             </div>
@@ -172,11 +172,11 @@
                     <i class="fas fa-bars text-xl"></i>
                 </button>
                 <div class="relative hidden md:block w-72">
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
                         <i class="fas fa-search"></i>
                     </span>
-                    <input type="text" placeholder="بحث سريع في النظام..."
-                           class="w-full py-2 pl-4 pr-10 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors">
+                    <input type="text" placeholder="Quick search..."
+                           class="w-full py-2 pr-4 pl-10 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors">
                 </div>
             </div>
 
@@ -188,15 +188,15 @@
                 <div class="relative">
                     <button onclick="toggleDropdown('notifications-menu', event); loadAdminNotifications();" class="relative p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 rounded-lg transition-colors">
                         <i class="fas fa-bell text-lg"></i>
-                        <span id="notif-badge" class="hidden absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full grid place-items-center">0</span>
+                        <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full grid place-items-center">0</span>
                     </button>
-                    <div id="notifications-menu" class="hidden absolute left-0 mt-2 w-80 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-2">
+                    <div id="notifications-menu" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-2">
                         <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-800 font-bold text-sm flex justify-between items-center">
-                            <span>الإشعارات الأخيرة</span>
-                            <span class="text-xs text-primary-600 cursor-pointer" onclick="loadAdminNotifications()"><i class="fas fa-rotate"></i> تحديث</span>
+                            <span>Recent Notifications</span>
+                            <span class="text-xs text-primary-600 cursor-pointer" onclick="loadAdminNotifications()"><i class="fas fa-rotate"></i> Refresh</span>
                         </div>
                         <div class="max-h-72 overflow-y-auto" id="notification-items">
-                            <div class="p-6 text-center text-xs text-gray-400"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+                            <div class="p-6 text-center text-xs text-gray-400"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
                         </div>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
                             if (data.count > 0) { badge.textContent = data.count; badge.classList.remove('hidden'); }
                             else { badge.classList.add('hidden'); }
                             if (!data.items.length) {
-                                box.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">لا توجد إشعارات جديدة</div>';
+                                box.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">No new notifications</div>';
                                 return;
                             }
                             box.innerHTML = data.items.map(i => `
@@ -227,7 +227,7 @@
                                 </a>`).join('');
                         } catch (e) { console.error(e); }
                     }
-                    // أوّل تحميل + تحديث كل 60 ثانية
+                    // Initial load + refresh every 60 seconds
                     loadAdminNotifications();
                     setInterval(loadAdminNotifications, 60000);
                 </script>
@@ -237,18 +237,18 @@
                         <div class="w-9 h-9 rounded-lg bg-primary-600 text-white flex items-center justify-center font-bold ring-2 ring-primary-500/20">
                             {{ mb_substr($adminName, 0, 1) }}
                         </div>
-                        <div class="hidden md:block text-right">
+                        <div class="hidden md:block text-left">
                             <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">{{ $adminName }}</p>
-                            <span class="text-xs text-gray-400">مدير النظام</span>
+                            <span class="text-xs text-gray-400">System Administrator</span>
                         </div>
                     </button>
-                    <div id="user-profile-menu" class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-1">
-                        <a href="{{ $r('admin.settings.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800"><i class="fas fa-cog w-5"></i>إعدادات المتجر</a>
+                    <div id="user-profile-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-1">
+                        <a href="{{ $r('admin.settings.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800"><i class="fas fa-cog w-5"></i>Store Settings</a>
                         <hr class="border-gray-100 dark:border-gray-800 my-1">
                         <form method="POST" action="{{ $r('admin.logout') }}">
                             @csrf
-                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-right">
-                                <i class="fas fa-sign-out-alt w-5"></i>تسجيل الخروج
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-left">
+                                <i class="fas fa-sign-out-alt w-5"></i>Logout
                             </button>
                         </form>
                     </div>
@@ -274,13 +274,13 @@
     </div>
 </div>
 
-<div id="toast-container" class="fixed bottom-5 left-5 z-50 space-y-2"></div>
+<div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2"></div>
 
 <script>
     function toggleSidebar(){
         const sb = document.getElementById('sidebar');
         const ov = document.getElementById('sidebar-overlay');
-        sb.classList.toggle('translate-x-full');
+        sb.classList.toggle('-translate-x-full');
         sb.classList.toggle('translate-x-0');
         ov.classList.toggle('hidden');
     }
@@ -290,7 +290,7 @@
         const opening = sub.classList.contains('hidden');
         sub.classList.toggle('hidden', !opening);
         sub.classList.toggle('flex', opening);
-        if(arrow) arrow.classList.toggle('-rotate-90', opening);
+        if(arrow) arrow.classList.toggle('rotate-90', opening);
     }
     function toggleDropdown(id, evt){
         if(evt) evt.stopPropagation();
