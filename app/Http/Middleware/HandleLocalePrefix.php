@@ -96,4 +96,14 @@ class HandleLocalePrefix
 
         return $next($request);
     }
+
+    protected function resolveLocale(Request $request): ?string
+    {
+        $cookie = $request->cookie('locale');
+        if ($cookie && $this->languages->exists($cookie)) {
+            return $cookie;
+        }
+        $default = optional($this->languages->default())->code;
+        return ($default && $this->languages->exists($default)) ? $default : null;
+    }
 }
