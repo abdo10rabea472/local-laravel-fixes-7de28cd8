@@ -23,8 +23,8 @@
             <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full rounded-2xl mb-8">
         @endif
 
-        <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-lg">
-            {!! nl2br(e($post->content)) !!}
+        <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-lg prose-headings:font-bold prose-a:text-violet-600 prose-img:rounded-xl">
+            {!! \Illuminate\Support\Str::of($post->content)->sanitizeHtml() !!}
         </div>
     </div>
 </article>
