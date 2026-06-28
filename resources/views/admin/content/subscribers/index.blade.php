@@ -1,28 +1,28 @@
 @extends('admin.layouts.app')
-@section('title', 'مشتركو النشرة')
+@section('title', 'Newsletter Subscribers')
 
 @section('content')
-<x-admin.page title="مشتركو النشرة البريدية" subtitle="قائمة جميع المشتركين في النشرة البريدية للمتجر.">
+<x-admin.page title="Newsletter Subscribers" subtitle="All subscribers to the store newsletter.">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <x-admin.card padding="p-5">
-            <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">إجمالي المشتركين</p>
+            <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Total Subscribers</p>
             <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ number_format($total) }}</p>
         </x-admin.card>
         <x-admin.card padding="p-5">
-            <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">المفعّلون</p>
+            <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase">Active</p>
             <p class="text-3xl font-bold text-emerald-600 mt-2">{{ number_format($active) }}</p>
         </x-admin.card>
     </div>
 
-    <x-admin.card title="كل المشتركين" icon="fa-envelope-open-text" padding="p-0">
+    <x-admin.card title="All Subscribers" icon="fa-envelope-open-text" padding="p-0">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-gray-50 dark:bg-dark-800 text-gray-500 dark:text-gray-400 text-xs">
                     <tr>
-                        <th class="p-3 text-right">البريد الإلكتروني</th>
-                        <th class="p-3">الحالة</th>
-                        <th class="p-3">تاريخ الاشتراك</th>
-                        <th class="p-3">إجراءات</th>
+                        <th class="p-3 text-left">Email</th>
+                        <th class="p-3">Status</th>
+                        <th class="p-3">Subscribed At</th>
+                        <th class="p-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,27 +31,27 @@
                         <td class="p-3 font-mono text-gray-900 dark:text-white">{{ $s->email }}</td>
                         <td class="p-3 text-center">
                             @if($s->active)
-                                <span class="px-2 py-1 text-xs bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-full font-bold">مفعّل</span>
+                                <span class="px-2 py-1 text-xs bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 rounded-full font-bold">Active</span>
                             @else
-                                <span class="px-2 py-1 text-xs bg-rose-50 dark:bg-rose-950/30 text-rose-600 rounded-full font-bold">معطّل</span>
+                                <span class="px-2 py-1 text-xs bg-rose-50 dark:bg-rose-950/30 text-rose-600 rounded-full font-bold">Inactive</span>
                             @endif
                         </td>
                         <td class="p-3 text-center text-xs text-gray-500">{{ $s->subscribed_at?->format('Y-m-d') ?? '—' }}</td>
                         <td class="p-3 text-center whitespace-nowrap">
                             <form method="POST" action="{{ route('admin.subscribers.toggle', $s) }}" class="inline">
                                 @csrf @method('PATCH')
-                                <button class="text-amber-600 hover:underline text-xs font-bold">{{ $s->active ? 'تعطيل' : 'تفعيل' }}</button>
+                                <button class="text-amber-600 hover:underline text-xs font-bold">{{ $s->active ? 'Disable' : 'Enable' }}</button>
                             </form>
-                            <form method="POST" action="{{ route('admin.subscribers.destroy', $s) }}" class="inline mr-2" onsubmit="return confirm('حذف؟')">
+                            <form method="POST" action="{{ route('admin.subscribers.destroy', $s) }}" class="inline ml-2" onsubmit="return confirm('Delete?')">
                                 @csrf @method('DELETE')
-                                <button class="text-rose-600 hover:underline text-xs font-bold">حذف</button>
+                                <button class="text-rose-600 hover:underline text-xs font-bold">Delete</button>
                             </form>
                         </td>
                     </tr>
                 @empty
                     <tr><td colspan="4" class="p-12 text-center text-gray-400">
                         <i class="fa-regular fa-envelope-open text-3xl mb-3 block"></i>
-                        لا يوجد مشتركون بعد.
+                        No subscribers yet.
                     </td></tr>
                 @endforelse
                 </tbody>
@@ -63,12 +63,12 @@
     </x-admin.card>
 
     <x-slot:side>
-        <x-admin.card title="إرسال مقال للمشتركين" icon="fa-paper-plane">
+        <x-admin.card title="Send Article to Subscribers" icon="fa-paper-plane">
             <form method="POST" action="{{ route('admin.subscribers.send-article') }}" class="space-y-3" id="sendArticleForm"
                   onsubmit="return confirmSend();">
                 @csrf
                 <div class="relative">
-                    <input type="text" id="postSearch" autocomplete="off" placeholder="ابحث بعنوان المقال..."
+                    <input type="text" id="postSearch" autocomplete="off" placeholder="Search by post title..."
                            class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                     <div id="postResults" class="hidden absolute z-20 mt-1 w-full max-h-64 overflow-auto bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg"></div>
                 </div>
@@ -76,7 +76,7 @@
 
                 <div class="flex items-center gap-2 text-[11px] text-gray-400">
                     <span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span>
-                    <span>أو الصق رابط المقال</span>
+                    <span>or paste the post URL</span>
                     <span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span>
                 </div>
                 <input type="url" name="post_url" id="postUrl" placeholder="https://site.com/blog/article-slug"
@@ -90,7 +90,7 @@
 
                 <button type="submit" id="sendBtn" disabled
                         class="w-full h-12 inline-flex items-center justify-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-lg shadow-violet-500/20">
-                    <i class="fa-solid fa-paper-plane"></i> <span id="sendBtnText">إرسال للمشتركين</span>
+                    <i class="fa-solid fa-paper-plane"></i> <span id="sendBtnText">Send to Subscribers</span>
                 </button>
 
                 @if(session('success'))
@@ -121,8 +121,8 @@
                         const r = await fetch("{{ route('admin.subscribers.posts-search') }}?q=" + encodeURIComponent(q));
                         const items = await r.json();
                         results.innerHTML = items.length
-                            ? items.map(p => `<button type="button" data-id="${p.id}" data-title="${p.title.replace(/"/g,'&quot;')}" data-url="${p.url}" class="block w-full text-right px-3 py-2 text-xs hover:bg-violet-50 dark:hover:bg-violet-950/30 border-b border-gray-100 dark:border-gray-800">${p.title}<div class="text-[10px] text-gray-400 truncate">${p.url}</div></button>`).join('')
-                            : '<div class="p-3 text-xs text-gray-400 text-center">لا نتائج</div>';
+                            ? items.map(p => `<button type="button" data-id="${p.id}" data-title="${p.title.replace(/"/g,'&quot;')}" data-url="${p.url}" class="block w-full text-left px-3 py-2 text-xs hover:bg-violet-50 dark:hover:bg-violet-950/30 border-b border-gray-100 dark:border-gray-800">${p.title}<div class="text-[10px] text-gray-400 truncate">${p.url}</div></button>`).join('')
+                            : '<div class="p-3 text-xs text-gray-400 text-center">No results</div>';
                         results.classList.remove('hidden');
                         results.querySelectorAll('button').forEach(b => {
                             b.addEventListener('click', () => {
@@ -132,7 +132,7 @@
                                 selU.textContent = b.dataset.url;
                                 sel.classList.remove('hidden');
                                 btn.disabled = false;
-                                btnT.textContent = 'إرسال "' + b.dataset.title.slice(0,40) + '"';
+                                btnT.textContent = 'Send "' + b.dataset.title.slice(0,40) + '"';
                                 input.value = b.dataset.title;
                                 results.classList.add('hidden');
                             });
@@ -144,8 +144,8 @@
                 });
                 window.confirmSend = function(){
                     const url = document.getElementById('postUrl').value.trim();
-                    if (!hidden.value && !url) { alert('اختر مقالاً أو ألصق رابطاً'); return false; }
-                    return confirm('سيتم إرسال المقال إلى جميع المشتركين المفعّلين. متابعة؟');
+                    if (!hidden.value && !url) { alert('Choose a post or paste a URL'); return false; }
+                    return confirm('This will send the article to all active subscribers. Continue?');
                 };
                 document.getElementById('postUrl').addEventListener('input', e => {
                     btn.disabled = !(hidden.value || e.target.value.trim());
@@ -156,18 +156,18 @@
         </x-admin.card>
 
 
-        <x-admin.card title="إجراءات سريعة" icon="fa-bolt">
+        <x-admin.card title="Quick Actions" icon="fa-bolt">
             <a href="{{ route('admin.subscribers.export') }}" class="w-full h-12 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20">
-                <i class="fa-solid fa-download"></i> تصدير CSV
+                <i class="fa-solid fa-download"></i> Export CSV
             </a>
         </x-admin.card>
 
 
-        <x-admin.card title="بحث" icon="fa-search">
+        <x-admin.card title="Search" icon="fa-search">
             <form method="GET" class="space-y-3">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="بحث بالبريد..."
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by email..."
                        class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
-                <button class="w-full h-11 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-sm font-bold">بحث</button>
+                <button class="w-full h-11 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-sm font-bold">Search</button>
             </form>
         </x-admin.card>
     </x-slot:side>

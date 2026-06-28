@@ -25,7 +25,7 @@
     <div class="space-y-2">
         <label class="text-xs font-bold text-slate-500">MAIL_PASSWORD</label>
         <input type="text" name="MAIL_PASSWORD" value="{{ $env('MAIL_PASSWORD') }}" class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono" autocomplete="off">
-        <p class="text-[11px] text-slate-400">لـ Gmail استخدم App Password بدون مسافات.</p>
+        <p class="text-[11px] text-slate-400">For Gmail use an App Password without spaces.</p>
     </div>
     <div class="space-y-2">
         <label class="text-xs font-bold text-slate-500">MAIL_FROM_ADDRESS</label>
@@ -37,9 +37,9 @@
     </div>
 
     <div class="md:col-span-2 flex items-center gap-3 pt-2 border-t border-slate-100">
-        <input type="email" id="mail_test_to" placeholder="بريد لإرسال رسالة اختبار" class="flex-1 h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm">
+        <input type="email" id="mail_test_to" placeholder="Email address for test message" class="flex-1 h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm">
         <button type="button" id="btn_test_mail" class="h-11 px-5 bg-slate-900 hover:bg-black text-white rounded-2xl text-sm font-bold">
-            <i class="fa-solid fa-paper-plane ml-1"></i> اختبار الإرسال
+            <i class="fa-solid fa-paper-plane mr-1"></i> Send Test
         </button>
         <span id="mail_test_result" class="text-xs font-bold"></span>
     </div>
@@ -49,8 +49,8 @@
 document.getElementById('btn_test_mail')?.addEventListener('click', async () => {
     const to = document.getElementById('mail_test_to').value.trim();
     const out = document.getElementById('mail_test_result');
-    if (!to) { out.textContent = 'أدخل بريداً'; out.className = 'text-xs font-bold text-rose-600'; return; }
-    out.textContent = 'جارٍ الإرسال...'; out.className = 'text-xs font-bold text-slate-500';
+    if (!to) { out.textContent = 'Enter an email'; out.className = 'text-xs font-bold text-rose-600'; return; }
+    out.textContent = 'Sending...'; out.className = 'text-xs font-bold text-slate-500';
     try {
         const r = await fetch("{{ route('admin.settings.mail.test') }}", {
             method: 'POST',
@@ -58,7 +58,7 @@ document.getElementById('btn_test_mail')?.addEventListener('click', async () => 
             body: JSON.stringify({ to })
         });
         const j = await r.json();
-        out.textContent = j.ok ? '✅ تم الإرسال' : ('❌ ' + (j.error || 'فشل'));
+        out.textContent = j.ok ? '✅ Sent' : ('❌ ' + (j.error || 'Failed'));
         out.className = 'text-xs font-bold ' + (j.ok ? 'text-emerald-600' : 'text-rose-600');
     } catch (e) {
         out.textContent = '❌ ' + e.message;

@@ -1,96 +1,96 @@
 @extends('admin.layouts.app')
-@section('title', $post->exists ? 'تعديل مقال' : 'مقال جديد')
+@section('title', $post->exists ? 'Edit Post' : 'New Post')
 
 @section('content')
 <x-admin.page
-    :title="$post->exists ? 'تعديل مقال' : 'مقال جديد'"
-    :subtitle="$post->exists ? 'تعديل بيانات المقال وإعدادات الـ SEO.' : 'إنشاء مقال جديد للمدونة.'"
+    :title="$post->exists ? 'Edit Post' : 'New Post'"
+    :subtitle="$post->exists ? 'Update post details and SEO settings.' : 'Create a new blog article.'"
     :back="route('admin.blog.index')"
-    backLabel="العودة للمقالات">
+    backLabel="Back to Posts">
 
     <form method="POST" action="{{ $post->exists ? route('admin.blog.update', $post) : route('admin.blog.store') }}" enctype="multipart/form-data" class="space-y-6" id="blog-form">
         @csrf @if($post->exists) @method('PUT') @endif
 
         @if($errors->any())
             <div class="bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-400 p-4 rounded-xl border border-rose-200 dark:border-rose-900">
-                <ul class="list-disc pr-5 text-sm">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+                <ul class="list-disc pl-5 text-sm">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
             </div>
         @endif
 
         {{-- ✨ AI Generator --}}
-        <x-admin.card title="الكتابة بالذكاء الاصطناعي" icon="fa-wand-magic-sparkles">
+        <x-admin.card title="AI Writing Assistant" icon="fa-wand-magic-sparkles">
             <div class="space-y-4">
                 <p class="text-xs text-gray-500">
-                    اختر منتجًا (اختياري) واكتب عنوانًا مقترحًا أو اتركه فارغًا، ثم اضغط
-                    <b>"كتابة المقال بالذكاء الاصطناعي"</b> ليتم توليد العنوان، المقتطف، المحتوى، وبيانات الـ SEO تلقائيًا.
+                    Optionally pick a product and provide a suggested title (or leave blank), then click
+                    <b>"Generate Article with AI"</b> to auto-generate the title, excerpt, content, and SEO fields.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">المنتج (اختياري)</label>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Product (optional)</label>
                         <select id="ai-product-id" class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm">
-                            <option value="">— بدون منتج —</option>
+                            <option value="">— No product —</option>
                             @foreach(($aiProducts ?? collect()) as $p)
                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 mb-1.5">اللغة</label>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Language</label>
                         <select id="ai-language" class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm">
-                            <option value="ar" selected>العربية</option>
-                            <option value="en">English</option>
+                            <option value="en" selected>English</option>
+                            <option value="ar">العربية</option>
                         </select>
                     </div>
                 </div>
                 <button type="button" id="ai-generate-btn"
-                        class="w-full md:w-auto h-12 px-6 inline-flex items-center justify-center gap-2 bg-gradient-to-l from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-violet-500/20">
+                        class="w-full md:w-auto h-12 px-6 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-violet-500/20">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span id="ai-generate-label">كتابة المقال بالذكاء الاصطناعي</span>
+                    <span id="ai-generate-label">Generate Article with AI</span>
                 </button>
                 <div id="ai-generate-result" class="hidden p-3 rounded-xl text-sm"></div>
             </div>
         </x-admin.card>
 
         {{-- Main content --}}
-        <x-admin.card title="بيانات المقال" icon="fa-pen-to-square">
+        <x-admin.card title="Post Details" icon="fa-pen-to-square">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">العنوان *</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Title *</label>
                     <input id="title" name="title" value="{{ old('title', $post->title) }}" required
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Slug (الرابط)</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Slug (URL)</label>
                     <div class="flex items-stretch" dir="ltr">
                         <span class="inline-flex items-center px-3 bg-gray-100 dark:bg-dark-700 border border-r-0 border-gray-200 dark:border-gray-700 rounded-l-xl text-xs text-gray-600 dark:text-gray-300 font-mono">{{ rtrim(url('/blog'), '/') }}/</span>
                         <input id="slug" name="slug" value="{{ old('slug', $post->slug) }}" dir="ltr" placeholder="your-slug"
                                class="flex-1 h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-r-xl text-sm font-mono focus:border-primary-500 focus:outline-none">
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">اكتب الجزء الأخير فقط من الرابط، أو اتركه فارغًا لتوليده تلقائيًا.</p>
+                    <p class="text-xs text-gray-500 mt-1">Enter only the last segment, or leave blank to auto-generate.</p>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">مقتطف قصير</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Short Excerpt</label>
                     <textarea name="excerpt" rows="2" maxlength="500"
                               class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">{{ old('excerpt', $post->excerpt) }}</textarea>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">التسميات (Tags)</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Tags</label>
                     <input name="tags" value="{{ old('tags', $post->tags) }}" placeholder="laravel, php, seo"
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
-                    <p class="text-xs text-gray-500 mt-1">افصل بين التسميات بفاصلة. ستظهر كفلاتر في صفحة المدونة.</p>
+                    <p class="text-xs text-gray-500 mt-1">Comma-separated. Shown as filters on the blog page.</p>
                 </div>
 
                 <label class="flex items-center gap-2 text-sm cursor-pointer select-none">
                     <input type="hidden" name="is_featured" value="0">
                     <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $post->is_featured)) class="accent-primary-600 w-4 h-4">
-                    <span class="font-bold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-star text-amber-500 me-1"></i> مقال مميز (يظهر في القائمة الجانبية)</span>
+                    <span class="font-bold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-star text-amber-500 mr-1"></i> Featured post (shown in sidebar)</span>
                 </label>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">المحتوى *</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Content *</label>
                     <textarea id="content-editor" name="content" rows="20"
                               class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm">{{ old('content', $post->content) }}</textarea>
                 </div>
@@ -100,23 +100,23 @@
     </form>
 
     <x-slot:side>
-        <x-admin.card title="النشر" icon="fa-paper-plane">
+        <x-admin.card title="Publish" icon="fa-paper-plane">
             <div class="space-y-3">
                 <button form="blog-form" class="w-full h-12 inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20">
-                    <i class="fa-solid fa-save"></i> {{ $post->exists ? 'حفظ التعديلات' : 'نشر المقال' }}
+                    <i class="fa-solid fa-save"></i> {{ $post->exists ? 'Save Changes' : 'Publish Post' }}
                 </button>
-                <a href="{{ route('admin.blog.index') }}" class="w-full h-11 inline-flex items-center justify-center bg-gray-100 dark:bg-dark-800 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-bold">إلغاء</a>
+                <a href="{{ route('admin.blog.index') }}" class="w-full h-11 inline-flex items-center justify-center bg-gray-100 dark:bg-dark-800 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-bold">Cancel</a>
                 @if($post->exists && $post->published_at)
                     <a href="{{ route('blog.show', $post->slug) }}" target="_blank" class="w-full h-11 inline-flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 rounded-xl text-sm font-bold">
-                        <i class="fa-solid fa-eye"></i> عرض المقال
+                        <i class="fa-solid fa-eye"></i> View Post
                     </a>
                 @endif
             </div>
         </x-admin.card>
 
-        <x-admin.card title="التصنيف" icon="fa-folder">
+        <x-admin.card title="Category" icon="fa-folder">
             <select form="blog-form" name="blog_category_id" class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
-                <option value="">— بدون تصنيف —</option>
+                <option value="">— Uncategorized —</option>
                 @php $byParent = $categories->groupBy('parent_id'); @endphp
                 @foreach($byParent->get(null, collect())->merge($byParent->get(0, collect())) as $root)
                     <option value="{{ $root->id }}" @selected(old('blog_category_id', $post->blog_category_id) == $root->id)>{{ $root->name }}</option>
@@ -125,17 +125,17 @@
                     @endforeach
                 @endforeach
             </select>
-            <p class="text-xs text-gray-500 mt-2">من تصنيفات المنتجات.</p>
+            <p class="text-xs text-gray-500 mt-2">From product categories.</p>
         </x-admin.card>
 
-        <x-admin.card title="تاريخ النشر" icon="fa-calendar">
+        <x-admin.card title="Publish Date" icon="fa-calendar">
             <input form="blog-form" type="datetime-local" name="published_at"
                    value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}"
                    class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
-            <p class="text-xs text-gray-500 mt-2">اتركه فارغًا للنشر فورًا.</p>
+            <p class="text-xs text-gray-500 mt-2">Leave blank to publish immediately.</p>
         </x-admin.card>
 
-        <x-admin.card title="الصورة الرئيسية" icon="fa-image">
+        <x-admin.card title="Featured Image" icon="fa-image">
             <input form="blog-form" type="file" name="image" accept="image/*"
                    class="w-full text-sm file:mr-3 file:px-4 file:py-2 file:border-0 file:rounded-lg file:bg-primary-50 file:text-primary-700 file:font-bold file:cursor-pointer">
             @if($post->image)
@@ -144,7 +144,7 @@
         </x-admin.card>
 
         {{-- SEO (sidebar) --}}
-        <x-admin.card title="تحسين محركات البحث (SEO)" icon="fa-magnifying-glass">
+        <x-admin.card title="Search Engine Optimization (SEO)" icon="fa-magnifying-glass">
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Meta Title</label>
@@ -169,26 +169,26 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">صورة المشاركة (OG Image)</label>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Open Graph Image</label>
                     <input form="blog-form" type="file" name="og_image" accept="image/*"
                            class="w-full text-xs file:mr-2 file:px-3 file:py-1.5 file:border-0 file:rounded-lg file:bg-primary-50 file:text-primary-700 file:font-bold file:cursor-pointer">
                     @if($post->og_image)<img src="{{ asset('storage/'.$post->og_image) }}" class="mt-2 w-full rounded-lg shadow">@endif
-                    <p class="text-xs text-gray-500 mt-1">1200×630 يُوصى به.</p>
+                    <p class="text-xs text-gray-500 mt-1">1200×630 recommended.</p>
                 </div>
 
                 <label class="flex items-center gap-2 text-sm cursor-pointer">
                     <input form="blog-form" type="hidden" name="no_index" value="0">
                     <input form="blog-form" type="checkbox" name="no_index" value="1" @checked(old('no_index', $post->no_index)) class="accent-primary-600">
-                    منع الفهرسة (noindex)
+                    Block indexing (noindex)
                 </label>
 
                 {{-- SERP preview --}}
                 <div class="mt-3 p-3 bg-gray-50 dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700">
-                    <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-2">معاينة Google:</p>
+                    <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-2">Google Preview:</p>
                     <div class="bg-white p-2 rounded-lg border" dir="ltr">
                         <p class="text-[10px] text-emerald-700 truncate" id="serp-url">{{ url('/blog/'.($post->slug ?: 'your-slug')) }}</p>
-                        <p class="text-blue-700 text-sm leading-tight truncate" id="serp-title">{{ $post->meta_title ?: ($post->title ?: 'عنوان المقال') }}</p>
-                        <p class="text-xs text-slate-600 line-clamp-2" id="serp-desc">{{ $post->meta_description ?: ($post->excerpt ?: 'وصف المقال يظهر هنا...') }}</p>
+                        <p class="text-blue-700 text-sm leading-tight truncate" id="serp-title">{{ $post->meta_title ?: ($post->title ?: 'Post title') }}</p>
+                        <p class="text-xs text-slate-600 line-clamp-2" id="serp-desc">{{ $post->meta_description ?: ($post->excerpt ?: 'Post description appears here...') }}</p>
                     </div>
                 </div>
             </div>
@@ -203,10 +203,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         ['ai-product-id'].forEach(id => {
             const el = document.getElementById(id);
-            if (el && !el.tomselect) new TomSelect(el, { create:false, allowEmptyOption:true, placeholder:'ابحث عن المنتج...' });
+            if (el && !el.tomselect) new TomSelect(el, { create:false, allowEmptyOption:true, placeholder:'Search for a product...' });
         });
         const catEl = document.querySelector('[name="blog_category_id"]');
-        if (catEl && !catEl.tomselect) new TomSelect(catEl, { create:false, allowEmptyOption:true, placeholder:'اختر تصنيفًا...' });
+        if (catEl && !catEl.tomselect) new TomSelect(catEl, { create:false, allowEmptyOption:true, placeholder:'Choose a category...' });
     });
 </script>
 
@@ -217,9 +217,8 @@
         selector: '#content-editor',
         license_key: 'gpl',
         height: 600,
-        directionality: 'rtl',
-        language: 'ar',
-        language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@latest/langs7/ar.js',
+        directionality: 'ltr',
+        language: 'en',
         plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons codesample',
         toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table codesample | removeformat code fullscreen preview',
         toolbar_mode: 'wrap',
@@ -231,10 +230,10 @@
     });
 
     document.querySelector('[name=meta_title]')?.addEventListener('input', e => {
-        document.getElementById('serp-title').textContent = e.target.value || document.getElementById('title').value || 'عنوان المقال';
+        document.getElementById('serp-title').textContent = e.target.value || document.getElementById('title').value || 'Post title';
     });
     document.querySelector('[name=meta_description]')?.addEventListener('input', e => {
-        document.getElementById('serp-desc').textContent = e.target.value || 'وصف المقال يظهر هنا...';
+        document.getElementById('serp-desc').textContent = e.target.value || 'Post description appears here...';
     });
 
     const slugInput = document.getElementById('slug');
@@ -249,7 +248,7 @@
         serpUrl.textContent = `${blogBaseUrl}/${previewSlug(e.target.value)}`;
     });
 
-    // Auto-fill slug from title when slug is empty (supports Arabic)
+    // Auto-fill slug from title when slug is empty (supports Arabic too)
     const titleInput = document.getElementById('title');
     const slugify = (str) => {
         return (str || '').toString().trim().toLowerCase()
@@ -299,13 +298,13 @@
                 title: document.getElementById('title')?.value || '',
                 blog_category_id: document.querySelector('[name="blog_category_id"]')?.value || '',
                 product_id: document.getElementById('ai-product-id')?.value || '',
-                language: document.getElementById('ai-language')?.value || 'ar',
+                language: document.getElementById('ai-language')?.value || 'en',
             };
 
             btn.disabled = true;
-            label.textContent = 'جارٍ التوليد...';
+            label.textContent = 'Generating...';
             btn.classList.add('opacity-70');
-            showMsg(true, '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ توليد المقال من الذكاء الاصطناعي...');
+            showMsg(true, '<i class="fa-solid fa-spinner fa-spin"></i> Generating article with AI...');
 
             try {
                 const res  = await fetch(url, {
@@ -315,7 +314,7 @@
                 });
                 const data = await res.json();
                 if (!data.ok) {
-                    showMsg(false, '<b><i class="fa-solid fa-circle-xmark"></i> '+(data.message || 'فشل التوليد')+'</b>' +
+                    showMsg(false, '<b><i class="fa-solid fa-circle-xmark"></i> '+(data.message || 'Generation failed')+'</b>' +
                         (data.error ? '<pre dir="ltr" class="mt-2 text-xs whitespace-pre-wrap opacity-80">'+data.error+'</pre>' : ''));
                     return;
                 }
@@ -326,7 +325,7 @@
                 setField('meta_description', d.meta_description);
                 setField('meta_keywords', d.meta_keywords);
                 setField('tags', d.tags);
-                // ضبط تصنيف المقال تلقائيًا من تصنيف المنتج
+                // Auto-assign post category from product category
                 if (d.blog_category_id) {
                     const catEl = document.querySelector('[name="blog_category_id"]');
                     if (catEl) {
@@ -340,12 +339,12 @@
                 } else {
                     setField('content', d.content);
                 }
-                showMsg(true, '<b><i class="fa-solid fa-circle-check"></i> تم توليد المقال بنجاح. يمكنك المراجعة والتعديل قبل الحفظ.</b>');
+                showMsg(true, '<b><i class="fa-solid fa-circle-check"></i> Article generated successfully. Review and edit before saving.</b>');
             } catch (e) {
-                showMsg(false, '<b>تعذّر الاتصال بالخادم</b><pre dir="ltr" class="mt-2 text-xs">'+e.message+'</pre>');
+                showMsg(false, '<b>Could not reach the server</b><pre dir="ltr" class="mt-2 text-xs">'+e.message+'</pre>');
             } finally {
                 btn.disabled = false;
-                label.textContent = 'كتابة المقال بالذكاء الاصطناعي';
+                label.textContent = 'Generate Article with AI';
                 btn.classList.remove('opacity-70');
             }
         });

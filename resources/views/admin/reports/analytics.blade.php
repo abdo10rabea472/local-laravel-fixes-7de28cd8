@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'تحليلات المبيعات')
+@section('title', 'Sales Analytics')
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -10,11 +10,11 @@
 <div class="p-6 space-y-6">
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-            <h1 class="text-2xl font-bold text-slate-800">لوحة التحليلات</h1>
-            <p class="text-sm text-slate-500 mt-1">أداء المبيعات والإيرادات وأكثر المنتجات طلباً</p>
+            <h1 class="text-2xl font-bold text-slate-800">Analytics Dashboard</h1>
+            <p class="text-sm text-slate-500 mt-1">Sales performance, revenue, and top-selling products.</p>
         </div>
         <div class="flex gap-2">
-            @foreach([7=>'7 أيام', 30=>'30 يوم', 90=>'90 يوم', 365=>'سنة'] as $d => $lbl)
+            @foreach([7=>'7 Days', 30=>'30 Days', 90=>'90 Days', 365=>'1 Year'] as $d => $lbl)
                 <a href="?days={{ $d }}" class="px-4 py-2 rounded-xl text-sm font-bold {{ $range == $d ? 'bg-violet-600 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-violet-300' }}">{{ $lbl }}</a>
             @endforeach
         </div>
@@ -23,49 +23,49 @@
     {{-- KPI Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white border rounded-2xl p-5">
-            <p class="text-xs font-bold text-slate-500">إجمالي الإيرادات</p>
-            <h3 class="text-2xl font-black text-emerald-600 mt-2">{{ number_format((float) $kpi->revenue, 0) }} <span class="text-xs">ج.م</span></h3>
+            <p class="text-xs font-bold text-slate-500">Total Revenue</p>
+            <h3 class="text-2xl font-black text-emerald-600 mt-2">{{ number_format((float) $kpi->revenue, 0) }} <span class="text-xs">EGP</span></h3>
         </div>
         <div class="bg-white border rounded-2xl p-5">
-            <p class="text-xs font-bold text-slate-500">عدد الطلبات</p>
+            <p class="text-xs font-bold text-slate-500">Orders</p>
             <h3 class="text-2xl font-black text-violet-600 mt-2">{{ (int) $kpi->orders_count }}</h3>
-            <p class="text-[11px] text-slate-400 mt-1">مدفوع: {{ (int) $kpi->paid_count }} · قيد الانتظار: {{ (int) $kpi->pending_count }}</p>
+            <p class="text-[11px] text-slate-400 mt-1">Paid: {{ (int) $kpi->paid_count }} · Pending: {{ (int) $kpi->pending_count }}</p>
         </div>
         <div class="bg-white border rounded-2xl p-5">
-            <p class="text-xs font-bold text-slate-500">متوسط قيمة الطلب</p>
+            <p class="text-xs font-bold text-slate-500">Average Order Value</p>
             <h3 class="text-2xl font-black text-sky-600 mt-2">
-                {{ $kpi->paid_count > 0 ? number_format($kpi->revenue / $kpi->paid_count, 0) : 0 }} <span class="text-xs">ج.م</span>
+                {{ $kpi->paid_count > 0 ? number_format($kpi->revenue / $kpi->paid_count, 0) : 0 }} <span class="text-xs">EGP</span>
             </h3>
         </div>
         <div class="bg-white border rounded-2xl p-5">
-            <p class="text-xs font-bold text-slate-500">ملغية / مرتجعة</p>
+            <p class="text-xs font-bold text-slate-500">Cancelled / Refunded</p>
             <h3 class="text-2xl font-black text-rose-600 mt-2">{{ (int) $kpi->cancelled_count + (int) $kpi->refunded_count }}</h3>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 bg-white border rounded-2xl p-6">
-            <h3 class="font-bold text-slate-800 mb-4">الإيرادات اليومية</h3>
+            <h3 class="font-bold text-slate-800 mb-4">Daily Revenue</h3>
             <canvas id="revenueChart" height="100"></canvas>
         </div>
         <div class="bg-white border rounded-2xl p-6">
-            <h3 class="font-bold text-slate-800 mb-4">حالات الطلبات</h3>
+            <h3 class="font-bold text-slate-800 mb-4">Order Statuses</h3>
             <canvas id="statusChart"></canvas>
         </div>
     </div>
 
     <div class="bg-white border rounded-2xl p-6">
-        <h3 class="font-bold text-slate-800 mb-4">أكثر المنتجات مبيعاً</h3>
+        <h3 class="font-bold text-slate-800 mb-4">Top Selling Products</h3>
         @if($topProducts->isEmpty())
-            <p class="text-center text-slate-400 py-8">لا توجد بيانات بعد</p>
+            <p class="text-center text-slate-400 py-8">No data yet</p>
         @else
         <table class="w-full text-sm">
             <thead class="text-xs uppercase text-slate-500 border-b">
                 <tr>
-                    <th class="py-2 text-right">#</th>
-                    <th class="py-2 text-right">المنتج</th>
-                    <th class="py-2 text-right">الكمية المباعة</th>
-                    <th class="py-2 text-right">الإيرادات</th>
+                    <th class="py-2 text-left">#</th>
+                    <th class="py-2 text-left">Product</th>
+                    <th class="py-2 text-left">Quantity Sold</th>
+                    <th class="py-2 text-left">Revenue</th>
                 </tr>
             </thead>
             <tbody class="divide-y">
@@ -96,13 +96,13 @@ window.addEventListener('load', function(){
         data: {
             labels: series.map(s => s.date.slice(5)),
             datasets: [{
-                label: 'الإيرادات',
+                label: 'Revenue',
                 data: series.map(s => s.revenue),
                 borderColor: '#7c3aed',
                 backgroundColor: 'rgba(124,58,237,0.1)',
                 fill: true, tension: 0.35, pointRadius: 3,
             }, {
-                label: 'عدد الطلبات',
+                label: 'Orders',
                 data: series.map(s => s.orders),
                 borderColor: '#10b981',
                 backgroundColor: 'rgba(16,185,129,0.1)',
@@ -113,13 +113,13 @@ window.addEventListener('load', function(){
             responsive: true,
             interaction: { intersect: false, mode: 'index' },
             scales: {
-                y: { beginAtZero: true, position: 'right' },
-                y2: { beginAtZero: true, position: 'left', grid: { display: false } }
+                y: { beginAtZero: true, position: 'left' },
+                y2: { beginAtZero: true, position: 'right', grid: { display: false } }
             }
         }
     });
 
-    const labels = { pending:'قيد الانتظار', paid:'مدفوع', shipped:'شحن', delivered:'تم التوصيل', cancelled:'ملغي', refunded:'مسترد' };
+    const labels = { pending:'Pending', paid:'Paid', shipped:'Shipped', delivered:'Delivered', cancelled:'Cancelled', refunded:'Refunded' };
     new Chart(document.getElementById('statusChart'), {
         type: 'doughnut',
         data: {
@@ -134,4 +134,3 @@ window.addEventListener('load', function(){
 });
 </script>
 @endpush
-
