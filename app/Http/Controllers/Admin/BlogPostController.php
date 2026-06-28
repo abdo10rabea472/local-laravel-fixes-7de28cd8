@@ -185,10 +185,26 @@ class BlogPostController extends Controller
                 ],
             ]);
         } catch (\Throwable $e) {
+            $msg = $e->getMessage();
+            $friendly = 'تعذّر توليد المقال. حاول مرة أخرى.';
+            if (preg_match('/can only afford\s+(\d+)/i', $msg, $m) || str_contains($msg, '402')) {
+                $afford = isset($m[1]) ? (int) $m[1] : null;
+                $friendly = 'رصيد مزوّد الذكاء الاصطناعي غير كافٍ لإكمال هذا الطلب'
+                    .($afford ? " (الحد المتاح حاليًا: {$afford} توكن)" : '')
+                    .'. الحلول: 1) قلّل قيمة "ai_max_tokens" من إعدادات الموقع. '
+                    .'2) اشحن رصيد OpenRouter من https://openrouter.ai/settings/credits. '
+                    .'3) بدّل إلى Google Gemini المجاني (Base URL: https://generativelanguage.googleapis.com/v1beta و Model: gemini-flash-latest).';
+            } elseif (preg_match('/\(401\)|invalid api key|unauthorized/i', $msg)) {
+                $friendly = 'مفتاح API غير صحيح أو منتهي. حدّثه من إعدادات الموقع → نماذج الذكاء الاصطناعي.';
+            } elseif (preg_match('/\(429\)|rate limit/i', $msg)) {
+                $friendly = 'تم تجاوز حد الطلبات لحظيًا. انتظر دقيقة وحاول مجددًا.';
+            } elseif (preg_match('/timeout|cURL error 28/i', $msg)) {
+                $friendly = 'انتهت مهلة الاتصال بمزوّد الذكاء الاصطناعي. حاول مرة أخرى.';
+            }
             return response()->json([
                 'ok' => false,
-                'message' => 'تعذّر توليد المقال',
-                'error' => $e->getMessage(),
+                'message' => $friendly,
+                'error' => $msg,
             ], 200);
         }
     }
