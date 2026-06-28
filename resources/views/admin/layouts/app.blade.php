@@ -211,7 +211,7 @@
                             if (data.count > 0) { badge.textContent = data.count; badge.classList.remove('hidden'); }
                             else { badge.classList.add('hidden'); }
                             if (!data.items.length) {
-                                box.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">لا توجد إشعارات جديدة</div>';
+                                box.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">No new notifications</div>';
                                 return;
                             }
                             box.innerHTML = data.items.map(i => `
