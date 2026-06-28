@@ -40,8 +40,19 @@ class BlogController extends Controller
 
         $related = BlogPost::published()
             ->where('id', '!=', $post->id)
-            ->where('blog_category_id', $post->blog_category_id)
+            ->when($post->blog_category_id, fn($q) => $q->where('blog_category_id', $post->blog_category_id))
+            ->latest('published_at')
             ->limit(3)->get();
+
+        // Fallback: if not enough related in the same category, fill with latest posts
+        if ($related->count() < 3) {
+            $extra = BlogPost::published()
+                ->where('id', '!=', $post->id)
+                ->whereNotIn('id', $related->pluck('id'))
+                ->latest('published_at')
+                ->limit(3 - $related->count())->get();
+            $related = $related->concat($extra);
+        }
 
         $ogImageUrl = $post->og_image
             ? asset('storage/'.$post->og_image)
