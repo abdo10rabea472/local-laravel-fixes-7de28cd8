@@ -111,7 +111,7 @@ class BlogPostController extends Controller
         try {
             $ai = new AiService();
             // الحد الأقصى للتوكنز يأخذ من الإعدادات (افتراضي 8000)، والمزوّد سيُرجع ما يستطيع فقط
-            $maxTokens = max(512, (int) (site_setting('ai_max_tokens') ?: 8000));
+            $maxTokens = max(512, (int) (site_setting('ai_max_tokens') ?: 10000));
             $messages = [
                 ['role' => 'system', 'content' => $system],
                 ['role' => 'user',   'content' => $userPrompt],
