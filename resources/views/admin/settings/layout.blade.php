@@ -29,6 +29,16 @@ $tabs = [
         'icon' => 'fa-envelope',
         'route' => route('admin.settings.index', ['tab' => 'mail']),
     ],
+    'languages' => [
+        'label' => 'Languages',
+        'icon' => 'fa-language',
+        'route' => route('admin.settings.languages.index'),
+    ],
+    'currencies' => [
+        'label' => 'Currencies',
+        'icon' => 'fa-money-bill-wave',
+        'route' => route('admin.settings.currencies.index'),
+    ],
     'header-menu' => [
         'label' => 'Header',
         'icon' => 'fa-bars',
