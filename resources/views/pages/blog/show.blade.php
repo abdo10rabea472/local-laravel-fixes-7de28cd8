@@ -178,11 +178,8 @@
             @foreach($related as $r)
             <a href="{{ route('blog.show', $r->slug) }}" class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-100">
                 <div class="aspect-video bg-slate-100 overflow-hidden">
-                    @if($r->image)
-                        <img src="{{ asset('storage/'.$r->image) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    @else
-                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-violet-100 to-indigo-100"><i class="fas fa-newspaper text-5xl text-violet-300"></i></div>
-                    @endif
+                    <img src="{{ $r->image_url }}" alt="{{ $r->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+
                 </div>
                 <div class="p-5">
                     <h3 class="font-bold text-slate-900 line-clamp-2 group-hover:text-violet-700 transition">{{ $r->title }}</h3>
