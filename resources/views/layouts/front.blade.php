@@ -66,9 +66,10 @@
 
     @include('components.front-footer')
 
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
+
         (function(){
             const el = document.querySelector(".collegeIconsSwiper");
             if(!el) return;
@@ -199,7 +200,6 @@
         })();
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{{ asset('js/ajax.js') }}?v={{ @filemtime(public_path('js/ajax.js')) ?: time() }}"></script>
     <script src="{{ asset('js/main.js') }}?v={{ @filemtime(public_path('js/main.js')) ?: time() }}"></script>
     <script defer src="{{ asset('js/swiper.js') }}?v={{ @filemtime(public_path('js/swiper.js')) ?: time() }}"></script>
