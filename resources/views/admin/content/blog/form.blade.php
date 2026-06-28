@@ -54,7 +54,7 @@
                 <div>
                     <label class="block text-sm font-semibold mb-1">تاريخ النشر</label>
                     <input type="datetime-local" name="published_at" value="{{ old('published_at', $post->published_at?->format('Y-m-d\TH:i')) }}" class="w-full px-3 py-2 border rounded-lg">
-                    <p class="text-xs text-slate-500 mt-1">اتركه فارغًا لحفظه كمسودة.</p>
+                    <p class="text-xs text-slate-500 mt-1">اتركه فارغًا للنشر فورًا.</p>
                 </div>
             </div>
         </div>
