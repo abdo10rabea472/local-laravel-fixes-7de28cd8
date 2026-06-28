@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $adminName = optional(auth('admin')->user())->name ?? 'المدير';
+    $adminName = optional(auth('admin')->user())->name ?? 'Admin';
     $fmt = fn($n) => number_format((float) $n);
 
     // حساب نسب التغير (آخر 7 أيام مقابل السابقة) من بيانات حقيقية
