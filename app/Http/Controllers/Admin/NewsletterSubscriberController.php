@@ -25,8 +25,34 @@ class NewsletterSubscriberController extends Controller
         $total = NewsletterSubscriber::count();
         $active = NewsletterSubscriber::where('active', true)->count();
 
-        return view('admin.content.subscribers.index', compact('subscribers','total','active'));
+        return view('admin.content.subscribers.index', compact('subscribers','total','active','posts'));
     }
+
+    public function sendArticle(Request $request)
+    {
+        $data = $request->validate([
+            'blog_post_id' => ['required', 'exists:blog_posts,id'],
+        ]);
+
+        $post = BlogPost::findOrFail($data['blog_post_id']);
+        $sent = 0;
+
+        NewsletterSubscriber::where('active', true)
+            ->orderBy('id')
+            ->chunk(100, function ($rows) use ($post, &$sent) {
+                foreach ($rows as $sub) {
+                    try {
+                        Mail::to($sub->email)->send(new NewsletterArticleMail($post));
+                        $sent++;
+                    } catch (\Throwable $e) {
+                        \Log::warning('Newsletter send failed for '.$sub->email.': '.$e->getMessage());
+                    }
+                }
+            });
+
+        return back()->with('success', "تم إرسال المقال إلى {$sent} مشترك.");
+    }
+
 
     public function toggle(NewsletterSubscriber $subscriber)
     {
