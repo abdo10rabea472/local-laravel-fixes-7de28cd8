@@ -24,7 +24,7 @@
         @endif
 
         <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-lg prose-headings:font-bold prose-a:text-violet-600 prose-img:rounded-xl">
-            {!! \Illuminate\Support\Str::of($post->content)->sanitizeHtml() !!}
+            {!! $post->content !!}
         </div>
     </div>
 </article>
