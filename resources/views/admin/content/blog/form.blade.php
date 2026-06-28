@@ -92,6 +92,66 @@
                 <img src="{{ asset('storage/'.$post->image) }}" class="mt-3 w-full rounded-xl shadow">
             @endif
         </x-admin.card>
+
+        {{-- SEO (sidebar) --}}
+        <x-admin.card title="تحسين محركات البحث (SEO)" icon="fa-magnifying-glass">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Meta Title</label>
+                    <input form="blog-form" name="meta_title" value="{{ old('meta_title', $post->meta_title) }}" maxlength="60"
+                           class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none"
+                           oninput="document.getElementById('mt-count').innerText=this.value.length">
+                    <p class="text-xs text-gray-500 mt-1">≤ 60 — <span id="mt-count">{{ strlen($post->meta_title ?? '') }}</span>/60</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Meta Description</label>
+                    <textarea form="blog-form" name="meta_description" rows="3" maxlength="160"
+                              class="w-full px-3 py-2 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none"
+                              oninput="document.getElementById('md-count').innerText=this.value.length">{{ old('meta_description', $post->meta_description) }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">≤ 160 — <span id="md-count">{{ strlen($post->meta_description ?? '') }}</span>/160</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Keywords</label>
+                    <input form="blog-form" name="meta_keywords" value="{{ old('meta_keywords', $post->meta_keywords) }}" placeholder="laravel, php, seo" dir="ltr"
+                           class="w-full h-11 px-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-mono focus:border-primary-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">صورة المشاركة (OG Image)</label>
+                    <input form="blog-form" type="file" name="og_image" accept="image/*"
+                           class="w-full text-xs file:mr-2 file:px-3 file:py-1.5 file:border-0 file:rounded-lg file:bg-primary-50 file:text-primary-700 file:font-bold file:cursor-pointer">
+                    @if($post->og_image)<img src="{{ asset('storage/'.$post->og_image) }}" class="mt-2 w-full rounded-lg shadow">@endif
+                    <p class="text-xs text-gray-500 mt-1">1200×630 يُوصى به.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Canonical URL</label>
+                    <div class="flex items-stretch" dir="ltr">
+                        <span class="inline-flex items-center px-2 bg-gray-100 dark:bg-dark-700 border border-l-0 border-gray-200 dark:border-gray-700 rounded-l-xl text-[10px] text-gray-600 dark:text-gray-300 font-mono">{{ rtrim(url('/'), '/') }}/</span>
+                        <input form="blog-form" name="canonical_url" type="text" value="{{ old('canonical_url', $post->canonical_url) }}" placeholder="blog/your-slug" dir="ltr"
+                               class="flex-1 h-11 px-2 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-r-xl text-xs font-mono focus:border-primary-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <label class="flex items-center gap-2 text-sm cursor-pointer">
+                    <input form="blog-form" type="hidden" name="no_index" value="0">
+                    <input form="blog-form" type="checkbox" name="no_index" value="1" @checked(old('no_index', $post->no_index)) class="accent-primary-600">
+                    منع الفهرسة (noindex)
+                </label>
+
+                {{-- SERP preview --}}
+                <div class="mt-3 p-3 bg-gray-50 dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                    <p class="text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-2">معاينة Google:</p>
+                    <div class="bg-white p-2 rounded-lg border" dir="ltr">
+                        <p class="text-[10px] text-emerald-700 truncate">{{ url('/blog/'.($post->slug ?: 'your-slug')) }}</p>
+                        <p class="text-blue-700 text-sm leading-tight truncate" id="serp-title">{{ $post->meta_title ?: ($post->title ?: 'عنوان المقال') }}</p>
+                        <p class="text-xs text-slate-600 line-clamp-2" id="serp-desc">{{ $post->meta_description ?: ($post->excerpt ?: 'وصف المقال يظهر هنا...') }}</p>
+                    </div>
+                </div>
+            </div>
+        </x-admin.card>
     </x-slot:side>
 </x-admin.page>
 
