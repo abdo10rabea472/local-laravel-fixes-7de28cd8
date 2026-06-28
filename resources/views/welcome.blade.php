@@ -97,63 +97,147 @@
 
 {{-- ═══════════════ COLLEGES (CATEGORY CIRCLES) ═══════════════ --}}
 @if($mainCategories->isNotEmpty())
-<section id="colleges" class="bg-slate-50 py-10">
+<section id="colleges" class="bg-slate-50 py-10 overflow-hidden">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
         <div class="flex items-end justify-between mb-6">
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-violet-600">Shop by college</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Find tools for your faculty</h2>
+                <span class="text-xs font-bold uppercase tracking-wider text-violet-600">
+                    Shop by college
+                </span>
+
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                    Find tools for your faculty
+                </h2>
             </div>
-            <a href="{{ route('products.index') }}" class="text-violet-700 font-bold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
-                View all <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
+
+            <div class="hidden md:flex gap-3">
+                <button class="college-icons-prev w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button class="college-icons-next w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 sm:gap-4">
-            @foreach($mainCategories as $cat)
-                <a href="{{ route('category.show', $cat->slug) }}" class="group flex flex-col items-center gap-2.5">
-                    <div class="relative w-full aspect-square rounded-2xl bg-white border border-slate-200 group-hover:border-violet-400 group-hover:-translate-y-1 transition-all duration-200 p-2 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-lg">
-                        @if($cat->image)
-                            <img src="{{ asset('storage/'.$cat->image) }}" alt="{{ $cat->name }}" class="w-full h-full object-contain" loading="lazy"
-                                 onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
-                            <div class="hidden absolute inset-0 items-center justify-center text-2xl" style="background: linear-gradient(135deg, {{ $cat->primary_color ?? '#6366f1' }}, {{ $cat->secondary_color ?? '#8b5cf6' }}); color:white;">
-                                <i class="fa-solid fa-graduation-cap"></i>
+        <div class="swiper collegeIconsSwiper">
+
+            <div class="swiper-wrapper">
+
+                @foreach($mainCategories as $cat)
+
+                    <div class="swiper-slide !w-[150px]">
+
+                        <a href="{{ route('category.show',$cat->slug) }}"
+                           class="group flex flex-col items-center gap-2.5">
+
+                            <div class="relative w-full aspect-square rounded-2xl bg-white border border-slate-200 group-hover:border-violet-400 transition-all duration-300 p-2 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-lg group-hover:-translate-y-1">
+
+                                @if($cat->image)
+
+                                    <img src="{{ asset('storage/'.$cat->image) }}"
+                                         alt="{{ $cat->name }}"
+                                         loading="lazy"
+                                         class="w-full h-full object-contain"
+                                         onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
+
+                                    <div class="hidden absolute inset-0 items-center justify-center text-2xl text-white"
+                                         style="background:linear-gradient(135deg,
+                                         {{ $cat->primary_color ?? '#6366f1' }},
+                                         {{ $cat->secondary_color ?? '#8b5cf6' }});">
+
+                                        <i class="fa-solid fa-graduation-cap"></i>
+
+                                    </div>
+
+                                @else
+
+                                    <div class="w-full h-full rounded-xl flex items-center justify-center text-3xl text-white"
+                                         style="background:linear-gradient(135deg,
+                                         {{ $cat->primary_color ?? '#6366f1' }},
+                                         {{ $cat->secondary_color ?? '#8b5cf6' }});">
+
+                                        <i class="fa-solid fa-graduation-cap"></i>
+
+                                    </div>
+
+                                @endif
+
                             </div>
-                        @else
-                            <div class="w-full h-full rounded-xl flex items-center justify-center text-3xl text-white" style="background: linear-gradient(135deg, {{ $cat->primary_color ?? '#6366f1' }}, {{ $cat->secondary_color ?? '#8b5cf6' }});">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-                        @endif
+
+                            <span class="text-xs font-bold text-slate-700 group-hover:text-violet-700 text-center leading-tight line-clamp-2">
+                                {{ $cat->name }}
+                            </span>
+
+                        </a>
+
                     </div>
-                    <span class="text-xs font-bold text-slate-700 group-hover:text-violet-700 text-center line-clamp-2 leading-tight">{{ $cat->name }}</span>
-                </a>
-            @endforeach
+
+                @endforeach
+
+            </div>
+
         </div>
+
     </div>
 </section>
 @endif
 
 {{-- ═══════════════ FEATURED / TOP PICKS ═══════════════ --}}
 @if($featuredProducts->isNotEmpty())
-<section id="featured" class="bg-white py-12">
+<section id="featured" class="bg-white py-12 overflow-hidden">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-6">
+
+        <div class="flex items-center justify-between mb-6">
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Editor's pick</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">{{ $homeSections['featured_title'] ?? 'Top picks for students' }}</h2>
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+                    Editor's Pick
+                </span>
+
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                    {{ $homeSections['featured_title'] ?? 'Top picks for students' }}
+                </h2>
+
                 @if(!empty($homeSections['featured_subtitle']))
-                    <p class="text-sm text-slate-500 mt-1">{{ $homeSections['featured_subtitle'] }}</p>
+                    <p class="text-sm text-slate-500 mt-1">
+                        {{ $homeSections['featured_subtitle'] }}
+                    </p>
                 @endif
             </div>
-            <a href="{{ route('products.index', ['featured' => 1]) }}" class="text-violet-700 font-bold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
-                See all featured <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
+
+            <div class="hidden md:flex gap-3">
+                <button class="featured-prev w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button class="featured-next w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            @foreach($featuredProducts->take(10) as $product)
-                @include('components.product-card', ['product' => $product])
-            @endforeach
+
+        <div class="swiper featuredSwiper">
+
+            <div class="swiper-wrapper">
+
+                @foreach($featuredProducts as $product)
+
+                    <div class="swiper-slide !w-[260px]">
+
+                        @include('components.product-card', ['product' => $product])
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+            <div class="swiper-pagination mt-8"></div>
+
         </div>
+
     </div>
 </section>
 @endif
@@ -188,70 +272,102 @@
 @if($products->isNotEmpty())
 <section class="py-12 bg-white">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
         <div class="text-center mb-6">
             <span class="text-xs font-bold uppercase tracking-wider text-rose-600">Best deals</span>
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Latest equipment & lowest prices</h2>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                Latest equipment & lowest prices
+            </h2>
+
             @if($mainCategories->isNotEmpty())
-            <div class="flex flex-wrap justify-center gap-2 mt-5">
-                <a href="{{ route('products.index') }}" class="px-4 py-2 rounded-full text-xs font-bold bg-violet-600 text-white hover:bg-violet-700 transition">
-                    All products
-                </a>
-                @foreach($mainCategories->take(6) as $c)
-                <a href="{{ route('products.index', ['college' => $c->slug]) }}" class="px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 hover:border-violet-500 hover:text-violet-700 transition">
-                    {{ $c->name }}
-                </a>
-                @endforeach
-            </div>
+                <div class="flex flex-wrap justify-center gap-2 mt-5">
+
+                    <button type="button"
+                            class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-violet-600 text-white"
+                            data-college="">
+                        All products
+                    </button>
+
+                    @foreach($mainCategories->take(6) as $c)
+                        <button type="button"
+                                class="filter-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200 hover:border-violet-500 hover:text-violet-700 transition"
+                                data-college="{{ $c->slug }}">
+                            {{ $c->name }}
+                        </button>
+                    @endforeach
+
+                </div>
             @endif
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            @foreach($products->take(10) as $product)
-                @include('components.product-card', ['product' => $product])
+
+        <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+
+            @foreach($products as $product)
+
+                <div class="product-item"
+                     data-college="{{ $product->category->parent->slug ?? $product->category->slug }}">
+
+                    @include('components.product-card',['product'=>$product])
+
+                </div>
+
             @endforeach
+
         </div>
+
         <div class="flex justify-center mt-8">
-            <a href="{{ route('products.index') }}" class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-bold px-8 py-3 rounded-full shadow-lg shadow-violet-500/30 transition">
-                Browse all deals <i class="fa-solid fa-arrow-right"></i>
+            <a href="{{ route('products.index') }}"
+               class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white font-bold px-8 py-3 rounded-full shadow-lg shadow-violet-500/30 transition">
+                Browse all deals
+                <i class="fa-solid fa-arrow-right"></i>
             </a>
         </div>
+
     </div>
 </section>
+
+
 @endif
 
 {{-- ═══════════════ COLLEGE TILES (BIG) ═══════════════ --}}
 @if($mainCategories->isNotEmpty())
-<section class="py-12 bg-slate-50">
+<section class="py-12 bg-slate-50 overflow-hidden">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-8">
-            <span class="text-xs font-bold uppercase tracking-wider text-violet-600">By college</span>
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Explore every faculty</h2>
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-violet-600">By college</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Explore every faculty</h2>
+            </div>
+            <div class="hidden md:flex gap-3">
+                <button class="college-prev w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="college-next w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            @foreach($mainCategories->take(8) as $cat)
-                <a href="{{ route('category.show', $cat->slug) }}" class="group relative aspect-[4/3] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1"
-                   style="background: linear-gradient(135deg, {{ $cat->primary_color ?? '#6366f1' }}, {{ $cat->secondary_color ?? '#8b5cf6' }});">
-                    @if($cat->image)
-                        <img src="{{ asset('storage/'.$cat->image) }}" alt="{{ $cat->name }}"
-                             class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500"
-                             loading="lazy" onerror="this.style.display='none'">
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div class="absolute inset-0 p-5 flex flex-col justify-between text-white">
-                        <div class="inline-flex w-11 h-11 rounded-xl bg-white/20 backdrop-blur items-center justify-center text-lg">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-lg sm:text-xl font-black leading-tight">{{ $cat->name }}</h3>
-                            @if($cat->children_count ?? null)
-                                <p class="text-xs text-white/80 mt-1">{{ $cat->children_count }} departments</p>
+
+        <div class="swiper collegeSwiper">
+            <div class="swiper-wrapper">
+                @foreach($mainCategories as $cat)
+                    <div class="swiper-slide !w-[320px]">
+                        <a href="{{ route('category.show',$cat->slug) }}" class="group relative block aspect-[4/3] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all hover:-translate-y-1" style="background:linear-gradient(135deg,{{ $cat->primary_color ?? '#6366f1' }},{{ $cat->secondary_color ?? '#8b5cf6' }});">
+                            @if($cat->image)
+                                <img src="{{ asset('storage/'.$cat->image) }}" alt="{{ $cat->name }}" class="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500" loading="lazy">
                             @endif
-                            <span class="inline-flex items-center gap-1.5 text-xs font-bold mt-3 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full">
-                                Shop now <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                            </span>
-                        </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute inset-0 p-5 flex flex-col justify-between text-white">
+                                <div class="inline-flex w-11 h-11 rounded-xl bg-white/20 backdrop-blur items-center justify-center text-lg"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <div>
+                                    <h3 class="text-lg sm:text-xl font-black leading-tight">{{ $cat->name }}</h3>
+                                    @if($cat->children_count)
+                                        <p class="text-xs text-white/80 mt-1">{{ $cat->children_count }} departments</p>
+                                    @endif
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-bold mt-3 bg-white/20 backdrop-blur px-3 py-1.5 rounded-full">Shop now <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            @endforeach
+                @endforeach
+            </div>
+            <div class="swiper-pagination mt-8"></div>
         </div>
     </div>
 </section>
@@ -261,22 +377,44 @@
 @if($products->isNotEmpty())
 <section class="py-12 bg-white">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
         <div class="flex items-end justify-between mb-6">
             <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Just landed</span>
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">New arrivals</h2>
             </div>
-            <a href="{{ route('products.index', ['sort' => 'newest']) }}" class="text-violet-700 font-bold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
-                View all <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
+
+            <div class="flex items-center gap-3">
+                <a href="{{ route('products.index',['sort'=>'newest']) }}" class="text-violet-700 font-bold text-sm hover:underline hidden sm:inline-flex items-center gap-1">
+                    View all <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+
+                <button class="new-prev hidden md:flex w-10 h-10 items-center justify-center rounded-full border bg-white hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button class="new-next hidden md:flex w-10 h-10 items-center justify-center rounded-full border bg-white hover:bg-violet-600 hover:text-white transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            @foreach($products->take(10) as $product)
-                @include('components.product-card', ['product' => $product])
-            @endforeach
+
+        <div class="swiper newProductsSwiper">
+            <div class="swiper-wrapper">
+
+                @foreach($products->take(10) as $product)
+                    <div class="swiper-slide">
+                        @include('components.product-card',['product'=>$product])
+                    </div>
+                @endforeach
+
+            </div>
         </div>
+
     </div>
 </section>
+
+
 @endif
 
 {{-- ═══════════════ WHY US ═══════════════ --}}
