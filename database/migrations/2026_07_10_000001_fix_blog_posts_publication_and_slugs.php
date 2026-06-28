@@ -9,12 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         $usedSlugs = [];
+        $updates = [];
 
         DB::table('blog_posts')
             ->orderBy('id')
             ->select(['id', 'title', 'slug', 'created_at', 'published_at'])
             ->get()
-            ->each(function ($post) use (&$usedSlugs) {
+            ->each(function ($post) use (&$usedSlugs, &$updates) {
                 $base = $this->normalizeSlug($post->slug ?: $post->title);
                 $slug = $base;
                 $counter = 2;
@@ -24,14 +25,27 @@ return new class extends Migration
                 }
 
                 $usedSlugs[$slug] = true;
-
-                DB::table('blog_posts')
-                    ->where('id', $post->id)
-                    ->update([
-                        'slug' => $slug,
-                        'published_at' => $post->published_at ?: ($post->created_at ?: now()),
-                    ]);
+                $updates[] = [
+                    'id' => $post->id,
+                    'slug' => $slug,
+                    'published_at' => $post->published_at ?: ($post->created_at ?: now()),
+                ];
             });
+
+        foreach ($updates as $post) {
+            DB::table('blog_posts')
+                ->where('id', $post['id'])
+                ->update(['slug' => 'repairing-post-'.$post['id']]);
+        }
+
+        foreach ($updates as $post) {
+            DB::table('blog_posts')
+                ->where('id', $post['id'])
+                ->update([
+                    'slug' => $post['slug'],
+                    'published_at' => $post['published_at'],
+                ]);
+        }
     }
 
     public function down(): void
