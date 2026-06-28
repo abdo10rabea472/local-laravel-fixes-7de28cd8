@@ -272,8 +272,10 @@
                                     </div>
                                 @endif
 
-                                <img src="{{ $imageUrl }}" alt="{{ $product- onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'">name }}" loading="lazy"
+                                <img src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="lazy"
+                                    onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'"
                                     class="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-1">
+
                             </div>
 
                             <div class="p-6 flex-1 flex flex-col justify-between bg-gradient-to-b from-white to-slate-50/50">
