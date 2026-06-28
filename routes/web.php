@@ -278,3 +278,38 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
+
+// ===== Extra public pages (الشركة، التسويق، المحتوى) =====
+Route::get('/about', [PagesController::class, 'about'])->name('about');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+
+Route::get('/track-order', [TrackOrderController::class, 'show'])->middleware('throttle:30,1')->name('track-order');
+
+Route::get('/offers', [OffersController::class, 'index'])->name('offers');
+
+// Blog (public)
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+// FAQ dynamic (override existing static)
+Route::get('/faqs-dynamic', [FaqController::class, 'index'])->name('faqs.dynamic');
+
+// Newsletter
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->middleware('throttle:10,1')->name('newsletter.subscribe');
+
+// Compare (session-based, no auth)
+Route::prefix('compare')->name('compare.')->group(function () {
+    Route::get('/', [CompareController::class, 'index'])->name('index');
+    Route::post('/add', [CompareController::class, 'add'])->name('add');
+    Route::post('/remove', [CompareController::class, 'remove'])->name('remove');
+    Route::delete('/clear', [CompareController::class, 'clear'])->name('clear');
+});
+
+// Wishlist (requires auth)
+Route::middleware('auth')->prefix('wishlist')->name('wishlist.')->group(function () {
+    Route::get('/', [WishlistController::class, 'index'])->name('index');
+    Route::post('/toggle', [WishlistController::class, 'toggle'])->name('toggle');
+    Route::delete('/{wishlist}', [WishlistController::class, 'destroy'])->name('destroy');
+});
