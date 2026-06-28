@@ -49,6 +49,18 @@ class SiteSettingController extends Controller
         $tab = $request->get('tab', 'general');
         $imageKeys = ['site_logo', 'hero_background', 'default_product_image', 'default_og_image', 'welcome_popup_image'];
 
+        if ($tab === 'mail') {
+            $mailKeys = ['MAIL_MAILER','MAIL_HOST','MAIL_PORT','MAIL_ENCRYPTION','MAIL_USERNAME','MAIL_PASSWORD','MAIL_FROM_ADDRESS','MAIL_FROM_NAME'];
+            $updates = [];
+            foreach ($mailKeys as $k) {
+                if ($request->has($k)) $updates[$k] = (string) $request->input($k, '');
+            }
+            $this->writeEnv($updates);
+            \Artisan::call('config:clear');
+            return redirect()->route('admin.settings.index', ['tab' => 'mail'])->with('success', 'تم حفظ إعدادات البريد في .env');
+        }
+
+
         foreach ($request->except(['_token', '_method', 'tab']) as $key => $value) {
             $setting = SiteSetting::firstOrNew(['key' => $key]);
 
