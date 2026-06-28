@@ -172,11 +172,11 @@
                     <i class="fas fa-bars text-xl"></i>
                 </button>
                 <div class="relative hidden md:block w-72">
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
                         <i class="fas fa-search"></i>
                     </span>
-                    <input type="text" placeholder="بحث سريع في النظام..."
-                           class="w-full py-2 pl-4 pr-10 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors">
+                    <input type="text" placeholder="Quick search..."
+                           class="w-full py-2 pr-4 pl-10 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:border-primary-500 transition-colors">
                 </div>
             </div>
 
