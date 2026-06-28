@@ -45,6 +45,7 @@
             <p class="text-xs text-slate-500">
                 أمثلة:
                 <span class="font-mono">https://api.openai.com/v1</span> ·
+                <span class="font-mono">https://generativelanguage.googleapis.com/v1beta</span> (Gemini) ·
                 <span class="font-mono">https://api.groq.com/openai/v1</span> ·
                 <span class="font-mono">https://openrouter.ai/api/v1</span> ·
                 <span class="font-mono">http://localhost:11434/v1</span>
