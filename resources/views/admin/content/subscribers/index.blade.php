@@ -143,9 +143,14 @@
                     if (!results.contains(e.target) && e.target !== input) results.classList.add('hidden');
                 });
                 window.confirmSend = function(){
-                    if (!hidden.value) { alert('اختر مقالاً أولاً'); return false; }
+                    const url = document.getElementById('postUrl').value.trim();
+                    if (!hidden.value && !url) { alert('اختر مقالاً أو ألصق رابطاً'); return false; }
                     return confirm('سيتم إرسال المقال إلى جميع المشتركين المفعّلين. متابعة؟');
                 };
+                document.getElementById('postUrl').addEventListener('input', e => {
+                    btn.disabled = !(hidden.value || e.target.value.trim());
+                });
+
             })();
             </script>
         </x-admin.card>
