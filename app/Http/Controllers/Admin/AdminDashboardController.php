@@ -115,6 +115,37 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get();
 
+        // الأكثر مبيعًا (أعلى 5 منتجات من order_items للطلبات المدفوعة/المشحونة/المسلمة)
+        $topProducts = collect();
+        if (Schema::hasTable('order_items')) {
+            $topProducts = DB::table('order_items')
+                ->join('orders', 'orders.id', '=', 'order_items.order_id')
+                ->leftJoin('products', 'products.id', '=', 'order_items.product_id')
+                ->whereIn('orders.status', ['paid','shipped','delivered'])
+                ->select(
+                    'order_items.product_id',
+                    DB::raw('COALESCE(products.name, order_items.product_name) as name'),
+                    'products.slug',
+                    DB::raw('SUM(order_items.quantity) as qty'),
+                    DB::raw('SUM(order_items.line_total) as revenue')
+                )
+                ->groupBy('order_items.product_id', 'name', 'products.slug')
+                ->orderByDesc('qty')
+                ->limit(5)
+                ->get();
+        }
+
+        // إحصاءات اليوم
+        $todayStats = ['orders' => 0, 'revenue' => 0.0, 'new_customers' => 0];
+        if (Schema::hasTable('orders')) {
+            $todayStats['orders']  = (int) Order::whereDate('created_at', today())->count();
+            $todayStats['revenue'] = (float) Order::whereIn('status', ['paid','shipped','delivered'])
+                ->whereDate('created_at', today())->sum('total');
+        }
+        if (Schema::hasTable('users')) {
+            $todayStats['new_customers'] = (int) User::whereDate('created_at', today())->count();
+        }
+
         return view('admin.dashboard', compact(
             'totalProducts',
             'totalStock',
@@ -131,7 +162,9 @@ class AdminDashboardController extends Controller
             'lowStockProducts',
             'revenueSeries',
             'ordersSeries',
-            'revenueLabels'
+            'revenueLabels',
+            'topProducts',
+            'todayStats'
         ));
     }
 }
