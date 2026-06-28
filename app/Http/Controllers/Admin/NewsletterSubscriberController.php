@@ -47,11 +47,26 @@ class NewsletterSubscriberController extends Controller
     public function sendArticle(Request $request)
     {
         $data = $request->validate([
-            'blog_post_id' => ['required', 'exists:blog_posts,id'],
+            'blog_post_id' => ['nullable', 'exists:blog_posts,id'],
+            'post_url'     => ['nullable', 'string', 'max:500'],
         ]);
 
-        $post = BlogPost::findOrFail($data['blog_post_id']);
+        if (empty($data['blog_post_id']) && empty($data['post_url'])) {
+            return back()->with('error', 'اختر مقالاً من البحث أو ألصق رابطاً.');
+        }
+
+        if (! empty($data['blog_post_id'])) {
+            $post = BlogPost::findOrFail($data['blog_post_id']);
+        } else {
+            $slug = BlogPost::normalizeSlug($data['post_url']);
+            $post = BlogPost::where('slug', $slug)->first();
+            if (! $post) {
+                return back()->with('error', 'تعذّر العثور على مقال مطابق للرابط: '.$slug);
+            }
+        }
+
         $sent = 0;
+
         $failed = 0;
         $firstError = null;
 
