@@ -247,7 +247,30 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::post('/returns/{return}/aramex-pickup', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'schedulePickup'])->name('returns.aramex-pickup');
     Route::delete('/returns/{return}', [\App\Http\Controllers\Admin\ReturnRequestController::class, 'destroy'])->name('returns.destroy');
 
+    // ── Content Management ──
+    // Blog posts
+    Route::resource('blog', \App\Http\Controllers\Admin\BlogPostController::class)->except(['show']);
+    Route::resource('blog-categories', \App\Http\Controllers\Admin\BlogCategoryController::class)
+        ->only(['index','store','update','destroy'])->parameters(['blog-categories' => 'category']);
+
+    // FAQs
+    Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class)->only(['index','store','update','destroy']);
+    Route::patch('/faqs/{faq}/toggle', [\App\Http\Controllers\Admin\FaqController::class, 'toggle'])->name('faqs.toggle');
+
+    // Contact messages
+    Route::get('/messages', [\App\Http\Controllers\Admin\ContactMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{message}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'show'])->name('messages.show');
+    Route::patch('/messages/{message}/status', [\App\Http\Controllers\Admin\ContactMessageController::class, 'updateStatus'])->name('messages.status');
+    Route::delete('/messages/{message}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'destroy'])->name('messages.destroy');
+
+    // Newsletter subscribers
+    Route::get('/subscribers', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'index'])->name('subscribers.index');
+    Route::get('/subscribers/export', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'export'])->name('subscribers.export');
+    Route::patch('/subscribers/{subscriber}/toggle', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'toggle'])->name('subscribers.toggle');
+    Route::delete('/subscribers/{subscriber}', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'destroy'])->name('subscribers.destroy');
+
     Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
 
 });
 
