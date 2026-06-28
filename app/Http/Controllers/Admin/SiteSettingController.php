@@ -146,4 +146,35 @@ class SiteSettingController extends Controller
             default => $key,
         };
     }
+
+    public function testMail(Request $request)
+    {
+        $data = $request->validate(['to' => ['required','email']]);
+        try {
+            \Mail::raw('رسالة اختبار من لوحة التحكم — إذا وصلتك فالإعدادات صحيحة.', function ($m) use ($data) {
+                $m->to($data['to'])->subject('اختبار SMTP');
+            });
+            return response()->json(['ok' => true]);
+        } catch (\Throwable $e) {
+            return response()->json(['ok' => false, 'error' => $e->getMessage()], 200);
+        }
+    }
+
+    private function writeEnv(array $values): void
+    {
+        $path = base_path('.env');
+        if (! is_file($path)) return;
+        $content = file_get_contents($path);
+        foreach ($values as $key => $val) {
+            $escaped = (preg_match('/\s|#|"/', $val) || $val === '') ? '"'.addcslashes($val, '"\\').'"' : $val;
+            $line = $key.'='.$escaped;
+            if (preg_match("/^{$key}=.*$/m", $content)) {
+                $content = preg_replace("/^{$key}=.*$/m", $line, $content);
+            } else {
+                $content .= PHP_EOL.$line;
+            }
+        }
+        file_put_contents($path, $content);
+    }
 }
+
