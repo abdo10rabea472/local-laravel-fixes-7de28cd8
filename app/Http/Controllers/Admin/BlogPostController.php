@@ -60,6 +60,9 @@ class BlogPostController extends Controller
 
     public function aiGenerate(Request $request)
     {
+        // AI generation can take longer than the default PHP max_execution_time (30s).
+        @set_time_limit(180);
+        @ini_set('max_execution_time', '180');
         $data = $request->validate([
             'title'            => ['nullable','string','max:255'],
             'blog_category_id' => ['nullable','exists:categories,id'],
