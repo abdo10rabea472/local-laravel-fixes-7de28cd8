@@ -1,5 +1,9 @@
 @extends('layouts.front')
 
+@push('styles')
+    @if($post->no_index ?? false)<meta name="robots" content="noindex,nofollow">@endif
+@endpush
+
 @section('content')
 <article class="py-12 bg-white">
     <div class="max-w-3xl mx-auto px-4">
@@ -19,8 +23,8 @@
             <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full rounded-2xl mb-8">
         @endif
 
-        <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-lg">
-            {!! nl2br(e($post->content)) !!}
+        <div class="prose prose-slate max-w-none text-slate-700 leading-relaxed text-lg prose-headings:font-bold prose-a:text-violet-600 prose-img:rounded-xl">
+            {!! $post->content !!}
         </div>
     </div>
 </article>

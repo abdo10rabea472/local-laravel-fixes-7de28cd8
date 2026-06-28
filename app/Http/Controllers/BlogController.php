@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -13,7 +13,7 @@ class BlogController extends Controller
         $query = BlogPost::published()->with('category:id,name,slug');
 
         if ($request->filled('category')) {
-            $cat = BlogCategory::where('slug', $request->category)->first();
+            $cat = Category::where('slug', $request->category)->first();
             if ($cat) $query->where('blog_category_id', $cat->id);
         }
 
@@ -23,7 +23,7 @@ class BlogController extends Controller
         }
 
         $posts = $query->latest('published_at')->paginate(9)->withQueryString();
-        $categories = BlogCategory::orderBy('name')->get();
+        $categories = Category::whereHas('blogPosts')->orderBy('name')->get(['id','name','slug']);
 
         return view('pages.blog.index', compact('posts', 'categories'));
     }
@@ -38,6 +38,21 @@ class BlogController extends Controller
             ->where('blog_category_id', $post->blog_category_id)
             ->limit(3)->get();
 
-        return view('pages.blog.show', compact('post', 'related'));
+        $ogImageUrl = $post->og_image
+            ? asset('storage/'.$post->og_image)
+            : ($post->image ? asset('storage/'.$post->image) : null);
+
+        $seo = [
+            'seo_title'       => $post->meta_title ?: $post->title,
+            'seo_description' => $post->meta_description ?: $post->excerpt,
+            'seo_keywords'    => $post->meta_keywords,
+            'og_title'        => $post->meta_title ?: $post->title,
+            'og_description'  => $post->meta_description ?: $post->excerpt,
+            'og_image'        => $ogImageUrl,
+            'canonical_url'   => $post->canonical_url ?: route('blog.show', $post->slug),
+            'no_index'        => $post->no_index,
+        ];
+
+        return view('pages.blog.show', compact('post', 'related', 'seo'));
     }
 }
