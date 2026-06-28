@@ -211,6 +211,69 @@ class OrderController extends Controller
         return back()->with('success', 'تم حذف الطلب.');
     }
 
+    /** تصدير الطلبات (المصفّاة حاليًا) كـ CSV. */
+    public function exportCsv(Request $request)
+    {
+        $q = Order::query()
+            ->where(fn ($w) => $w->whereIn('payment_status', ['paid', 'cod_pending', 'refunded'])
+                                 ->orWhereIn('status', ['paid', 'shipped', 'delivered', 'refunded']))
+            ->with('items:id,order_id')->latest();
+
+        if ($s = $request->string('q')->trim()->value()) {
+            $q->where(function ($w) use ($s) {
+                $w->where('order_number', 'like', "%{$s}%")
+                  ->orWhere('email', 'like', "%{$s}%")
+                  ->orWhere('phone', 'like', "%{$s}%")
+                  ->orWhere('customer_name', 'like', "%{$s}%");
+            });
+        }
+        if ($status = $request->string('status')->value()) {
+            if (in_array($status, Order::STATUSES, true)) $q->where('status', $status);
+        }
+        if ($from = $request->date('from')) $q->whereDate('created_at', '>=', $from);
+        if ($to = $request->date('to'))     $q->whereDate('created_at', '<=', $to);
+
+        $filename = 'orders-' . now()->format('Ymd-His') . '.csv';
+        return response()->streamDownload(function () use ($q) {
+            $h = fopen('php://output', 'w');
+            // BOM لدعم العربية في Excel
+            fwrite($h, "\xEF\xBB\xBF");
+            fputcsv($h, ['رقم الطلب','العميل','الإيميل','الهاتف','عدد العناصر','الإجمالي','العملة','الحالة','حالة الدفع','التاريخ']);
+            $q->chunk(200, function ($rows) use ($h) {
+                foreach ($rows as $o) {
+                    fputcsv($h, [
+                        $o->order_number, $o->customer_name, $o->email, $o->phone,
+                        $o->items->count(), number_format($o->total, 2, '.', ''),
+                        $o->currency, $o->status, $o->payment_status,
+                        $o->created_at?->format('Y-m-d H:i'),
+                    ]);
+                }
+            });
+            fclose($h);
+        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /** تغيير حالة جماعي لعدة طلبات. */
+    public function bulkStatus(Request $request)
+    {
+        $data = $request->validate([
+            'ids'    => 'required|array|min:1',
+            'ids.*'  => 'integer|exists:orders,id',
+            'status' => 'required|in:' . implode(',', Order::STATUSES),
+            'notify' => 'nullable|boolean',
+        ]);
+
+        $count = 0;
+        foreach (Order::whereIn('id', $data['ids'])->get() as $order) {
+            if ($order->status === $data['status']) continue;
+            $req = new Request(['status' => $data['status'], 'notify' => $data['notify'] ?? false]);
+            $this->updateStatus($req, $order);
+            $count++;
+        }
+
+        return back()->with('success', "تم تحديث {$count} طلب.");
+    }
+
     private function safeMail(Order $order, string $kind): void
     {
         try {

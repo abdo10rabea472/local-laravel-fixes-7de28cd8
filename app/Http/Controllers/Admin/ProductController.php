@@ -131,6 +131,64 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح.');
     }
 
+    /** تكرار منتج (يُنشئ نسخة جديدة بنفس البيانات بدون الصور). */
+    public function duplicate(Product $product): RedirectResponse
+    {
+        $copy = $product->replicate(['slug']);
+        $copy->name  = $product->name . ' (نسخة)';
+        $copy->slug  = Str::slug($product->slug . '-' . Str::random(5));
+        $copy->sku   = $product->sku ? $product->sku . '-COPY-' . Str::random(4) : null;
+        $copy->stock = 0;
+        $copy->featured = false;
+        $copy->save();
+
+        NavigationService::clearCache();
+        return redirect()->route('admin.products.edit', $copy)->with('success', 'تم تكرار المنتج. عدّل ما تريد وأضف الصور.');
+    }
+
+    /** تفعيل / تعطيل / تمييز / إلغاء تمييز جماعي. */
+    public function bulkAction(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids'    => 'required|array|min:1',
+            'ids.*'  => 'integer|exists:products,id',
+            'action' => 'required|in:feature,unfeature,delete',
+        ]);
+
+        $q = Product::whereIn('id', $data['ids']);
+        $count = match ($data['action']) {
+            'feature'   => $q->update(['featured' => true]),
+            'unfeature' => $q->update(['featured' => false]),
+            'delete'    => (function () use ($q) { $n = $q->count(); $q->delete(); return $n; })(),
+        };
+
+        NavigationService::clearCache();
+        return back()->with('success', "تم تنفيذ الإجراء على {$count} منتج.");
+    }
+
+    /** تصدير المنتجات كـ CSV. */
+    public function exportCsv()
+    {
+        $filename = 'products-' . now()->format('Ymd-His') . '.csv';
+        return response()->streamDownload(function () {
+            $h = fopen('php://output', 'w');
+            fwrite($h, "\xEF\xBB\xBF");
+            fputcsv($h, ['ID','الاسم','SKU','التصنيف','السعر','سعر العرض','المخزون','مميز','تاريخ الإنشاء']);
+            Product::with('category:id,name')->chunk(200, function ($rows) use ($h) {
+                foreach ($rows as $p) {
+                    fputcsv($h, [
+                        $p->id, $p->name, $p->sku, $p->category?->name,
+                        $p->price, $p->sale_price, $p->stock,
+                        $p->featured ? 'نعم' : 'لا',
+                        $p->created_at?->format('Y-m-d'),
+                    ]);
+                }
+            });
+            fclose($h);
+        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+
     private function validateProduct(Request $request, ?int $ignoreId = null): array
     {
         $slugRule = 'nullable|string|max:255|unique:products,slug';

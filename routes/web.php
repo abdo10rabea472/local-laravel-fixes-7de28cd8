@@ -116,7 +116,13 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
 
     Route::get('/categories/{category}/children', [AdminCategoryController::class, 'children'])->name('categories.children');
 
+    Route::get('/products/export/csv', [ProductController::class, 'exportCsv'])->name('products.export');
+    Route::post('/products/bulk-action', [ProductController::class, 'bulkAction'])->name('products.bulk-action');
+    Route::post('/products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
     Route::resource('products', ProductController::class)->except(['show']);
+
+    // Admin notifications feed (Topbar bell)
+    Route::get('/notifications/feed', [\App\Http\Controllers\Admin\AdminNotificationController::class, 'feed'])->name('notifications.feed');
     // Site Settings
     Route::get('/settings', [SiteSettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SiteSettingController::class, 'update'])->name('settings.update');
@@ -172,6 +178,8 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
 
     // Orders
     Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/export/csv', [\App\Http\Controllers\Admin\OrderController::class, 'exportCsv'])->name('orders.export');
+    Route::post('/orders/bulk-status', [\App\Http\Controllers\Admin\OrderController::class, 'bulkStatus'])->name('orders.bulk-status');
     Route::get('/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{order}/invoice', [\App\Http\Controllers\Admin\OrderController::class, 'invoice'])->name('orders.invoice');
     Route::patch('/orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.status');
