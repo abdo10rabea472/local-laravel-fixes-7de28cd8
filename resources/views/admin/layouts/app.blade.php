@@ -227,7 +227,7 @@
                                 </a>`).join('');
                         } catch (e) { console.error(e); }
                     }
-                    // أوّل تحميل + تحديث كل 60 ثانية
+                    // Initial load + refresh every 60 seconds
                     loadAdminNotifications();
                     setInterval(loadAdminNotifications, 60000);
                 </script>
@@ -237,18 +237,18 @@
                         <div class="w-9 h-9 rounded-lg bg-primary-600 text-white flex items-center justify-center font-bold ring-2 ring-primary-500/20">
                             {{ mb_substr($adminName, 0, 1) }}
                         </div>
-                        <div class="hidden md:block text-right">
+                        <div class="hidden md:block text-left">
                             <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">{{ $adminName }}</p>
-                            <span class="text-xs text-gray-400">مدير النظام</span>
+                            <span class="text-xs text-gray-400">System Administrator</span>
                         </div>
                     </button>
-                    <div id="user-profile-menu" class="hidden absolute left-0 mt-2 w-48 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-1">
-                        <a href="{{ $r('admin.settings.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800"><i class="fas fa-cog w-5"></i>إعدادات المتجر</a>
+                    <div id="user-profile-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-1">
+                        <a href="{{ $r('admin.settings.index') }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-800"><i class="fas fa-cog w-5"></i>Store Settings</a>
                         <hr class="border-gray-100 dark:border-gray-800 my-1">
                         <form method="POST" action="{{ $r('admin.logout') }}">
                             @csrf
-                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-right">
-                                <i class="fas fa-sign-out-alt w-5"></i>تسجيل الخروج
+                            <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-left">
+                                <i class="fas fa-sign-out-alt w-5"></i>Logout
                             </button>
                         </form>
                     </div>
