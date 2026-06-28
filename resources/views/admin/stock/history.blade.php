@@ -1,30 +1,30 @@
 @extends('admin.layouts.app')
 
-@section('title', 'سجل المخزون')
+@section('title', 'Stock History')
 
 @section('content')
 <div class="p-6 space-y-6">
     <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-slate-800">سجل تغييرات المخزون</h1>
+        <h1 class="text-2xl font-bold text-slate-800">Stock Change Log</h1>
         <a href="{{ route('admin.stock.index') }}" class="text-violet-600 hover:underline text-sm font-semibold">
-            <i class="fa-solid fa-arrow-right ml-1"></i> العودة للمخزون
+            <i class="fa-solid fa-arrow-left mr-1"></i> Back to Stock
         </a>
     </div>
 
     <form method="GET" class="bg-white rounded-2xl shadow-sm border p-4 flex flex-wrap items-center gap-3">
         <select name="product_id" class="rounded-xl border-slate-200 text-sm min-w-[200px]">
-            <option value="">كل المنتجات</option>
+            <option value="">All Products</option>
             @foreach($products as $p)
                 <option value="{{ $p->id }}" @selected($productId == $p->id)>{{ $p->name }}</option>
             @endforeach
         </select>
         <select name="type" class="rounded-xl border-slate-200 text-sm">
-            <option value="">كل أنواع التغييرات</option>
-            @foreach(['manual' => 'تعديل يدوي', 'order' => 'طلب جديد', 'order_cancel' => 'إلغاء طلب', 'return' => 'مرتجع', 'adjustment' => 'تسوية', 'bulk_update' => 'تحديث جماعي'] as $k => $v)
+            <option value="">All Change Types</option>
+            @foreach(['manual' => 'Manual Edit', 'order' => 'New Order', 'order_cancel' => 'Order Cancelled', 'return' => 'Return', 'adjustment' => 'Adjustment', 'bulk_update' => 'Bulk Update'] as $k => $v)
                 <option value="{{ $k }}" @selected($type === $k)>{{ $v }}</option>
             @endforeach
         </select>
-        <button class="px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700">فلترة</button>
+        <button class="px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700">Filter</button>
     </form>
 
     <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
@@ -32,13 +32,13 @@
             <table class="w-full text-sm">
                 <thead class="bg-slate-50 text-slate-600 text-xs uppercase">
                     <tr>
-                        <th class="px-4 py-3 text-right">التاريخ</th>
-                        <th class="px-4 py-3 text-right">المنتج</th>
-                        <th class="px-4 py-3 text-right">النوع</th>
-                        <th class="px-4 py-3 text-right">التغيير</th>
-                        <th class="px-4 py-3 text-right">قبل</th>
-                        <th class="px-4 py-3 text-right">بعد</th>
-                        <th class="px-4 py-3 text-right">ملاحظة</th>
+                        <th class="px-4 py-3 text-left">Date</th>
+                        <th class="px-4 py-3 text-left">Product</th>
+                        <th class="px-4 py-3 text-left">Type</th>
+                        <th class="px-4 py-3 text-left">Change</th>
+                        <th class="px-4 py-3 text-left">Before</th>
+                        <th class="px-4 py-3 text-left">After</th>
+                        <th class="px-4 py-3 text-left">Note</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -57,7 +57,7 @@
                             <td class="px-4 py-3 text-slate-500 text-xs">{{ $m->note ?: '—' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="text-center py-12 text-slate-400">لا توجد حركات مسجلة</td></tr>
+                        <tr><td colspan="7" class="text-center py-12 text-slate-400">No movements recorded</td></tr>
                     @endforelse
                 </tbody>
             </table>
