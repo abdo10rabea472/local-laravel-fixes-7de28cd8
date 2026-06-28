@@ -81,7 +81,15 @@ class BlogController extends Controller
             'no_index'        => $post->no_index,
         ];
 
-        return view('pages.blog.show', compact('post', 'related', 'seo'));
+        $categories = Category::whereHas('blogPosts')->orderBy('name')->get(['id','name','slug']);
+        $featured = BlogPost::published()->where('is_featured', true)->where('id','!=',$post->id)->latest('published_at')->first()
+            ?: BlogPost::published()->where('id','!=',$post->id)->latest('published_at')->first();
+        $popular = BlogPost::published()->where('id','!=',$post->id)->orderByDesc('views')->limit(5)->get(['id','title','slug','image','views','published_at']);
+        $tags = BlogPost::published()->whereNotNull('tags')->where('tags','!=','')->pluck('tags')
+            ->flatMap(fn($t) => array_filter(array_map('trim', explode(',', $t))))
+            ->unique()->values()->take(30);
+
+        return view('pages.blog.show', compact('post', 'related', 'seo', 'categories', 'featured', 'popular', 'tags'));
     }
 
     public function storeComment(Request $request, string $slug)
