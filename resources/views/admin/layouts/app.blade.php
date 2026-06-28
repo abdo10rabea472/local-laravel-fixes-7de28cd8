@@ -188,15 +188,15 @@
                 <div class="relative">
                     <button onclick="toggleDropdown('notifications-menu', event); loadAdminNotifications();" class="relative p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 rounded-lg transition-colors">
                         <i class="fas fa-bell text-lg"></i>
-                        <span id="notif-badge" class="hidden absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full grid place-items-center">0</span>
+                        <span id="notif-badge" class="hidden absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full grid place-items-center">0</span>
                     </button>
-                    <div id="notifications-menu" class="hidden absolute left-0 mt-2 w-80 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-2">
+                    <div id="notifications-menu" class="hidden absolute right-0 mt-2 w-80 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-2">
                         <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-800 font-bold text-sm flex justify-between items-center">
-                            <span>الإشعارات الأخيرة</span>
-                            <span class="text-xs text-primary-600 cursor-pointer" onclick="loadAdminNotifications()"><i class="fas fa-rotate"></i> تحديث</span>
+                            <span>Recent Notifications</span>
+                            <span class="text-xs text-primary-600 cursor-pointer" onclick="loadAdminNotifications()"><i class="fas fa-rotate"></i> Refresh</span>
                         </div>
                         <div class="max-h-72 overflow-y-auto" id="notification-items">
-                            <div class="p-6 text-center text-xs text-gray-400"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+                            <div class="p-6 text-center text-xs text-gray-400"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
                         </div>
                     </div>
                 </div>
