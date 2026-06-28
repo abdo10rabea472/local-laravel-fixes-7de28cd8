@@ -40,9 +40,8 @@
 </section>
 
 <div class="max-w-7xl mx-auto px-6 lg:px-10 -mt-24 relative z-10">
-    @if($post->image)
-        <img src="{{ asset('storage/'.$post->image) }}" alt="{{ $post->title }}" class="w-full rounded-3xl shadow-2xl aspect-video object-cover">
-    @endif
+    <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="w-full rounded-3xl shadow-2xl aspect-video object-cover">
+
 </div>
 
 <article class="py-12 bg-white">

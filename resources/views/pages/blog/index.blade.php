@@ -116,11 +116,8 @@
                     <li>
                         <a href="{{ route('blog.show', $p->slug) }}" class="flex gap-3 group">
                             <div class="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-slate-100">
-                                @if($p->image)
-                                    <img src="{{ asset('storage/'.$p->image) }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center bg-violet-50"><i class="fas fa-newspaper text-violet-300"></i></div>
-                                @endif
+                                <img src="{{ $p->image_url }}" alt="{{ $p->title }}" class="w-full h-full object-cover">
+
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h4 class="text-sm font-semibold text-slate-800 line-clamp-2 group-hover:text-violet-700 transition">{{ $p->title }}</h4>
