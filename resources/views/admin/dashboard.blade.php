@@ -39,15 +39,15 @@
     {{-- Page header --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">نظرة عامة على النظام</h1>
-            <p class="text-sm text-gray-500 mt-1">مرحباً بك مجدداً، {{ $adminName }}. إليك أداء متجرك لهذا اليوم.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">System Overview</h1>
+            <p class="text-sm text-gray-500 mt-1">Welcome back, {{ $adminName }}. Here's your store performance today.</p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" class="bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-                <i class="fas fa-calendar-alt"></i> آخر 30 يومًا
+                <i class="fas fa-calendar-alt"></i> Last 30 days
             </button>
             <a href="{{ route('admin.products.create') }}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg shadow-primary-500/20 flex items-center gap-2">
-                <i class="fas fa-plus"></i> إضافة منتج
+                <i class="fas fa-plus"></i> Add Product
             </a>
         </div>
     </div>
