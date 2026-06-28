@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewsletterArticleMail;
+use App\Models\BlogPost;
 use App\Models\NewsletterSubscriber;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NewsletterSubscriberController extends Controller
 {
     public function index(Request $request)
     {
+        $posts = BlogPost::orderByDesc('id')->limit(100)->get(['id','title']);
+
         $subscribers = NewsletterSubscriber::query()
             ->when($request->q, fn ($q, $t) => $q->where('email', 'like', "%$t%"))
             ->orderByDesc('id')
