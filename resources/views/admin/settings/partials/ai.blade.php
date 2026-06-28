@@ -32,7 +32,7 @@
             <label class="text-xs font-bold text-slate-500">اسم النموذج (Model)</label>
             <input type="text" name="ai_model" id="ai_model" dir="ltr"
                    value="{{ site_setting('ai_model', 'gpt-4o-mini') }}"
-                   placeholder="gpt-4o-mini, llama-3.1-70b, google/gemini-2.5-flash ..."
+                   placeholder="gpt-4o-mini, gemini-flash-latest, llama-3.1-70b ..."
                    class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono">
         </div>
 
