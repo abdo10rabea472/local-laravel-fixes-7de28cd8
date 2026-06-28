@@ -11,10 +11,12 @@ class BlogPost extends Model
     protected $fillable = [
         'blog_category_id','author_id','title','slug','image',
         'excerpt','content','views','published_at',
+        'meta_title','meta_description','meta_keywords','og_image','canonical_url','no_index',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'no_index' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -26,7 +28,8 @@ class BlogPost extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+        // Now points to product Category table (shared taxonomy).
+        return $this->belongsTo(Category::class, 'blog_category_id');
     }
 
     public function author(): BelongsTo
