@@ -382,6 +382,21 @@
                 <a href="{{ route('products.index', ['featured' => 1]) }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
                     <i class="fa-solid fa-star w-5 text-amber-500"></i> Featured
                 </a>
+                <a href="{{ route('offers') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-rose-600">
+                    <i class="fa-solid fa-fire w-5 text-rose-500"></i> Offers
+                </a>
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-newspaper w-5 text-violet-600"></i> Blog
+                </a>
+                <a href="{{ route('track-order') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-truck w-5 text-violet-600"></i> Track Order
+                </a>
+                <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-envelope w-5 text-violet-600"></i> Contact
+                </a>
+                <a href="{{ route('about') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-circle-info w-5 text-violet-600"></i> About
+                </a>
 
                 @foreach($navHeaderMenu ?? collect() as $item)
                     @if($item->children->isNotEmpty())
