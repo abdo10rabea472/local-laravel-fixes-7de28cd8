@@ -14,9 +14,9 @@
         @include("admin.settings.partials.{$tab}")
 
         <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-            <p class="text-xs text-slate-500"><i class="fa-solid fa-circle-info ml-1"></i> تغييرات الإعدادات العامة تُحفظ معاً.</p>
+            <p class="text-xs text-slate-500"><i class="fa-solid fa-circle-info mr-1"></i> General settings are saved together.</p>
             <button type="submit" class="h-11 px-8 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors shadow-lg shadow-emerald-500/20">
-                <i class="fa-solid fa-floppy-disk ml-2"></i> حفظ الإعدادات
+                <i class="fa-solid fa-floppy-disk mr-2"></i> Save Settings
             </button>
         </div>
     </form>
