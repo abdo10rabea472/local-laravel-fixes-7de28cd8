@@ -6,7 +6,7 @@
 @endphp
 
 @section('content')
-<x-admin.page title="عرض الرسالة" subtitle="تفاصيل رسالة العميل والإجراءات المتاحة." :backUrl="route('admin.messages.index')">
+<x-admin.page title="عرض الرسالة" subtitle="تفاصيل رسالة العميل والإجراءات المتاحة." :back="route('admin.messages.index')">
     <x-admin.card title="محتوى الرسالة" icon="fa-envelope-open-text">
         <div class="flex justify-between items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-800">
             <div>
