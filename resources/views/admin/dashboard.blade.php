@@ -154,8 +154,8 @@
 
         <div class="bg-white dark:bg-dark-900 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold text-red-600 flex items-center gap-2"><i class="fas fa-boxes"></i> المنتجات أوشكت على النفاد</h3>
-                <a href="{{ route('admin.stock.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">إدارة المخزن</a>
+                <h3 class="text-base font-bold text-red-600 flex items-center gap-2"><i class="fas fa-boxes"></i> Low Stock Products</h3>
+                <a href="{{ route('admin.stock.index') }}" class="text-xs text-primary-600 font-semibold hover:underline">Manage stock</a>
             </div>
             <div class="space-y-3">
                 @forelse($lowStockProducts as $p)
@@ -169,10 +169,10 @@
                                 <p class="text-xs text-gray-400">{{ optional($p->category)->name ?? '—' }}</p>
                             </div>
                         </div>
-                        <span class="text-xs px-2 py-1 font-bold rounded bg-red-50 text-red-600 dark:bg-red-950/30">متبقي {{ $p->stock }}</span>
+                        <span class="text-xs px-2 py-1 font-bold rounded bg-red-50 text-red-600 dark:bg-red-950/30">{{ $p->stock }} left</span>
                     </div>
                 @empty
-                    <div class="text-center text-sm text-gray-400 py-6">لا توجد منتجات منخفضة المخزون</div>
+                    <div class="text-center text-sm text-gray-400 py-6">No low-stock products</div>
                 @endforelse
             </div>
         </div>
