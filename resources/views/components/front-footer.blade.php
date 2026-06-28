@@ -107,12 +107,18 @@
         <div class="lg:col-span-3">
             <h5 class="text-white font-black text-sm mb-4 uppercase tracking-wider"><span class="inline-block w-1 h-4 bg-violet-500 rounded-full align-middle mr-2"></span>Help & Account</h5>
             <ul class="space-y-2 text-sm">
+                <li><a href="{{ route('about') }}" class="hover:text-violet-400 transition">About Us</a></li>
+                <li><a href="{{ route('contact') }}" class="hover:text-violet-400 transition">Contact Us</a></li>
+                <li><a href="{{ route('blog.index') }}" class="hover:text-violet-400 transition">Blog</a></li>
+                <li><a href="{{ route('offers') }}" class="hover:text-violet-400 transition">Offers</a></li>
+                <li><a href="{{ route('track-order') }}" class="hover:text-violet-400 transition">Track Order</a></li>
+                <li><a href="{{ route('compare.index') }}" class="hover:text-violet-400 transition">Compare Products</a></li>
                 <li><a href="{{ route('pages.faqs') }}" class="hover:text-violet-400 transition">FAQs</a></li>
                 <li><a href="{{ route('pages.returns') }}" class="hover:text-violet-400 transition">Returns & Refunds</a></li>
                 <li><a href="{{ route('pages.privacy') }}" class="hover:text-violet-400 transition">Privacy Policy</a></li>
                 @auth('web')
                     <li><a href="{{ route('account.dashboard') }}" class="hover:text-violet-400 transition">My Dashboard</a></li>
-                    <li><a href="{{ route('account.orders') }}" class="hover:text-violet-400 transition">My Orders</a></li>
+                    <li><a href="{{ route('wishlist.index') }}" class="hover:text-violet-400 transition">My Wishlist</a></li>
                 @else
                     <li><a href="{{ route('login') }}" class="hover:text-violet-400 transition">Sign in</a></li>
                     <li><a href="{{ route('register') }}" class="hover:text-violet-400 transition">Create account</a></li>
@@ -122,9 +128,10 @@
             {{-- Mini newsletter --}}
             <div class="mt-6">
                 <p class="text-xs font-bold text-white mb-2">Get semester deals</p>
-                <form action="#" method="post" class="flex gap-2">
+                @if(session('success') && url()->previous() === route('newsletter.subscribe'))<p class="text-xs text-emerald-400 mb-2">{{ session('success') }}</p>@endif
+                <form action="{{ route('newsletter.subscribe') }}" method="post" class="flex gap-2">
                     @csrf
-                    <input type="email" required placeholder="your@email.com" class="flex-1 h-10 px-3 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white placeholder:text-slate-600 outline-none focus:border-violet-500">
+                    <input type="email" name="email" required placeholder="your@email.com" class="flex-1 h-10 px-3 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white placeholder:text-slate-600 outline-none focus:border-violet-500">
                     <button type="submit" class="h-10 px-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg transition shadow-md shadow-violet-500/30">
                         Join
                     </button>

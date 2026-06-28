@@ -154,6 +154,7 @@
                                     <a href="{{ route('account.orders') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-violet-50 hover:text-violet-700"><i class="fa-solid fa-receipt w-5 text-violet-500"></i> My Orders</a>
                                     <a href="{{ route('account.returns.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-violet-50 hover:text-violet-700"><i class="fa-solid fa-rotate-left w-5 text-violet-500"></i> Returns</a>
                                     <a href="{{ route('account.reviews') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-violet-50 hover:text-violet-700"><i class="fa-solid fa-star w-5 text-violet-500"></i> Reviews</a>
+                                    <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-violet-50 hover:text-violet-700"><i class="fa-solid fa-heart w-5 text-rose-500"></i> Wishlist</a>
                                     <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-violet-50 hover:text-violet-700"><i class="fa-solid fa-user-pen w-5 text-violet-500"></i> Profile</a>
                                     <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100 mt-1 pt-1">@csrf
                                         <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 text-right"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Logout</button>
@@ -246,6 +247,21 @@
                     </a>
                     <a href="{{ route('products.index', ['featured' => 1]) }}" class="flex items-center gap-1.5 px-4 h-12 text-sm font-bold text-slate-600 hover:text-violet-700 border-b-2 border-transparent hover:border-violet-300 transition">
                         <i class="fa-solid fa-star text-xs text-amber-500"></i> Featured
+                    </a>
+                    <a href="{{ route('offers') }}" class="flex items-center gap-1.5 px-4 h-12 text-sm font-bold {{ request()->routeIs('offers') ? 'text-rose-600 border-b-2 border-rose-500' : 'text-rose-600 hover:text-rose-700 border-b-2 border-transparent hover:border-rose-300' }} transition">
+                        <i class="fa-solid fa-fire text-xs"></i> Offers
+                    </a>
+                    <a href="{{ route('blog.index') }}" class="flex items-center gap-1.5 px-4 h-12 text-sm font-bold {{ request()->routeIs('blog.*') ? 'text-violet-700 border-b-2 border-violet-600' : 'text-slate-600 hover:text-violet-700 border-b-2 border-transparent hover:border-violet-300' }} transition">
+                        <i class="fa-solid fa-newspaper text-xs"></i> Blog
+                    </a>
+                    <a href="{{ route('track-order') }}" class="flex items-center gap-1.5 px-4 h-12 text-sm font-bold {{ request()->routeIs('track-order') ? 'text-violet-700 border-b-2 border-violet-600' : 'text-slate-600 hover:text-violet-700 border-b-2 border-transparent hover:border-violet-300' }} transition">
+                        <i class="fa-solid fa-truck text-xs"></i> Track Order
+                    </a>
+                    <a href="{{ route('contact') }}" class="flex items-center gap-1.5 px-4 h-12 text-sm font-bold {{ request()->routeIs('contact') ? 'text-violet-700 border-b-2 border-violet-600' : 'text-slate-600 hover:text-violet-700 border-b-2 border-transparent hover:border-violet-300' }} transition">
+                        <i class="fa-solid fa-envelope text-xs"></i> Contact
+                    </a>
+                    <a href="{{ route('about') }}" class="hidden xl:flex items-center gap-1.5 px-4 h-12 text-sm font-bold {{ request()->routeIs('about') ? 'text-violet-700 border-b-2 border-violet-600' : 'text-slate-600 hover:text-violet-700 border-b-2 border-transparent hover:border-violet-300' }} transition">
+                        <i class="fa-solid fa-circle-info text-xs"></i> About
                     </a>
 
                     {{-- Dynamic menu items --}}
@@ -347,6 +363,7 @@
                         <a href="{{ route('account.orders') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white hover:text-violet-700"><i class="fa-solid fa-receipt w-5 text-violet-500"></i> My Orders</a>
                         <a href="{{ route('account.returns.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white hover:text-violet-700"><i class="fa-solid fa-rotate-left w-5 text-violet-500"></i> Returns</a>
                         <a href="{{ route('account.reviews') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white hover:text-violet-700"><i class="fa-solid fa-star w-5 text-violet-500"></i> Reviews</a>
+                        <a href="{{ route('wishlist.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white hover:text-violet-700"><i class="fa-solid fa-heart w-5 text-rose-500"></i> Wishlist</a>
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-white hover:text-violet-700"><i class="fa-solid fa-user-pen w-5 text-violet-500"></i> Profile</a>
                         <form method="POST" action="{{ route('logout') }}" class="border-t border-slate-100 mt-1 pt-1">@csrf
                             <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold text-rose-600 hover:bg-rose-50 text-right"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i> Logout</button>
@@ -364,6 +381,21 @@
                 </a>
                 <a href="{{ route('products.index', ['featured' => 1]) }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
                     <i class="fa-solid fa-star w-5 text-amber-500"></i> Featured
+                </a>
+                <a href="{{ route('offers') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-rose-600">
+                    <i class="fa-solid fa-fire w-5 text-rose-500"></i> Offers
+                </a>
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-newspaper w-5 text-violet-600"></i> Blog
+                </a>
+                <a href="{{ route('track-order') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-truck w-5 text-violet-600"></i> Track Order
+                </a>
+                <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-envelope w-5 text-violet-600"></i> Contact
+                </a>
+                <a href="{{ route('about') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
+                    <i class="fa-solid fa-circle-info w-5 text-violet-600"></i> About
                 </a>
 
                 @foreach($navHeaderMenu ?? collect() as $item)
