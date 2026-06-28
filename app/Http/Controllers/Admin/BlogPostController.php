@@ -108,7 +108,7 @@ class BlogPostController extends Controller
             $raw = $ai->chat([
                 ['role' => 'system', 'content' => $system],
                 ['role' => 'user',   'content' => $userPrompt],
-            ], maxTokens: 4096, temperature: 0.8, timeout: 90);
+            ], maxTokens: (int) (site_setting('ai_max_tokens') ?: 2000), temperature: 0.8, timeout: 90);
 
             $json = trim($raw);
             $json = preg_replace('/^```(?:json)?\s*|\s*```$/m', '', $json);
