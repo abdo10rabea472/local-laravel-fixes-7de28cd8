@@ -2,10 +2,6 @@
     $approved = $product->reviews()->approved()->latest()->limit(20)->get();
     $avg = $product->reviews()->approved()->avg('rating');
     $count = $approved->count();
-    $userCanReview = auth()->check() && \App\Models\Order::where('user_id', auth()->id())
-        ->whereIn('status', ['paid','shipped','delivered'])
-        ->whereHas('items', fn ($q) => $q->where('product_id', $product->id))
-        ->exists();
     $userReview = auth()->check() ? \App\Models\Review::where('product_id', $product->id)->where('user_id', auth()->id())->first() : null;
 @endphp
 
@@ -27,7 +23,6 @@
         </div>
 
         @auth
-            @if($userCanReview)
             <form method="POST" action="{{ route('account.reviews.store') }}" class="bg-slate-50 p-5 rounded-2xl mb-6">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -43,11 +38,8 @@
                 </div>
                 <input type="text" name="title" value="{{ $userReview->title ?? '' }}" placeholder="عنوان المراجعة (اختياري)" class="w-full h-11 px-3 border border-slate-200 rounded-xl text-sm mb-3">
                 <textarea name="body" rows="4" required class="w-full p-3 border border-slate-200 rounded-xl text-sm mb-3" placeholder="شاركنا رأيك في المنتج...">{{ $userReview->body ?? '' }}</textarea>
-                <button class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl">{{ $userReview ? 'تحديث المراجعة' : 'إرسال المراجعة' }}</button>
+                <button class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl">{{ $userReview ? 'تحديث المراجعة' : 'نشر المراجعة' }}</button>
             </form>
-            @else
-            <div class="bg-slate-50 p-4 rounded-xl text-sm text-slate-600 mb-6">لا يمكنك مراجعة هذا المنتج إلا بعد شرائه.</div>
-            @endif
         @else
             <div class="bg-slate-50 p-4 rounded-xl text-sm text-slate-600 mb-6">
                 <a href="{{ route('login') }}" class="text-violet-600 font-bold">سجل دخولك</a> لكتابة مراجعة.
