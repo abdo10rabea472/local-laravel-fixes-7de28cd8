@@ -137,6 +137,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::get('/settings', [SiteSettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SiteSettingController::class, 'update'])->name('settings.update');
     Route::post('/settings/ai/test', [SiteSettingController::class, 'testAi'])->name('settings.ai.test');
+    Route::post('/settings/mail/test', [SiteSettingController::class, 'testMail'])->name('settings.mail.test');
 
     // Payment Gateways
     Route::get('/settings/payment-gateways', [\App\Http\Controllers\Admin\PaymentGatewayController::class, 'index'])->name('settings.payment-gateways.index');
