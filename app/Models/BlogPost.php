@@ -94,4 +94,14 @@ class BlogPost extends Model
                 ->orWhere('published_at', '<=', now());
         });
     }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class)->latest();
+    }
+
+    public function approvedComments(): HasMany
+    {
+        return $this->hasMany(BlogComment::class)->where('approved', true)->latest();
+    }
 }
