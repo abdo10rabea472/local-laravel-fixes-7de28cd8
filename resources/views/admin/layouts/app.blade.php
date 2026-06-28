@@ -177,26 +177,51 @@
                 </button>
 
                 <div class="relative">
-                    <button onclick="toggleDropdown('notifications-menu', event)" class="relative p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 rounded-lg transition-colors">
+                    <button onclick="toggleDropdown('notifications-menu', event); loadAdminNotifications();" class="relative p-2 text-gray-500 hover:text-primary-600 dark:text-gray-400 rounded-lg transition-colors">
                         <i class="fas fa-bell text-lg"></i>
-                        <span class="absolute top-1 left-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                        <span id="notif-badge" class="hidden absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full grid place-items-center">0</span>
                     </button>
                     <div id="notifications-menu" class="hidden absolute left-0 mt-2 w-80 bg-white dark:bg-dark-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl z-50 py-2">
                         <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-800 font-bold text-sm flex justify-between items-center">
                             <span>الإشعارات الأخيرة</span>
-                            <span class="text-xs text-primary-600 cursor-pointer">تحديد كمقروء</span>
+                            <span class="text-xs text-primary-600 cursor-pointer" onclick="loadAdminNotifications()"><i class="fas fa-rotate"></i> تحديث</span>
                         </div>
-                        <div class="max-h-64 overflow-y-auto" id="notification-items">
-                            <div class="flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-dark-800 border-b border-gray-100 dark:border-gray-800 transition-colors cursor-pointer">
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-emerald-500 bg-emerald-50"><i class="fas fa-shopping-cart text-xs"></i></div>
-                                <div>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300 font-medium">طلبات جديدة بانتظار المراجعة</p>
-                                    <span class="text-[10px] text-gray-400 mt-1 block">منذ قليل</span>
-                                </div>
-                            </div>
+                        <div class="max-h-72 overflow-y-auto" id="notification-items">
+                            <div class="p-6 text-center text-xs text-gray-400"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</div>
                         </div>
                     </div>
                 </div>
+                <script>
+                    async function loadAdminNotifications() {
+                        try {
+                            const res = await fetch('{{ route('admin.notifications.feed') }}', { headers: { 'Accept': 'application/json' }});
+                            const data = await res.json();
+                            const badge = document.getElementById('notif-badge');
+                            const box   = document.getElementById('notification-items');
+                            if (!badge || !box) return;
+                            if (data.count > 0) { badge.textContent = data.count; badge.classList.remove('hidden'); }
+                            else { badge.classList.add('hidden'); }
+                            if (!data.items.length) {
+                                box.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">لا توجد إشعارات جديدة</div>';
+                                return;
+                            }
+                            box.innerHTML = data.items.map(i => `
+                                <a href="${i.url}" class="flex gap-3 p-3 hover:bg-gray-50 dark:hover:bg-dark-800 border-b border-gray-100 dark:border-gray-800 transition-colors">
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-${i.color}-500 bg-${i.color}-50 dark:bg-${i.color}-950/30"><i class="fas ${i.icon} text-xs"></i></div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs text-gray-700 dark:text-gray-200 font-semibold truncate">${i.title}</p>
+                                        <div class="flex gap-2 items-center mt-0.5">
+                                            ${i.meta ? `<span class="text-[10px] text-gray-500">${i.meta}</span>` : ''}
+                                            ${i.time ? `<span class="text-[10px] text-gray-400">· ${i.time}</span>` : ''}
+                                        </div>
+                                    </div>
+                                </a>`).join('');
+                        } catch (e) { console.error(e); }
+                    }
+                    // أوّل تحميل + تحديث كل 60 ثانية
+                    loadAdminNotifications();
+                    setInterval(loadAdminNotifications, 60000);
+                </script>
 
                 <div class="relative">
                     <button onclick="toggleDropdown('user-profile-menu', event)" class="flex items-center gap-3 focus:outline-none">
