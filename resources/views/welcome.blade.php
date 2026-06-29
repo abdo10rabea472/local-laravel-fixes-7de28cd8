@@ -197,7 +197,7 @@
                 </span>
 
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                    {{ $homeSections['featured_title'] ?? __('home.featured_title') }}
+                    {{ __('home.featured_title') }}
                 </h2>
 
                 @if(!empty($homeSections['featured_subtitle']))
