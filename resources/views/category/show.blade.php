@@ -38,7 +38,7 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
         {{-- Breadcrumb --}}
         <nav class="flex items-center gap-2 text-sm text-white/80 mb-6">
-            <a class="hover:text-white transition-colors" href="{{ route('home') }}">Home</a>
+            <a class="hover:text-white transition-colors" href="{{ route('home') }}">{{ __('app.cat_home') }}</a>
             <i class="fa-solid fa-chevron-right text-[10px] text-white/60"></i>
             @if(!$isCollege && $college)
                 <a class="hover:text-white transition-colors" href="{{ route('category.show', $college->slug) }}">{{ $college->name }}</a>
