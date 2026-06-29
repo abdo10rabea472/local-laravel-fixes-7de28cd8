@@ -117,7 +117,7 @@
                               ? 'text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.15)]'
                               : 'text-slate-500 hover:text-slate-900 hover:bg-white/70' }}"
                    @if($allActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
-                    All {{ $college->name }}
+                    {{ __('app.cat_all_prefix', ['name' => $college->name]) }}
                 </a>
             @endif
 
