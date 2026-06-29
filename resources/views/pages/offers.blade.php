@@ -3,31 +3,31 @@
 @section('content')
 <section class="bg-gradient-to-br from-rose-500 via-pink-600 to-red-700 text-white py-16">
     <div class="max-w-6xl mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-3"><i class="fas fa-fire"></i> العروض والخصومات</h1>
-        <p class="text-rose-100">أفضل العروض على منتجاتك المفضلة — اغتنم الفرصة!</p>
+        <h1 class="text-4xl font-bold mb-3"><i class="fas fa-fire"></i> {{ __('app.offers_hero_title') }}</h1>
+        <p class="text-rose-100">{{ __('app.offers_hero_subtitle') }}</p>
     </div>
 </section>
 
 @if($coupons->count())
 <section class="py-12 bg-slate-50">
     <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fas fa-ticket text-violet-600"></i> كوبونات متاحة</h2>
+        <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fas fa-ticket text-violet-600"></i> {{ __('app.offers_available_coupons') }}</h2>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($coupons as $c)
             <div class="bg-white rounded-2xl border-2 border-dashed border-violet-300 p-5 hover:shadow-lg transition">
                 <div class="flex justify-between items-start mb-3">
                     <div>
-                        <div class="text-xs text-slate-500">كود الخصم</div>
+                        <div class="text-xs text-slate-500">{{ __('app.offers_coupon_code') }}</div>
                         <div class="text-2xl font-bold text-violet-700">{{ $c->code }}</div>
                     </div>
                     <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-bold">
-                        @if($c->type==='percent') {{ rtrim(rtrim($c->value,'0'),'.') }}% @else {{ number_format($c->value,2) }} ر.س @endif
+                        @if($c->type==='percent') {{ rtrim(rtrim($c->value,'0'),'.') }}% @else {{ number_format($c->value,2) }} {{ __('app.shared_currency_egp') }} @endif
                     </span>
                 </div>
                 @if($c->description)<p class="text-sm text-slate-600 mb-2">{{ $c->description }}</p>@endif
-                @if($c->ends_at)<p class="text-xs text-slate-400"><i class="far fa-clock"></i> ينتهي {{ $c->ends_at->format('Y-m-d') }}</p>@endif
-                <button onclick="navigator.clipboard.writeText('{{ $c->code }}'); this.innerText='تم النسخ ✓'"
-                        class="mt-3 w-full bg-violet-600 text-white py-2 rounded-lg text-sm hover:bg-violet-700">نسخ الكود</button>
+                @if($c->ends_at)<p class="text-xs text-slate-400"><i class="far fa-clock"></i> {{ __('app.offers_ends_at') }} {{ $c->ends_at->format('Y-m-d') }}</p>@endif
+                <button onclick="navigator.clipboard.writeText('{{ $c->code }}'); this.innerText='{{ __('app.offers_copied') }}'"
+                        class="mt-3 w-full bg-violet-600 text-white py-2 rounded-lg text-sm hover:bg-violet-700">{{ __('app.offers_copy_code') }}</button>
             </div>
             @endforeach
         </div>
@@ -37,10 +37,10 @@
 
 <section class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fas fa-tags text-rose-500"></i> منتجات مخفّضة</h2>
+        <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fas fa-tags text-rose-500"></i> {{ __('app.offers_discounted_products') }}</h2>
 
         @if($products->isEmpty())
-            <p class="text-center text-slate-500 py-12">لا توجد عروض متاحة حاليًا.</p>
+            <p class="text-center text-slate-500 py-12">{{ __('app.offers_empty') }}</p>
         @else
             <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($products as $p)
