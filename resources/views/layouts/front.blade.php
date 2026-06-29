@@ -15,7 +15,7 @@
         $canonicalUrl = $seo['canonical_url'] ?? url()->current();
         $ogTitle = $seo['og_title'] ?? $seoTitle;
         $ogDescription = $seo['og_description'] ?? $seoDescription;
-        $ogImage = $seo['og_image'] ?? site_setting_url('default_og_image', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٥-removebg-preview.png'));
+        $ogImage = $seo['og_image'] ?? site_setting_url('default_og_image', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png'));
         $ogType = $seo['og_type'] ?? 'website';
         $ogImageAlt = $seo['og_image_alt'] ?? $ogTitle ?? $siteName;
         $twitterSite = site_setting('twitter_site_handle');
