@@ -109,9 +109,6 @@
                     @endif
                 </div>
 
-                @if($product->short_description)
-                <p class="text-slate-600 leading-relaxed text-lg">{{ $product->short_description }}</p>
-                @endif
 
                 <p class="font-semibold {{ $product->isInStock() ? 'text-emerald-600' : 'text-rose-600' }}">
                     {{ $product->isInStock() ? 'In stock · ' . $product->stock . ' available' : 'Out of stock' }}
