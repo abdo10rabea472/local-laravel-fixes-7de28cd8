@@ -79,10 +79,26 @@
                         </div>
                         <input type="text" class="faq-q w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm" placeholder="السؤال" value="{{ $item['q'] }}">
                         <textarea class="faq-a w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm" rows="3" placeholder="الإجابة">{{ $item['a'] }}</textarea>
-                        <input type="text" class="faq-cat w-full h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="التصنيف (اختياري) مثل: Shipping, Payment" value="{{ $item['category'] }}">
+                        <div class="flex items-center gap-2">
+                            <input type="text" list="faq-categories" class="faq-cat flex-1 h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="اختر تصنيف أو اكتب جديد…" value="{{ $item['category'] }}">
+                            <button type="button" class="faq-cat-new inline-flex items-center gap-1 h-10 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold whitespace-nowrap">
+                                <i class="fa-solid fa-plus"></i> تصنيف جديد
+                            </button>
+                        </div>
                     </div>
                     @endforeach
                 </div>
+
+                @php
+                    $defaultCats = ['Shipping', 'Payment', 'Warranty', 'Returns', 'Support', 'Orders', 'General'];
+                    $existingCats = collect($faqItems)->pluck('category')->filter()->unique()->values()->all();
+                    $allCats = collect(array_merge($defaultCats, $existingCats))->filter()->unique()->values();
+                @endphp
+                <datalist id="faq-categories">
+                    @foreach($allCats as $cat)
+                        <option value="{{ $cat }}"></option>
+                    @endforeach
+                </datalist>
 
                 <div id="faq-empty" class="hidden text-center py-10 text-sm text-slate-500 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
                     لا توجد نتائج مطابقة للبحث.
@@ -266,7 +282,12 @@
                 </div>
                 <input type="text" class="faq-q w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm" placeholder="السؤال">
                 <textarea class="faq-a w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm" rows="3" placeholder="الإجابة"></textarea>
-                <input type="text" class="faq-cat w-full h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="التصنيف (اختياري)">
+                <div class="flex items-center gap-2">
+                    <input type="text" list="faq-categories" class="faq-cat flex-1 h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="اختر تصنيف أو اكتب جديد…">
+                    <button type="button" class="faq-cat-new inline-flex items-center gap-1 h-10 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i> تصنيف جديد
+                    </button>
+                </div>
             `;
             return wrap;
         };
@@ -284,6 +305,22 @@
         });
 
         list.addEventListener('click', (e) => {
+            const newBtn = e.target.closest('.faq-cat-new');
+            if (newBtn) {
+                const input = newBtn.parentElement.querySelector('.faq-cat');
+                const val = (prompt('اسم التصنيف الجديد:', input.value || '') || '').trim();
+                if (val) {
+                    input.value = val;
+                    const dl = document.getElementById('faq-categories');
+                    if (dl && !Array.from(dl.options).some(o => o.value.toLowerCase() === val.toLowerCase())) {
+                        const opt = document.createElement('option');
+                        opt.value = val;
+                        dl.appendChild(opt);
+                    }
+                }
+                return;
+            }
+
             const btn = e.target.closest('.faq-remove');
             if (!btn) return;
             const all = rows();
