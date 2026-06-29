@@ -457,7 +457,9 @@ class PaymentService
 
                     $redirectUrl = $walletPay->json('redirect_url');
                     if (! $walletPay->successful() || ! $redirectUrl) {
-                        return ['ok' => false, 'message' => 'تعذر بدء دفع محفظة Paymob: ' . $this->paymobError($walletPay->json(), $walletPay->body())];
+                        $msg = $this->paymobError($walletPay->json(), $walletPay->body());
+                        Log::error('paymob.wallet_pay.failed', ['order_id' => $order->id, 'status' => $walletPay->status(), 'response' => $walletPay->json() ?? $walletPay->body(), 'message' => $msg]);
+                        return ['ok' => false, 'message' => 'تعذر بدء دفع محفظة Paymob: ' . $msg];
                     }
                 }
             } else {
