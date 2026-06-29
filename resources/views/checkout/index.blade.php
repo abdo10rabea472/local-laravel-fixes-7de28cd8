@@ -338,7 +338,7 @@
         itemsEl.innerHTML = '';
         cart.forEach(item => {
             const qty = item.quantity || 1;
-            const lineTotal = ((item.price || 0) * qty).toLocaleString();
+            const lineTotal = fmt((item.price || 0) * qty);
             const max = Number(stockMap[item.id] ?? Infinity);
             const atMax = Number.isFinite(max) && qty >= max;
             const incClasses = atMax
