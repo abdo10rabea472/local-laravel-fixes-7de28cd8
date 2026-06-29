@@ -21,7 +21,7 @@
                         <div class="text-2xl font-bold text-violet-700">{{ $c->code }}</div>
                     </div>
                     <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-bold">
-                        @if($c->type==='percent') {{ rtrim(rtrim($c->value,'0'),'.') }}% @else {{ number_format($c->value,2) }} {{ __('app.shared_currency_egp') }} @endif
+                        @if($c->type==='percent') {{ rtrim(rtrim($c->value,'0'),'.') }}% @else {{ money($c->value) }} @endif
                     </span>
                 </div>
                 @if($c->description)<p class="text-sm text-slate-600 mb-2">{{ $c->description }}</p>@endif
@@ -59,8 +59,8 @@
                         <div class="text-xs text-slate-500">{{ $p->category?->name }}</div>
                         <div class="font-semibold text-slate-800 line-clamp-2 my-1">{{ $p->name }}</div>
                         <div class="flex items-center gap-2 mt-2">
-                            <span class="text-rose-600 font-bold">{{ number_format($p->sale_price, 2) }}</span>
-                            <span class="text-slate-400 line-through text-sm">{{ number_format($p->price, 2) }}</span>
+                            <span class="text-rose-600 font-bold">{{ money($p->sale_price) }}</span>
+                            <span class="text-slate-400 line-through text-sm">{{ money($p->price) }}</span>
                         </div>
                     </div>
                 </a>
