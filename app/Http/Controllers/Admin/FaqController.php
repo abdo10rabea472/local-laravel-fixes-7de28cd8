@@ -62,6 +62,9 @@ class FaqController extends Controller
     {
         $data = $request->validate(['name' => ['required', 'string', 'max:100']]);
         $name = $data['name'];
+        if (Faq::where('category', $name)->exists()) {
+            return back()->with('error', 'لا يمكن حذف التصنيف لأنه مرتبط بأسئلة. احذف الأسئلة أو غيّر تصنيفها أولاً.');
+        }
         $list = collect(json_decode(\App\Models\SiteSetting::get('faq_categories', '[]'), true) ?: [])
             ->reject(fn ($v) => $v === $name)->values();
         \App\Models\SiteSetting::updateOrCreate(
@@ -71,6 +74,7 @@ class FaqController extends Controller
         \App\Models\SiteSetting::clearCache();
         return back()->with('success', 'تم حذف التصنيف من القائمة.');
     }
+
 
 
     public function updateSeo(Request $request)
