@@ -52,7 +52,38 @@
             </div>
         </x-admin.card>
 
-        @php $cur = current_currency()->code ?? 'EGP'; @endphp
+        @php
+            $defaultCurrency = app(\App\Services\CurrencyService::class)->default();
+            $cur = $defaultCurrency->code ?? 'EGP';
+            $curSymbol = $defaultCurrency->symbol ?? $cur;
+            $curName = $defaultCurrency->name ?? $cur;
+        @endphp
+
+        <div class="relative overflow-hidden rounded-2xl mb-5 p-6 md:p-7 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 dark:from-amber-900/30 dark:via-orange-900/20 dark:to-amber-800/30 border-2 border-amber-300 dark:border-amber-700 shadow-lg shadow-amber-200/40 dark:shadow-amber-900/30">
+            <div class="absolute -top-8 -right-8 w-32 h-32 bg-amber-300/30 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-orange-300/30 rounded-full blur-2xl"></div>
+            <div class="relative flex items-start gap-4">
+                <div class="shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/40">
+                    <i class="fas fa-triangle-exclamation text-white text-2xl"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-lg md:text-xl font-extrabold text-amber-900 dark:text-amber-100 mb-2 flex flex-wrap items-center gap-2">
+                        {{ __('app.admin_product_form_currency_notice_title') }}
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white dark:bg-amber-950 text-amber-700 dark:text-amber-200 text-sm font-mono font-bold border border-amber-300 dark:border-amber-700 shadow-sm">
+                            <i class="fas fa-coins text-xs"></i> {{ $curSymbol }} {{ $cur }}
+                        </span>
+                    </h4>
+                    <p class="text-sm md:text-base text-amber-900/90 dark:text-amber-100/90 leading-relaxed">
+                        {{ __('app.admin_product_form_currency_notice', ['currency' => $cur, 'name' => $curName]) }}
+                    </p>
+                    <p class="mt-2 text-xs md:text-sm text-amber-800/80 dark:text-amber-200/80 leading-relaxed">
+                        <i class="fas fa-circle-info mr-1"></i>
+                        {{ __('app.admin_product_form_currency_notice_hint', ['currency' => $cur]) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <x-admin.card :title="__('app.admin_product_form_pricing')" icon="fa-coins">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
