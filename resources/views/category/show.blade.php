@@ -40,6 +40,15 @@
 
 @section('content')
 @php
+    $_breadItems = [['name' => 'الرئيسية', 'url' => url('/')]];
+    if ($category->parent) { $_breadItems[] = ['name' => $category->parent->name, 'url' => url('/category/'.$category->parent->slug)]; }
+    $_breadItems[] = ['name' => $category->name];
+@endphp
+<div class="max-w-7xl mx-auto px-4">
+    <x-breadcrumbs :items="$_breadItems" />
+</div>
+
+@php
     $primary = $themeCategory?->primary_color ?? '#7c3aed';   // emerald-500
     $secondary = $themeCategory?->secondary_color ?? '#6366f1'; // cyan-400
     $college = $isCollege ? $category : $category->parent;
