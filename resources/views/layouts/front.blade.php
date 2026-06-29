@@ -60,6 +60,33 @@
         <script type="application/ld+json">{!! $schemaMarkup !!}</script>
     @endif
 
+    {{-- Global JSON-LD: Organization + WebSite with SearchAction --}}
+    @php
+        $orgLogo = site_setting_url('site_logo', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png'));
+        $orgSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => $siteName,
+            'url' => url('/'),
+            'logo' => $orgLogo,
+        ];
+        $siteSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => $siteName,
+            'url' => url('/'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => url('/products') . '?search={search_term_string}',
+                'query-input' => 'required name=search_term_string',
+            ],
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($orgSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($siteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @stack('schemas')
+
+
     {{-- SEO: indexing, verification, analytics --}}
     @if(site_setting('seo_indexing_enabled','1') !== '1')
         <meta name="robots" content="noindex, nofollow">

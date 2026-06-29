@@ -1,5 +1,29 @@
 @extends('layouts.front')
 
+@push('schemas')
+@php
+    $_faqItems = [];
+    foreach (($faqs ?? collect()) as $_group) {
+        foreach ($_group as $_f) {
+            $_faqItems[] = [
+                '@type' => 'Question',
+                'name' => $_f->question,
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => strip_tags($_f->answer)],
+            ];
+        }
+    }
+    $_faqSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => $_faqItems,
+    ];
+@endphp
+@if(!empty($_faqItems))
+<script type="application/ld+json">{!! json_encode($_faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endif
+@endpush
+
+
 @push('styles')
 <style>
     .faq-hero {

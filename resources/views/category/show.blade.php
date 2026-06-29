@@ -1,5 +1,43 @@
 @extends('layouts.front')
 
+@push('schemas')
+@php
+    $_items = [];
+    $_pos = 1;
+    foreach ($products as $_p) {
+        $_items[] = [
+            '@type' => 'ListItem',
+            'position' => $_pos++,
+            'url' => url('/product/'.$_p->slug),
+            'name' => $_p->name,
+        ];
+    }
+    $_listSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'ItemList',
+        'name' => $category->name,
+        'numberOfItems' => $products->total(),
+        'itemListElement' => $_items,
+    ];
+    $_crumbs = [['name' => 'Home', 'url' => url('/')]];
+    if ($category->parent) {
+        $_crumbs[] = ['name' => $category->parent->name, 'url' => url('/category/'.$category->parent->slug)];
+    }
+    $_crumbs[] = ['name' => $category->name, 'url' => url()->current()];
+    $_breadSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => array_map(fn($i, $c) => [
+            '@type' => 'ListItem', 'position' => $i + 1, 'name' => $c['name'], 'item' => $c['url'],
+        ], array_keys($_crumbs), $_crumbs),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($_listSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+<script type="application/ld+json">{!! json_encode($_breadSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
+
+
+
 @section('content')
 @php
     $primary = $themeCategory?->primary_color ?? '#7c3aed';   // emerald-500

@@ -4,6 +4,45 @@
 @section('meta_description', $seo['seo_description'] ?? $post->excerpt)
 @section('meta_keywords', $seo['seo_keywords'] ?? '')
 
+@push('schemas')
+@php
+    $_articleSchema = array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        'headline' => $post->title,
+        'description' => $post->excerpt,
+        'image' => $post->image ? asset('storage/'.$post->image) : null,
+        'datePublished' => optional($post->published_at)->toIso8601String(),
+        'dateModified' => optional($post->updated_at)->toIso8601String(),
+        'author' => ['@type' => 'Person', 'name' => $post->author_name ?? site_setting('site_name', 'UNI-LAB MARKET')],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => site_setting('site_name', 'UNI-LAB MARKET'),
+            'logo' => ['@type' => 'ImageObject', 'url' => site_setting_url('site_logo', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png'))],
+        ],
+        'mainEntityOfPage' => url()->current(),
+    ]);
+    $_crumbs = [
+        ['name' => 'Home', 'url' => url('/')],
+        ['name' => 'Blog', 'url' => route('blog.index')],
+    ];
+    if ($post->category) {
+        $_crumbs[] = ['name' => $post->category->name, 'url' => route('blog.index', ['category' => $post->category->slug])];
+    }
+    $_crumbs[] = ['name' => $post->title, 'url' => url()->current()];
+    $_breadSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => array_map(fn($i, $c) => [
+            '@type' => 'ListItem', 'position' => $i + 1, 'name' => $c['name'], 'item' => $c['url'],
+        ], array_keys($_crumbs), $_crumbs),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($_articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+<script type="application/ld+json">{!! json_encode($_breadSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
+
+
 @section('content')
 <div class="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-indigo-500 selection:text-white pb-24">
 
