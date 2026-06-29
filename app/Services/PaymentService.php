@@ -392,7 +392,9 @@ class PaymentService
 
             $authToken = $auth->json('token');
             if (! $auth->successful() || ! $authToken) {
-                return ['ok' => false, 'message' => 'Paymob رفض API Key: ' . $this->paymobError($auth->json(), $auth->body())];
+                $msg = $this->paymobError($auth->json(), $auth->body());
+                Log::error('paymob.auth.failed', ['order_id' => $order->id, 'status' => $auth->status(), 'response' => $auth->json() ?? $auth->body(), 'message' => $msg]);
+                return ['ok' => false, 'message' => 'Paymob رفض API Key: ' . $msg];
             }
 
             $paymobOrder = \Illuminate\Support\Facades\Http::timeout(20)
