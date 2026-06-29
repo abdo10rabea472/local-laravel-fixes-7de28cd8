@@ -87,31 +87,19 @@ class SitemapController extends Controller
 
         $base = rtrim(config('app.url'), '/');
 
-        $localized = function (string $code, string $path) use ($base) {
-            $path = $path === '/' ? '' : $path;
-            return $base . '/' . $code . $path;
-        };
-
         $xml  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'."\n"
-              . '        xmlns:xhtml="http://www.w3.org/1999/xhtml"'."\n"
               . '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'."\n"
               . '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'."\n";
 
         foreach ($entries as $e) {
-            foreach ($codes as $code) {
-                $loc = $localized($code, $e['path']);
-                $xml .= "  <url>\n";
-                $xml .= "    <loc>".htmlspecialchars($loc, ENT_XML1)."</loc>\n";
-                if (!empty($e['lastmod'])) $xml .= "    <lastmod>{$e['lastmod']}</lastmod>\n";
-                $xml .= "    <changefreq>{$e['changefreq']}</changefreq>\n";
-                $xml .= "    <priority>{$e['priority']}</priority>\n";
-                foreach ($codes as $alt) {
-                    $xml .= '    <xhtml:link rel="alternate" hreflang="'.$alt.'" href="'.htmlspecialchars($localized($alt, $e['path']), ENT_XML1).'"/>'."\n";
-                }
-                $xml .= '    <xhtml:link rel="alternate" hreflang="x-default" href="'.htmlspecialchars($localized($default, $e['path']), ENT_XML1).'"/>'."\n";
-                $xml .= "  </url>\n";
-            }
+            $loc = $base . ($e['path'] === '/' ? '' : $e['path']);
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>".htmlspecialchars($loc, ENT_XML1)."</loc>\n";
+            if (!empty($e['lastmod'])) $xml .= "    <lastmod>{$e['lastmod']}</lastmod>\n";
+            $xml .= "    <changefreq>{$e['changefreq']}</changefreq>\n";
+            $xml .= "    <priority>{$e['priority']}</priority>\n";
+            $xml .= "  </url>\n";
         }
         $xml .= '</urlset>';
 
