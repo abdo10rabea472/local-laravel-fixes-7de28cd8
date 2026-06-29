@@ -22,11 +22,61 @@
             </div>
         </div>
 
-        <div class="space-y-2">
-            <label class="text-xs font-bold text-slate-500">المحتوى</label>
-            <textarea id="content-editor" name="content" rows="20" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">{{ old('content', $page->content) }}</textarea>
-            <p class="text-[11px] text-slate-400">سيظهر هذا المحتوى في الصفحة العامة بدل القالب الافتراضي.</p>
-        </div>
+        @php
+            $isFaqsPage = $page->slug === 'faqs';
+            $faqItems = [];
+            if ($isFaqsPage) {
+                $decoded = json_decode((string) old('content', $page->content), true);
+                if (is_array($decoded)) {
+                    foreach ($decoded as $row) {
+                        if (is_array($row) && isset($row['q'], $row['a'])) {
+                            $faqItems[] = ['q' => (string) $row['q'], 'a' => (string) $row['a'], 'category' => (string) ($row['category'] ?? '')];
+                        }
+                    }
+                }
+                if (empty($faqItems)) {
+                    $faqItems[] = ['q' => '', 'a' => '', 'category' => ''];
+                }
+            }
+        @endphp
+
+        @if($isFaqsPage)
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <label class="text-xs font-bold text-slate-500">الأسئلة والأجوبة</label>
+                        <p class="text-[11px] text-slate-400 mt-1">أضف الأسئلة والأجوبة التي ستظهر في صفحة FAQs العامة.</p>
+                    </div>
+                    <button type="button" id="faq-add" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl">
+                        <i class="fa-solid fa-plus"></i> إضافة سؤال
+                    </button>
+                </div>
+
+                <div id="faq-list" class="space-y-3">
+                    @foreach($faqItems as $i => $item)
+                    <div class="faq-row bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-500">سؤال <span class="faq-index">{{ $i + 1 }}</span></span>
+                            <button type="button" class="faq-remove text-rose-500 hover:text-rose-700 text-xs font-bold inline-flex items-center gap-1">
+                                <i class="fa-solid fa-trash"></i> حذف
+                            </button>
+                        </div>
+                        <input type="text" class="faq-q w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm" placeholder="السؤال" value="{{ $item['q'] }}">
+                        <textarea class="faq-a w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm" rows="3" placeholder="الإجابة">{{ $item['a'] }}</textarea>
+                        <input type="text" class="faq-cat w-full h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="التصنيف (اختياري) مثل: Shipping, Payment" value="{{ $item['category'] }}">
+                    </div>
+                    @endforeach
+                </div>
+
+                <textarea name="content" id="content-editor" class="hidden">{{ old('content', $page->content) }}</textarea>
+            </div>
+        @else
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500">المحتوى</label>
+                <textarea id="content-editor" name="content" rows="20" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">{{ old('content', $page->content) }}</textarea>
+                <p class="text-[11px] text-slate-400">سيظهر هذا المحتوى في الصفحة العامة بدل القالب الافتراضي.</p>
+            </div>
+        @endif
 
         <div class="border-t border-slate-100 pt-6">
             <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
