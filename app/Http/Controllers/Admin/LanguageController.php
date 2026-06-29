@@ -181,14 +181,10 @@ class LanguageController extends Controller
             }
         }
 
-        $apiKey  = env('AI_TRANSLATE_API_KEY', env('OPENAI_API_KEY', env('LOVABLE_API_KEY')));
-        $baseUrl = rtrim(env('AI_TRANSLATE_BASE_URL', 'https://ai.gateway.lovable.dev/v1'), '/');
-        $model   = env('AI_TRANSLATE_MODEL', 'google/gemini-3-flash-preview');
-
-        if (!$apiKey) {
+        if (!\App\Services\AiService::isEnabled()) {
             return response()->json([
                 'ok' => false,
-                'message' => 'AI_TRANSLATE_API_KEY (or OPENAI_API_KEY / LOVABLE_API_KEY) is not set in .env',
+                'message' => 'AI غير مفعّل. فعّله من إعدادات الموقع → AI.',
             ], 422);
         }
 
@@ -197,26 +193,12 @@ class LanguageController extends Controller
              . "Preserve leading/trailing whitespace. Do not add quotes, explanations, or extra text. Return ONLY the translation.";
 
         try {
-            $resp = \Illuminate\Support\Facades\Http::withHeaders([
-                    'Authorization' => 'Bearer '.$apiKey,
-                ])
-                ->timeout(45)
-                ->post($baseUrl.'/chat/completions', [
-                    'model' => $model,
-                    'temperature' => 0.2,
-                    'messages' => [
-                        ['role' => 'system', 'content' => $sys],
-                        ['role' => 'user', 'content' => $data['source']],
-                    ],
-                ]);
+            $ai = new \App\Services\AiService();
+            $translation = trim($ai->chat([
+                ['role' => 'system', 'content' => $sys],
+                ['role' => 'user',   'content' => $data['source']],
+            ], maxTokens: 1024, temperature: 0.2, timeout: 45));
 
-            if (!$resp->successful()) {
-                \Log::warning('AI translate failed', ['status' => $resp->status(), 'body' => $resp->body()]);
-                $msg = $resp->status().' '.($resp->json('error.message') ?: $resp->body());
-                return response()->json(['ok' => false, 'message' => 'AI error: '.$msg], $resp->status() >= 500 ? 502 : 422);
-            }
-
-            $translation = trim((string) ($resp->json('choices.0.message.content') ?? ''));
             if ($translation === '') {
                 return response()->json(['ok' => false, 'message' => 'Empty translation returned.'], 422);
             }
@@ -228,9 +210,77 @@ class LanguageController extends Controller
             return response()->json(['ok' => true, 'translation' => $translation]);
         } catch (\Throwable $e) {
             \Log::error('AI translate exception', ['err' => $e->getMessage()]);
-            return response()->json(['ok' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['ok' => false, 'message' => $e->getMessage()], 422);
         }
     }
+
+    /**
+     * Export all translation groups of a language as a JSON file.
+     */
+    public function exportTranslations(Language $language)
+    {
+        $dir = base_path("resources/lang/{$language->code}");
+        $out = [];
+        if (is_dir($dir)) {
+            foreach (glob($dir.'/*.php') as $file) {
+                $group = basename($file, '.php');
+                $data = include $file;
+                if (is_array($data)) $out[$group] = $data;
+            }
+        }
+        $filename = "translations-{$language->code}-".now()->format('Ymd-His').'.json';
+        return response()->streamDownload(function () use ($out) {
+            echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }, $filename, ['Content-Type' => 'application/json; charset=UTF-8']);
+    }
+
+    /**
+     * Import translations for a language from a JSON file.
+     * Expected shape: { "<group>": { "<key>": "<value>", ... }, ... }
+     */
+    public function importTranslations(Request $request, Language $language)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimetypes:application/json,text/plain,text/json', 'max:5120'],
+            'mode' => ['nullable', 'in:merge,replace'],
+        ]);
+
+        $raw = file_get_contents($request->file('file')->getRealPath());
+        $data = json_decode($raw, true);
+        if (!is_array($data)) {
+            return back()->with('error', 'Invalid JSON file.');
+        }
+
+        $mode = $request->input('mode', 'merge');
+        $payload = [];
+        $count = 0;
+        foreach ($data as $group => $entries) {
+            if (!is_string($group) || !preg_match('/^[a-z0-9_\-]+$/i', $group) || !is_array($entries)) continue;
+            $clean = [];
+            foreach ($entries as $k => $v) {
+                if (!is_string($k) || !preg_match('/^[a-zA-Z0-9_\.\-]+$/', $k)) continue;
+                $clean[$k] = (string) $v;
+                $count++;
+            }
+            if ($clean) $payload[$group] = $clean;
+        }
+
+        if ($mode === 'replace') {
+            $dir = base_path("resources/lang/{$language->code}");
+            if (is_dir($dir)) {
+                foreach (array_keys($payload) as $group) {
+                    $file = $dir.'/'.$group.'.php';
+                    if (is_file($file)) @unlink($file);
+                }
+            }
+        }
+
+        $this->writeGroups($language->code, $payload);
+        if (function_exists('opcache_reset')) { @opcache_reset(); }
+
+        return back()->with('success', "Imported {$count} translation(s) for {$language->name}.");
+    }
+
 
     protected function writeGroups(string $code, array $payload): void
     {
