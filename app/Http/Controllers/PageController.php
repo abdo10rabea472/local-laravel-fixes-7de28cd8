@@ -30,30 +30,35 @@ class PageController extends Controller
         $page = Page::bySlug('faqs')->active()->first();
 
         // Single source of truth: faqs table (managed from /admin/faqs).
-        $faqs = [];
+        $faqs = collect();
         if (Schema::hasTable('faqs')) {
             $faqs = Faq::query()
                 ->where('active', true)
                 ->orderBy('category')->orderBy('sort_order')->orderBy('id')
                 ->get(['question', 'answer', 'category'])
-                ->map(fn ($f) => ['q' => $f->question, 'a' => $f->answer, 'category' => $f->category ?: 'General'])
-                ->all();
+                ->groupBy(fn ($f) => $f->category ?: 'General');
         }
 
         // FAQPage JSON-LD for rich results
         $seo = $this->buildSeo($page, 'FAQs | UNI-LAB MARKET', 'Frequently asked questions about ordering, shipping, returns, and payments.');
-        if (! empty($faqs)) {
+        if ($faqs->isNotEmpty()) {
+            $items = [];
+            foreach ($faqs as $group) {
+                foreach ($group as $f) {
+                    $items[] = [
+                        '@type' => 'Question',
+                        'name' => $f->question,
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => strip_tags((string) $f->answer),
+                        ],
+                    ];
+                }
+            }
             $seo['schema_markup'] = json_encode([
                 '@context' => 'https://schema.org',
                 '@type' => 'FAQPage',
-                'mainEntity' => array_map(fn ($f) => [
-                    '@type' => 'Question',
-                    'name' => $f['q'],
-                    'acceptedAnswer' => [
-                        '@type' => 'Answer',
-                        'text' => strip_tags((string) $f['a']),
-                    ],
-                ], $faqs),
+                'mainEntity' => $items,
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         }
 
