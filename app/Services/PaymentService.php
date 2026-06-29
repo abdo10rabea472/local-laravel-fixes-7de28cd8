@@ -502,32 +502,43 @@ class PaymentService
             ?: $request->input('order')
             ?: $request->input('merchantRefNumber');
 
-        if ($hmac !== '' && $request->filled('hmac')) {
-            $string = $request->input('amount_cents')
-                . $request->input('created_at')
-                . $request->input('currency')
-                . $request->input('error_occured')
-                . $request->input('has_parent_transaction')
-                . $request->input('id')
-                . $request->input('integration_id')
-                . $request->input('is_3d_secure')
-                . $request->input('is_auth')
-                . $request->input('is_capture')
-                . $request->input('is_refunded')
-                . $request->input('is_standalone_payment')
-                . $request->input('is_voided')
-                . $request->input('order')
-                . $request->input('owner')
-                . $request->input('pending')
-                . $request->input('source_data_pan')
-                . $request->input('source_data_sub_type')
-                . $request->input('source_data_type')
-                . $request->input('success');
-
-            if (! hash_equals(hash_hmac('sha512', $string, $hmac), (string) $request->input('hmac'))) {
-                return ['success' => false, 'payment_id' => $reference, 'message' => 'فشل التحقق من توقيع Paymob.'];
-            }
+        // HMAC is mandatory: reject any callback that lacks a configured secret
+        // or a signature, otherwise an attacker could mark their own order as paid
+        // by simply hitting the verify URL without going through Paymob.
+        if ($hmac === '') {
+            \Log::warning('Paymob verify rejected: PAYMOB_HMAC not configured', ['ref' => $reference]);
+            return ['success' => false, 'payment_id' => $reference, 'message' => 'Paymob HMAC secret غير مُهيّأ.'];
         }
+        if (! $request->filled('hmac')) {
+            \Log::warning('Paymob verify rejected: missing hmac param', ['ref' => $reference]);
+            return ['success' => false, 'payment_id' => $reference, 'message' => 'توقيع Paymob مفقود.'];
+        }
+
+        $string = $request->input('amount_cents')
+            . $request->input('created_at')
+            . $request->input('currency')
+            . $request->input('error_occured')
+            . $request->input('has_parent_transaction')
+            . $request->input('id')
+            . $request->input('integration_id')
+            . $request->input('is_3d_secure')
+            . $request->input('is_auth')
+            . $request->input('is_capture')
+            . $request->input('is_refunded')
+            . $request->input('is_standalone_payment')
+            . $request->input('is_voided')
+            . $request->input('order')
+            . $request->input('owner')
+            . $request->input('pending')
+            . $request->input('source_data_pan')
+            . $request->input('source_data_sub_type')
+            . $request->input('source_data_type')
+            . $request->input('success');
+
+        if (! hash_equals(hash_hmac('sha512', $string, $hmac), (string) $request->input('hmac'))) {
+            return ['success' => false, 'payment_id' => $reference, 'message' => 'فشل التحقق من توقيع Paymob.'];
+        }
+
 
         $paidNow = in_array((string) $request->input('success'), ['true', '1'], true);
         $order = null;
