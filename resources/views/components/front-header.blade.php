@@ -236,8 +236,8 @@
                         </button>
 
                         <div id="colleges-dropdown-panel"
-                             class="absolute left-0 top-full pt-2 z-50 hidden opacity-0 translate-y-1 pointer-events-none transition-all duration-200 lg:group-hover:block lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:pointer-events-auto"
-                             style="width: min(760px, calc(100vw - 2rem));">
+                             class="absolute start-0 top-full pt-2 z-50 hidden opacity-0 translate-y-1 pointer-events-none transition-all duration-200 lg:group-hover:block lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:pointer-events-auto"
+                             style="width: min(760px, calc(100vw - 2rem)); max-width: calc(100vw - 2rem);">
                             <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
                                 <div class="bg-gradient-to-r from-violet-50 to-indigo-50 px-5 py-3 border-b border-slate-100">
                                     <div class="text-xs font-black uppercase tracking-wider text-violet-700">{{ __('nav.browse_by_college') }}</div>
