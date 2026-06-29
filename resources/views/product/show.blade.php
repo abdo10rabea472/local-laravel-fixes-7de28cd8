@@ -4,6 +4,55 @@
 <link rel="stylesheet" href="{{ asset('css/product.css') }}">
 @endpush
 
+@push('schemas')
+@php
+    $_pimg = $product->images->first();
+    $_pimgUrl = $_pimg ? $_pimg->getUrl('large') : site_setting_url('default_product_image', asset('imges/products/default.jpg'));
+    $_price = $product->effective_price;
+    $_avg = round((float) $product->reviews()->approved()->avg('rating'), 1);
+    $_count = (int) $product->reviews()->approved()->count();
+    $_productSchema = array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'description' => strip_tags($product->short_description ?: $product->description ?: ''),
+        'sku' => $product->sku,
+        'image' => $_pimgUrl,
+        'category' => $product->category?->name,
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => url()->current(),
+            'priceCurrency' => site_setting('currency_code', 'USD'),
+            'price' => number_format((float) $_price, 2, '.', ''),
+            'availability' => ($product->stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        ],
+        'aggregateRating' => $_count > 0 ? [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $_avg,
+            'reviewCount' => $_count,
+        ] : null,
+    ]);
+    $_crumbs = [['name' => 'Home', 'url' => url('/')]];
+    if ($product->category?->parent) {
+        $_crumbs[] = ['name' => $product->category->parent->name, 'url' => url('/category/'.$product->category->parent->slug)];
+    }
+    if ($product->category) {
+        $_crumbs[] = ['name' => $product->category->name, 'url' => url('/category/'.$product->category->slug)];
+    }
+    $_crumbs[] = ['name' => $product->name, 'url' => url()->current()];
+    $_breadSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => array_map(fn($i, $c) => [
+            '@type' => 'ListItem', 'position' => $i + 1, 'name' => $c['name'], 'item' => $c['url'],
+        ], array_keys($_crumbs), $_crumbs),
+    ];
+@endphp
+<script type="application/ld+json">{!! json_encode($_productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+<script type="application/ld+json">{!! json_encode($_breadSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
+
+
 @section('content')
 @php
     $primaryImage = $product->images->first();
