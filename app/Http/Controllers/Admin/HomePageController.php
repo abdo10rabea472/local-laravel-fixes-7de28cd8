@@ -45,7 +45,7 @@ class HomePageController extends Controller
         }
 
         // Image fields (single file each, with optional removal).
-        $imageKeys = ['hero_background', 'cta_bg_image', 'cta_image_1', 'cta_image_2', 'cta_image_3', 'cta_image_4'];
+        $imageKeys = ['hero_background'];
         foreach ($imageKeys as $key) {
             if ($request->hasFile($key)) {
                 $setting = SiteSetting::firstOrNew(['key' => $key]);
