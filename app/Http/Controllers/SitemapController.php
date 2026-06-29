@@ -117,7 +117,9 @@ class SitemapController extends Controller
     {
         $custom = trim((string) site_setting('robots_txt_content', ''));
         if ($custom === '') {
-            $custom = "User-agent: *\nAllow: /\n\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
+            $custom = "User-agent: *\nAllow: /\n\n"
+                ."Disallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout\n"
+                ."Disallow: /*/admin\nDisallow: /*/account\nDisallow: /*/cart\nDisallow: /*/checkout";
         }
 
         $custom .= "\n\nSitemap: ".rtrim(config('app.url'), '/')."/sitemap.xml\n";
