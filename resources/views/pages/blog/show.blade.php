@@ -115,7 +115,7 @@
 
             {{-- BODY --}}
             <article class="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-indigo-600 prose-img:rounded-2xl">
-                {!! $post->content !!}
+                {!! app(\App\Services\InternalLinker::class)->linkProductMentions($post->content) !!}
             </article>
 
             {{-- RELATED --}}
