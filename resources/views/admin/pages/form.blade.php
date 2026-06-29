@@ -24,6 +24,7 @@
 
         @php
             $isFaqsPage = $page->slug === 'faqs';
+            $isAboutPage = $page->slug === 'about';
             $faqItems = [];
             if ($isFaqsPage) {
                 $decoded = json_decode((string) old('content', $page->content), true);
@@ -38,7 +39,45 @@
                     $faqItems[] = ['q' => '', 'a' => '', 'category' => ''];
                 }
             }
+
+            $aboutDefaults = [
+                'hero' => [
+                    'title'    => __('app.about_hero_title'),
+                    'subtitle' => __('app.about_hero_subtitle'),
+                ],
+                'story' => [
+                    'title' => __('app.about_story_title'),
+                    'p1'    => __('app.about_story_p1', ['years' => 5]),
+                    'p2'    => __('app.about_story_p2'),
+                ],
+                'stats' => [
+                    ['label' => __('app.about_stat_products'),   'value' => '', 'color' => 'violet'],
+                    ['label' => __('app.about_stat_categories'), 'value' => '', 'color' => 'indigo'],
+                    ['label' => __('app.about_stat_customers'),  'value' => '', 'color' => 'emerald'],
+                    ['label' => __('app.about_stat_years'),      'value' => '', 'color' => 'amber'],
+                ],
+                'cards' => [
+                    ['icon' => 'fa-bullseye',  'title' => __('app.about_mission_title'), 'desc' => __('app.about_mission_desc'), 'color' => 'violet'],
+                    ['icon' => 'fa-eye',       'title' => __('app.about_vision_title'),  'desc' => __('app.about_vision_desc'),  'color' => 'indigo'],
+                    ['icon' => 'fa-handshake', 'title' => __('app.about_values_title'),  'desc' => __('app.about_values_desc'),  'color' => 'emerald'],
+                ],
+                'team_title' => __('app.about_team_title'),
+                'team' => [
+                    ['name' => __('app.about_team_member1_name'), 'role' => __('app.about_team_member1_role')],
+                    ['name' => __('app.about_team_member2_name'), 'role' => __('app.about_team_member2_role')],
+                    ['name' => __('app.about_team_member3_name'), 'role' => __('app.about_team_member3_role')],
+                    ['name' => __('app.about_team_member4_name'), 'role' => __('app.about_team_member4_role')],
+                ],
+            ];
+            $aboutData = $aboutDefaults;
+            if ($isAboutPage) {
+                $decoded = json_decode((string) old('content', $page->content), true);
+                if (is_array($decoded)) {
+                    $aboutData = array_replace_recursive($aboutDefaults, $decoded);
+                }
+            }
         @endphp
+
 
         @if($isFaqsPage)
             <div class="space-y-3">
