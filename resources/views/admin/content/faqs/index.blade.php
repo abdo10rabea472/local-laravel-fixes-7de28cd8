@@ -9,6 +9,23 @@
 @section('content')
 <x-admin.page :title="__('app.admin_faqs_page_title')" :subtitle="__('app.admin_faqs_page_subtitle')">
     <x-admin.card :title="__('app.admin_faqs_card_all')" icon="fa-circle-question" padding="p-0">
+        {{-- Stats strip --}}
+        <div class="px-5 py-3 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3 flex-wrap text-xs">
+            <div class="text-gray-500 dark:text-gray-400">
+                {{ __('app.admin_pages_form_faq_total') ?? 'الإجمالي' }}:
+                <span class="font-bold text-gray-700 dark:text-gray-200">{{ $faqs->total() }}</span>
+                @if(($q ?? '') !== '' || ($cat ?? '') !== '')
+                    · <span class="text-primary-600 dark:text-primary-400">{{ __('app.admin_pages_form_faq_shown') ?? 'مصفّى' }}</span>
+                @endif
+            </div>
+            <div class="text-gray-500 dark:text-gray-400">
+                {{ __('app.admin_pages_form_page') ?? 'صفحة' }}
+                <span class="font-bold text-gray-700 dark:text-gray-200">{{ $faqs->currentPage() }}</span>
+                {{ __('app.admin_pages_form_of') ?? 'من' }}
+                <span class="font-bold text-gray-700 dark:text-gray-200">{{ max(1, $faqs->lastPage()) }}</span>
+            </div>
+        </div>
+
         {{-- Toolbar: search + category + per page --}}
         <form method="GET" class="p-4 border-b border-gray-100 dark:border-gray-800 grid grid-cols-1 md:grid-cols-12 gap-3">
             <div class="md:col-span-6 relative">
