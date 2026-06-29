@@ -49,7 +49,17 @@
                     <td class="p-4 text-slate-600">{{ $page->sort_order }}</td>
                     <td class="p-4">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ url(app()->getLocale() . '/' . $page->slug) }}" target="_blank"
+                            @php
+                                $viewUrl = match($page->slug) {
+                                    'about'           => url(app()->getLocale() . '/about'),
+                                    'faqs'            => url(app()->getLocale() . '/faqs'),
+                                    'privacy-policy'  => url(app()->getLocale() . '/privacy-policy'),
+                                    'returns-refunds' => url(app()->getLocale() . '/returns-refunds'),
+                                    'contact'         => url(app()->getLocale() . '/contact'),
+                                    default           => url(app()->getLocale() . '/p/' . $page->slug),
+                                };
+                            @endphp
+                            <a href="{{ $viewUrl }}" target="_blank"
                                class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 transition-colors"
                                title="View page">
                                 <i class="fa-solid fa-eye"></i>
