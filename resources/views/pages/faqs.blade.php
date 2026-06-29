@@ -4,17 +4,17 @@
 <style>
     .faq-hero {
         background:
-            radial-gradient(1200px 500px at 10% -20%, rgba(45, 212, 191, .35), transparent 60%),
-            radial-gradient(900px 500px at 100% 0%, rgba(99, 102, 241, .35), transparent 55%),
-            linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #0b1220 100%);
+            radial-gradient(1200px 500px at 10% -20%, rgba(167, 139, 250, .35), transparent 60%),
+            radial-gradient(900px 500px at 100% 0%, rgba(99, 102, 241, .4), transparent 55%),
+            linear-gradient(135deg, #4c1d95 0%, #5b21b6 45%, #3730a3 100%);
     }
     .faq-card {
         transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
     }
-    .faq-card:hover { border-color: rgb(20 184 166 / .35); box-shadow: 0 18px 40px -24px rgb(13 148 136 / .35); }
-    .faq-card.is-open { border-color: rgb(20 184 166 / .55); box-shadow: 0 20px 50px -25px rgb(13 148 136 / .4); }
-    .faq-card.is-open .faq-icon { background: linear-gradient(135deg, #14b8a6, #6366f1); color: #fff; }
-    .faq-card.is-open .faq-chevron { transform: rotate(180deg); color: #14b8a6; }
+    .faq-card:hover { border-color: rgb(139 92 246 / .35); box-shadow: 0 18px 40px -24px rgb(124 58 237 / .35); }
+    .faq-card.is-open { border-color: rgb(139 92 246 / .55); box-shadow: 0 20px 50px -25px rgb(124 58 237 / .4); }
+    .faq-card.is-open .faq-icon { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; }
+    .faq-card.is-open .faq-chevron { transform: rotate(180deg); color: #7c3aed; }
     .faq-answer {
         display: grid;
         grid-template-rows: 0fr;
@@ -22,14 +22,12 @@
     }
     .faq-answer > div { overflow: hidden; }
     .faq-card.is-open .faq-answer { grid-template-rows: 1fr; }
-    .chip {
-        transition: all .2s ease;
-    }
+    .chip { transition: all .2s ease; }
     .chip.active {
-        background: linear-gradient(135deg, #0f766e, #4f46e5);
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
         color: #fff;
         border-color: transparent;
-        box-shadow: 0 10px 25px -12px rgb(20 184 166 / .55);
+        box-shadow: 0 10px 25px -12px rgb(124 58 237 / .55);
     }
     [dir="rtl"] .faq-search-icon { right: auto; left: 1.5rem; }
 </style>
