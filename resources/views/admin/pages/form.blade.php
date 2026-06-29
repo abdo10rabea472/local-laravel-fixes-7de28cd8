@@ -363,9 +363,10 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-    const IS_FAQS_PAGE = @json($isFaqsPage ?? false);
+    const IS_FAQS_PAGE  = @json($isFaqsPage ?? false);
+    const IS_ABOUT_PAGE = @json($isAboutPage ?? false);
 
-    if (!IS_FAQS_PAGE) {
+    if (!IS_FAQS_PAGE && !IS_ABOUT_PAGE) {
         tinymce.init({
             selector: '#content-editor',
             license_key: 'gpl',
@@ -381,7 +382,58 @@
             promotion: false,
             content_style: 'body { font-family: Inter, system-ui, sans-serif; font-size: 15px; line-height: 1.7; }',
         });
-    } else {
+    }
+
+    if (IS_ABOUT_PAGE) {
+        const editor = document.getElementById('about-editor');
+        const hidden = document.getElementById('content-editor');
+        const form   = hidden.closest('form');
+        const teamList = document.getElementById('about-team-list');
+
+        const setDeep = (obj, path, value) => {
+            const keys = path.split('.');
+            let cur = obj;
+            for (let i = 0; i < keys.length - 1; i++) {
+                const k = keys[i];
+                const nextIsIdx = /^\d+$/.test(keys[i + 1]);
+                if (cur[k] == null) cur[k] = nextIsIdx ? [] : {};
+                cur = cur[k];
+            }
+            cur[keys[keys.length - 1]] = value;
+        };
+
+        document.getElementById('about-team-add').addEventListener('click', () => {
+            const row = document.createElement('div');
+            row.className = 'about-team-row bg-white border border-slate-200 rounded-xl p-3 space-y-2';
+            row.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-slate-400">عضو جديد</span>
+                    <button type="button" class="about-team-remove text-rose-500 hover:text-rose-700 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <input type="text" class="team-name w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="الاسم">
+                <input type="text" class="team-role w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="المسمى الوظيفي">
+            `;
+            teamList.appendChild(row);
+        });
+
+        teamList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.about-team-remove');
+            if (btn) btn.closest('.about-team-row').remove();
+        });
+
+        form.addEventListener('submit', () => {
+            const data = {};
+            editor.querySelectorAll('[data-about]').forEach(el => {
+                setDeep(data, el.dataset.about, el.value);
+            });
+            data.team = Array.from(teamList.querySelectorAll('.about-team-row')).map(r => ({
+                name: r.querySelector('.team-name').value.trim(),
+                role: r.querySelector('.team-role').value.trim(),
+            })).filter(m => m.name || m.role);
+            hidden.value = JSON.stringify(data);
+        });
+    } else if (IS_FAQS_PAGE) {
+
         const list      = document.getElementById('faq-list');
         const hidden    = document.getElementById('content-editor');
         const form      = hidden.closest('form');
