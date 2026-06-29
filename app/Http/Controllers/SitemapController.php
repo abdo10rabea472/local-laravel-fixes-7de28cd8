@@ -12,28 +12,60 @@ use Illuminate\Support\Facades\URL;
 
 class SitemapController extends Controller
 {
+    /** Max URLs per sitemap file (spec: 50,000). */
+    private const PER_FILE = 45000;
+
+    /** ===================== INDEX (sitemap.xml) ===================== */
     public function index(): Response
     {
-        $entries = [];
-        $now = now()->toAtomString();
+        $base = rtrim(config('app.url'), '/');
+        $now  = now()->toAtomString();
+        $maps = [];
 
-        $langs = app(\App\Services\LanguageService::class);
-        $codes = $langs->codes();
-        if (empty($codes)) $codes = [config('app.locale', 'en')];
-        $default = optional($langs->default())->code ?? $codes[0];
+        $maps[] = ['loc' => $base.'/sitemap-static.xml', 'lastmod' => $now];
 
-        // path هنا بدون بادئة اللغة (نضيفها لاحقًا لكل لغة)
-        $add = function (string $path, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.7') use (&$entries, $codes) {
-            $path = '/' . ltrim(parse_url($path, PHP_URL_PATH) ?? '/', '/');
-            // أزل أي بادئة لغة موجودة (مثل /ar/... أو /en/...)
-            $segments = explode('/', ltrim($path, '/'), 2);
-            if (isset($segments[0]) && in_array($segments[0], $codes, true)) {
-                $path = '/' . ($segments[1] ?? '');
+        if (\Schema::hasTable('pages')) {
+            $maps[] = ['loc' => $base.'/sitemap-pages.xml', 'lastmod' => $now];
+        }
+        if (\Schema::hasTable('categories')) {
+            $maps[] = ['loc' => $base.'/sitemap-categories.xml', 'lastmod' => $now];
+        }
+
+        if (\Schema::hasTable('products')) {
+            $total = \App\Models\Product::query()
+                ->when(\Schema::hasColumn('products','status'), fn($q) => $q->where('status', 1))
+                ->count();
+            $pages = max(1, (int) ceil($total / self::PER_FILE));
+            for ($i = 1; $i <= $pages; $i++) {
+                $maps[] = ['loc' => $base."/sitemap-products-{$i}.xml", 'lastmod' => $now];
             }
-            $path = rtrim($path, '/') ?: '/';
-            $entries[$path] = compact('path','lastmod','changefreq','priority');
-        };
+        }
 
+        if (\Schema::hasTable('blog_posts')) {
+            $total = \App\Models\BlogPost::published()->count();
+            $pages = max(1, (int) ceil($total / self::PER_FILE));
+            for ($i = 1; $i <= $pages; $i++) {
+                $maps[] = ['loc' => $base."/sitemap-blog-{$i}.xml", 'lastmod' => $now];
+            }
+        }
+
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
+        foreach ($maps as $m) {
+            $xml .= "  <sitemap>\n";
+            $xml .= "    <loc>".htmlspecialchars($m['loc'], ENT_XML1)."</loc>\n";
+            $xml .= "    <lastmod>{$m['lastmod']}</lastmod>\n";
+            $xml .= "  </sitemap>\n";
+        }
+        $xml .= '</sitemapindex>';
+
+        return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
+    }
+
+    /** ===================== STATIC ROUTES ===================== */
+    public function staticPages(): Response
+    {
+        $now = now()->toAtomString();
         $statics = [
             ['home',                  'daily',   '1.0'],
             ['products.index',        'daily',   '0.9'],
@@ -46,65 +78,122 @@ class SitemapController extends Controller
             ['pages.privacy',         'yearly',  '0.3'],
             ['pages.returns',         'yearly',  '0.3'],
         ];
-        foreach ($statics as [$name, $freq, $pri]) {
-            try { $add(route($name, [], false), $now, $freq, $pri); } catch (\Throwable $e) {}
-        }
 
+        $entries = [];
+        foreach ($statics as [$name, $freq, $pri]) {
+            try {
+                $entries[] = ['loc' => route($name), 'lastmod' => $now, 'changefreq' => $freq, 'priority' => $pri];
+            } catch (\Throwable $e) {}
+        }
+        return $this->renderUrlset($entries);
+    }
+
+    /** ===================== CMS PAGES ===================== */
+    public function pages(): Response
+    {
         $reserved = ['about','faqs','privacy-policy','returns-refunds','payment-success','checkout','contact','blog','offers'];
+        $entries = [];
         if (\Schema::hasTable('pages')) {
             Page::query()
                 ->when(\Schema::hasColumn('pages','is_active'), fn($q) => $q->where('is_active', 1))
                 ->whereNotIn('slug', $reserved)
-                ->select(['slug','updated_at'])->limit(500)
-                ->get()->each(function ($p) use ($add) {
-                    if ($p->slug) $add(route('pages.show', $p->slug, false), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
+                ->select(['slug','updated_at'])
+                ->limit(self::PER_FILE)
+                ->get()->each(function ($p) use (&$entries) {
+                    if (!$p->slug) return;
+                    $entries[] = [
+                        'loc' => route('pages.show', $p->slug),
+                        'lastmod' => optional($p->updated_at)?->toAtomString(),
+                        'changefreq' => 'monthly', 'priority' => '0.5',
+                    ];
                 });
         }
+        return $this->renderUrlset($entries);
+    }
 
+    /** ===================== CATEGORIES ===================== */
+    public function categories(): Response
+    {
+        $entries = [];
+        if (\Schema::hasTable('categories')) {
+            Category::query()
+                ->select(['slug','updated_at'])
+                ->orderByDesc('updated_at')
+                ->limit(self::PER_FILE)
+                ->get()->each(function ($c) use (&$entries) {
+                    if (!$c->slug) return;
+                    $entries[] = [
+                        'loc' => route('category.show', $c->slug),
+                        'lastmod' => optional($c->updated_at)?->toAtomString(),
+                        'changefreq' => 'weekly', 'priority' => '0.7',
+                    ];
+                });
+        }
+        return $this->renderUrlset($entries);
+    }
+
+    /** ===================== PRODUCTS (paginated) ===================== */
+    public function products(int $page): Response
+    {
+        $entries = [];
         if (\Schema::hasTable('products')) {
             Product::query()
                 ->when(\Schema::hasColumn('products','status'), fn($q) => $q->where('status', 1))
-                ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
-                ->get()->each(function ($p) use ($add) {
-                    if ($p->slug) $add(route('product.show', $p->slug, false), optional($p->updated_at)?->toAtomString(), 'weekly', '0.8');
+                ->select(['slug','updated_at'])
+                ->orderBy('id')
+                ->forPage($page, self::PER_FILE)
+                ->get()->each(function ($p) use (&$entries) {
+                    if (!$p->slug) return;
+                    $entries[] = [
+                        'loc' => route('product.show', $p->slug),
+                        'lastmod' => optional($p->updated_at)?->toAtomString(),
+                        'changefreq' => 'weekly', 'priority' => '0.8',
+                    ];
                 });
         }
+        if (empty($entries)) abort(404);
+        return $this->renderUrlset($entries);
+    }
 
-        if (\Schema::hasTable('categories')) {
-            Category::query()->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(2000)
-                ->get()->each(function ($c) use ($add) {
-                    if ($c->slug) $add(route('category.show', $c->slug, false), optional($c->updated_at)?->toAtomString(), 'weekly', '0.7');
-                });
-        }
-
+    /** ===================== BLOG (paginated) ===================== */
+    public function blog(int $page): Response
+    {
+        $entries = [];
         if (\Schema::hasTable('blog_posts')) {
             BlogPost::published()
-                ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
-                ->get()->each(function ($b) use ($add) {
-                    if ($b->slug) $add(route('blog.show', $b->slug, false), optional($b->updated_at)?->toAtomString(), 'weekly', '0.6');
+                ->select(['slug','updated_at'])
+                ->orderBy('id')
+                ->forPage($page, self::PER_FILE)
+                ->get()->each(function ($b) use (&$entries) {
+                    if (!$b->slug) return;
+                    $entries[] = [
+                        'loc' => route('blog.show', $b->slug),
+                        'lastmod' => optional($b->updated_at)?->toAtomString(),
+                        'changefreq' => 'weekly', 'priority' => '0.6',
+                    ];
                 });
         }
+        if (empty($entries)) abort(404);
+        return $this->renderUrlset($entries);
+    }
 
-        $base = rtrim(config('app.url'), '/');
-
+    /** Render a <urlset> XML response from an entries array. */
+    private function renderUrlset(array $entries): Response
+    {
         $xml  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'."\n"
-              . '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'."\n"
-              . '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'."\n";
-
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
         foreach ($entries as $e) {
-            $loc = $base . ($e['path'] === '/' ? '' : $e['path']);
             $xml .= "  <url>\n";
-            $xml .= "    <loc>".htmlspecialchars($loc, ENT_XML1)."</loc>\n";
+            $xml .= "    <loc>".htmlspecialchars($e['loc'], ENT_XML1)."</loc>\n";
             if (!empty($e['lastmod'])) $xml .= "    <lastmod>{$e['lastmod']}</lastmod>\n";
-            $xml .= "    <changefreq>{$e['changefreq']}</changefreq>\n";
-            $xml .= "    <priority>{$e['priority']}</priority>\n";
+            if (!empty($e['changefreq'])) $xml .= "    <changefreq>{$e['changefreq']}</changefreq>\n";
+            if (!empty($e['priority'])) $xml .= "    <priority>{$e['priority']}</priority>\n";
             $xml .= "  </url>\n";
         }
         $xml .= '</urlset>';
-
         return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
+
 
 
     public function robots(): Response
