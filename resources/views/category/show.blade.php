@@ -239,9 +239,7 @@
                                     <div class="flex flex-col">
                                         <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">{{ __('app.cat_investment') }}</span>
                                         <span class="text-xl font-black text-slate-400 font-mono tracking-tight">
-                                            {{ number_format($displayPrice, 2) }}
-                                            <span class="text-[11px] font-extrabold text-slate-300 ml-0.5">{{ __('app.cat_egp') }}</span>
-
+                                            {{ money($displayPrice) }}
                                         </span>
                                     </div>
                                     <button disabled
