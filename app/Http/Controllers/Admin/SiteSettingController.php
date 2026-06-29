@@ -87,6 +87,10 @@ class SiteSettingController extends Controller
 
         SiteSetting::clearCache();
 
+        if ($tab === 'seo') {
+            try { \Artisan::call('sitemap:generate'); } catch (\Throwable $e) {}
+        }
+
         return redirect()->route('admin.settings.index', ['tab' => $tab])->with('success', 'تم حفظ الإعدادات بنجاح.');
     }
 
