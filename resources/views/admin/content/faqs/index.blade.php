@@ -173,6 +173,7 @@
 </x-admin.page>
 
 <script>
+    // Add-form: new category button
     document.getElementById('faq-cat-new')?.addEventListener('click', function () {
         const name = prompt('{{ __('app.admin_pages_form_add_faq') ?? 'اسم التصنيف الجديد' }}');
         if (!name) return;
@@ -180,6 +181,19 @@
         const opt = document.createElement('option');
         opt.value = name; opt.textContent = name; opt.selected = true;
         sel.appendChild(opt);
+    });
+
+    // Per-row: new category button (inside each edit form)
+    document.querySelectorAll('.faq-row .faq-cat-new').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const name = prompt('{{ __('app.admin_pages_form_add_faq') ?? 'اسم التصنيف الجديد' }}');
+            if (!name) return;
+            const sel = btn.parentElement.querySelector('.faq-cat-select');
+            if (!sel) return;
+            const opt = document.createElement('option');
+            opt.value = name; opt.textContent = name; opt.selected = true;
+            sel.appendChild(opt);
+        });
     });
 </script>
 @endsection
