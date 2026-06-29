@@ -7,6 +7,22 @@ use Illuminate\View\View;
 
 class PageController extends Controller
 {
+    private const RESERVED_SLUGS = ['about', 'faqs', 'privacy-policy', 'returns-refunds', 'payment-success', 'checkout', 'contact', 'blog', 'offers'];
+
+    public function show(string $slug): View
+    {
+        if (in_array($slug, self::RESERVED_SLUGS, true)) {
+            abort(404);
+        }
+
+        $page = Page::bySlug($slug)->active()->firstOrFail();
+
+        return view('pages.dynamic', [
+            'page' => $page,
+            'seo'  => $this->buildSeo($page, $page->title, (string) ($page->seo_description ?? '')),
+        ]);
+    }
+
     public function faqs(): View
     {
         $page = Page::bySlug('faqs')->active()->first();
