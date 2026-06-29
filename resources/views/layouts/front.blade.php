@@ -329,6 +329,28 @@
     {{-- Instant page navigation: prefetches links on hover/touchstart --}}
     <script src="https://instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 
+    {{-- Perf: auto-apply lazy loading & async decoding to images that don't set it.
+         Skips first 2 images (likely above-the-fold / LCP candidates). --}}
+    <script>
+        (function () {
+            var imgs = document.querySelectorAll('img');
+            imgs.forEach(function (img, i) {
+                if (i < 2) return;
+                if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+                if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+            });
+            var iframes = document.querySelectorAll('iframe');
+            iframes.forEach(function (f) {
+                if (!f.hasAttribute('loading')) f.setAttribute('loading', 'lazy');
+            });
+        })();
+    </script>
+    <style>
+        /* Perf: keep aspect ratio so images without explicit width/height don't cause layout shift */
+        img { max-width: 100%; height: auto; }
+    </style>
+
     @stack('scripts')
 </body>
+
 </html>
