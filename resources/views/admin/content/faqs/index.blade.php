@@ -136,14 +136,14 @@
                             @foreach($allCats as $c)
                                 <option value="{{ $c }}">{{ $c }}</option>
                             @endforeach
-                            <option value="__new__">+ إضافة تصنيف جديد</option>
+                            <option value="__new__">{{ __('app.admin_faqs_add_new_category_opt') }}</option>
                         </select>
                     </div>
-                    <input type="text" id="faq-add-category-new" placeholder="اسم التصنيف الجديد"
+                    <input type="text" id="faq-add-category-new" placeholder="{{ __('app.admin_faqs_new_category_name') }}"
                            class="hidden w-full h-11 px-4 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl text-sm focus:border-violet-500 focus:outline-none">
                 </div>
 
-                <input name="sort_order" type="number" value="{{ $nextSort ?? '' }}" placeholder="{{ __('app.admin_faqs_field_sort_order') }} — تلقائي"
+                <input name="sort_order" type="number" value="{{ $nextSort ?? '' }}" placeholder="{{ __('app.admin_faqs_field_sort_order') }} — {{ __('app.admin_faqs_sort_auto') }}"
                        class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
 
 
@@ -161,13 +161,13 @@
         </x-admin.card>
 
         {{-- Categories management --}}
-        <x-admin.card title="التصنيفات" icon="fa-tags">
+        <x-admin.card :title="__('app.admin_faqs_categories_card')" icon="fa-tags">
             <form method="POST" action="{{ route('admin.faqs.categories.store') }}" class="flex items-center gap-2 mb-4">
                 @csrf
-                <input type="text" name="name" required placeholder="اسم التصنيف"
+                <input type="text" name="name" required placeholder="{{ __('app.admin_faqs_categories_placeholder') }}"
                        class="flex-1 h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 <button class="h-11 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-xl text-sm font-bold whitespace-nowrap">
-                    <i class="fa-solid fa-plus"></i> إضافة تصنيف
+                    <i class="fa-solid fa-plus"></i> {{ __('app.admin_faqs_categories_add') }}
                 </button>
             </form>
             <div class="flex flex-wrap gap-2">
@@ -178,11 +178,11 @@
                             <i class="fa-solid fa-tag text-[10px] text-gray-400"></i> {{ $c }}
                         </a>
                         @if($inUse)
-                            <span title="مرتبط بأسئلة — لا يمكن حذفه" class="text-gray-300 cursor-not-allowed">
+                            <span title="{{ __('app.admin_faqs_categories_locked') }}" class="text-gray-300 cursor-not-allowed">
                                 <i class="fa-solid fa-lock text-[10px]"></i>
                             </span>
                         @else
-                            <form method="POST" action="{{ route('admin.faqs.categories.destroy') }}" class="inline" onsubmit="return confirm('حذف التصنيف من القائمة؟')">
+                            <form method="POST" action="{{ route('admin.faqs.categories.destroy') }}" class="inline" onsubmit="return confirm('{{ __('app.admin_faqs_categories_confirm') }}')">
                                 @csrf @method('DELETE')
                                 <input type="hidden" name="name" value="{{ $c }}">
                                 <button class="text-rose-500 hover:text-rose-700"><i class="fa-solid fa-xmark text-[10px]"></i></button>
@@ -191,63 +191,64 @@
                     </span>
                 @endforeach
                 @if($allCats->isEmpty())
-                    <p class="text-xs text-gray-400">لا توجد تصنيفات بعد</p>
+                    <p class="text-xs text-gray-400">{{ __('app.admin_faqs_categories_empty') }}</p>
                 @endif
             </div>
         </x-admin.card>
 
 
 
+
         {{-- Page & SEO card --}}
-        <x-admin.card title="بيانات الصفحة و SEO" icon="fa-magnifying-glass-chart">
+        <x-admin.card :title="__('app.admin_faqs_seo_card_title')" icon="fa-magnifying-glass-chart">
             <form method="POST" action="{{ route('admin.faqs.seo.update') }}" enctype="multipart/form-data" class="space-y-3">
                 @csrf @method('PUT')
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">العنوان *</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_field_title') }} *</label>
                     <input type="text" name="title" value="{{ old('title', $seoPage->title) }}" required
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">المعرف (Slug) *</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_field_slug') }} *</label>
                     <input type="text" value="{{ $seoPage->slug }}" disabled
                            class="w-full h-11 px-4 bg-gray-100 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-500 cursor-not-allowed">
-                    <p class="text-[11px] text-gray-400 mt-1">ثابت — يستخدم في الرابط /faqs</p>
+                    <p class="text-[11px] text-gray-400 mt-1">{{ __('app.admin_faqs_slug_hint') }}</p>
                 </div>
 
                 <hr class="border-gray-200 dark:border-gray-700">
-                <p class="text-xs font-bold text-gray-500 dark:text-gray-400">SEO</p>
+                <p class="text-xs font-bold text-gray-500 dark:text-gray-400">{{ __('app.admin_faqs_seo_section') }}</p>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">SEO Title</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_seo_title') }}</label>
                     <input type="text" name="seo_title" value="{{ old('seo_title', $seoPage->seo_title) }}" maxlength="70"
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
-                    <p class="text-[11px] text-gray-400 mt-1">≤ 60 حرف موصى به</p>
+                    <p class="text-[11px] text-gray-400 mt-1">{{ __('app.admin_faqs_seo_title_hint') }}</p>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">SEO Keywords</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_seo_keywords') }}</label>
                     <input type="text" name="seo_keywords" value="{{ old('seo_keywords', $seoPage->seo_keywords) }}"
-                           placeholder="faq, shipping, payment, support"
+                           placeholder="{{ __('app.admin_faqs_seo_keywords_placeholder') }}"
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">SEO Description</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_seo_description') }}</label>
                     <textarea name="seo_description" rows="3" maxlength="160"
                               class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">{{ old('seo_description', $seoPage->seo_description) }}</textarea>
-                    <p class="text-[11px] text-gray-400 mt-1">≤ 160 حرف</p>
+                    <p class="text-[11px] text-gray-400 mt-1">{{ __('app.admin_faqs_seo_description_hint') }}</p>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">OG Title</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_og_title') }}</label>
                     <input type="text" name="og_title" value="{{ old('og_title', $seoPage->og_title) }}" maxlength="120"
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">OG Image</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_og_image') }}</label>
                     @if($seoPage->og_image)
                         <img src="{{ $seoPage->og_image_url }}" alt="" class="h-20 rounded-lg mb-2 border border-gray-200 dark:border-gray-700">
                     @endif
@@ -256,35 +257,36 @@
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">OG Description</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_og_description') }}</label>
                     <textarea name="og_description" rows="2" maxlength="200"
                               class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">{{ old('og_description', $seoPage->og_description) }}</textarea>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">Canonical URL</label>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_canonical_url') }}</label>
                     <input type="text" name="canonical_url" value="{{ old('canonical_url', $seoPage->canonical_url) }}"
-                           placeholder="https://example.com/faqs"
+                           placeholder="{{ __('app.admin_faqs_canonical_placeholder') }}"
                            class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 items-end">
                     <div>
-                        <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">الترتيب</label>
+                        <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_faqs_field_sort') }}</label>
                         <input type="number" name="sort_order" value="{{ old('sort_order', $seoPage->sort_order ?? 0) }}"
                                class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                     </div>
                     <label class="h-11 flex items-center gap-2 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm cursor-pointer">
                         <input type="hidden" name="status" value="0">
-                        <input type="checkbox" name="status" value="1" @checked(old('status', $seoPage->status)) class="accent-primary-600"> نشط
+                        <input type="checkbox" name="status" value="1" @checked(old('status', $seoPage->status)) class="accent-primary-600"> {{ __('app.admin_faqs_active') }}
                     </label>
                 </div>
 
                 <button class="w-full h-11 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl">
-                    <i class="fa-solid fa-floppy-disk"></i> حفظ
+                    <i class="fa-solid fa-floppy-disk"></i> {{ __('app.admin_faqs_btn_save_seo') }}
                 </button>
             </form>
         </x-admin.card>
+
 
     </x-slot:side>
 </x-admin.page>
