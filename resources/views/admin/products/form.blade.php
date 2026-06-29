@@ -395,4 +395,24 @@
         </x-slot:side>
     </x-admin.page>
 </form>
+
+{{-- TinyMCE rich editor for product description --}}
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#product-description-editor',
+        license_key: 'gpl',
+        height: 500,
+        directionality: '{{ app()->getLocale() === "ar" ? "rtl" : "ltr" }}',
+        language: '{{ app()->getLocale() === "ar" ? "ar" : "en" }}',
+        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons codesample',
+        toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table codesample | removeformat code fullscreen preview',
+        toolbar_mode: 'wrap',
+        menubar: 'edit view insert format tools table help',
+        image_advtab: true,
+        branding: false,
+        promotion: false,
+        content_style: 'body { font-family: Inter, system-ui, sans-serif; font-size: 15px; line-height: 1.7; }',
+    });
+</script>
 @endsection
