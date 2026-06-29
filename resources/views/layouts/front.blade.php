@@ -26,6 +26,21 @@
     @endif
     <link rel="canonical" href="{{ $canonicalUrl }}">
 
+    {{-- hreflang alternates: same URL, different ?lang= for each active language --}}
+    @php
+        $hreflangBase = strtok($canonicalUrl, '?');
+        $hreflangQuery = parse_url($canonicalUrl, PHP_URL_QUERY);
+        parse_str($hreflangQuery ?? '', $hreflangParams);
+        unset($hreflangParams['lang']);
+        $hreflangSuffix = !empty($hreflangParams) ? ('&' . http_build_query($hreflangParams)) : '';
+        try { $hreflangLangs = app(\App\Services\LanguageService::class)->all(); } catch (\Throwable $e) { $hreflangLangs = collect(); }
+    @endphp
+    @foreach($hreflangLangs as $hl)
+        <link rel="alternate" hreflang="{{ $hl->code }}" href="{{ $hreflangBase }}?lang={{ $hl->code }}{{ $hreflangSuffix }}">
+    @endforeach
+    <link rel="alternate" hreflang="x-default" href="{{ $hreflangBase }}{{ !empty($hreflangParams) ? ('?' . http_build_query($hreflangParams)) : '' }}">
+
+
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ $ogTitle }}">
     <meta property="og:description" content="{{ $ogDescription }}">
