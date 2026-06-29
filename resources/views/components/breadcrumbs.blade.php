@@ -1,4 +1,4 @@
-@props(['items' => []])
+@props(['items' => [], 'emitSchema' => false])
 
 @php
     // Normalize items into [['name' => ..., 'url' => ... (optional)]]
