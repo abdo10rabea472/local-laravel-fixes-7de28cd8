@@ -16,7 +16,11 @@
         $ogTitle = $seo['og_title'] ?? $seoTitle;
         $ogDescription = $seo['og_description'] ?? $seoDescription;
         $ogImage = $seo['og_image'] ?? site_setting_url('default_og_image', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png'));
+        $ogType = $seo['og_type'] ?? 'website';
+        $ogImageAlt = $seo['og_image_alt'] ?? $ogTitle ?? $siteName;
+        $twitterSite = site_setting('twitter_site_handle');
         $schemaMarkup = $seo['schema_markup'] ?? null;
+
     @endphp
 
     <title>{{ $seoTitle }}</title>
@@ -41,20 +45,31 @@
     <link rel="alternate" hreflang="x-default" href="{{ $hreflangBase }}{{ !empty($hreflangParams) ? ('?' . http_build_query($hreflangParams)) : '' }}">
 
 
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
     <meta property="og:title" content="{{ $ogTitle }}">
     <meta property="og:description" content="{{ $ogDescription }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     @if($ogImage)
         <meta property="og:image" content="{{ $ogImage }}">
+        <meta property="og:image:alt" content="{{ $ogImageAlt }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
     @endif
+    @stack('og')
 
     <meta name="twitter:card" content="summary_large_image">
+    @if($twitterSite)
+        <meta name="twitter:site" content="{{ $twitterSite }}">
+    @endif
     <meta name="twitter:title" content="{{ $ogTitle }}">
     <meta name="twitter:description" content="{{ $ogDescription }}">
     @if($ogImage)
         <meta name="twitter:image" content="{{ $ogImage }}">
+        <meta name="twitter:image:alt" content="{{ $ogImageAlt }}">
     @endif
+
 
     @if($schemaMarkup)
         <script type="application/ld+json">{!! $schemaMarkup !!}</script>
@@ -116,12 +131,21 @@
         <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', @json($fbPx)); fbq('track', 'PageView');</script>
     @endif
 
+    {{-- Perf: preconnect + dns-prefetch for third-party origins --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://www.google-analytics.com">
+    <link rel="dns-prefetch" href="https://connect.facebook.net">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/ss.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
 
     @stack('styles')
 
@@ -305,6 +329,28 @@
     {{-- Instant page navigation: prefetches links on hover/touchstart --}}
     <script src="https://instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 
+    {{-- Perf: auto-apply lazy loading & async decoding to images that don't set it.
+         Skips first 2 images (likely above-the-fold / LCP candidates). --}}
+    <script>
+        (function () {
+            var imgs = document.querySelectorAll('img');
+            imgs.forEach(function (img, i) {
+                if (i < 2) return;
+                if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+                if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+            });
+            var iframes = document.querySelectorAll('iframe');
+            iframes.forEach(function (f) {
+                if (!f.hasAttribute('loading')) f.setAttribute('loading', 'lazy');
+            });
+        })();
+    </script>
+    <style>
+        /* Perf: keep aspect ratio so images without explicit width/height don't cause layout shift */
+        img { max-width: 100%; height: auto; }
+    </style>
+
     @stack('scripts')
 </body>
+
 </html>

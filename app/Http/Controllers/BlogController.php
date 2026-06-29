@@ -77,8 +77,11 @@ class BlogController extends Controller
             'og_title'        => $post->meta_title ?: $post->title,
             'og_description'  => $post->meta_description ?: $post->excerpt,
             'og_image'        => $ogImageUrl,
+            'og_image_alt'    => $post->title,
+            'og_type'         => 'article',
             'canonical_url'   => route('blog.show', $post->slug),
             'no_index'        => $post->no_index,
+
         ];
 
         $categories = Category::whereHas('blogPosts')->orderBy('name')->get(['id','name','slug']);
