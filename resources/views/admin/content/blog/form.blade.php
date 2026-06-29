@@ -102,7 +102,7 @@
         <x-admin.card :title="__('app.admin_blog_card_publish')" icon="fa-paper-plane">
             <div class="space-y-3">
                 <button form="blog-form" class="w-full h-12 inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-lg shadow-primary-500/20">
-                    <i class="fa-solid fa-save"></i> {{ \$post->exists ? __('app.admin_blog_btn_save_changes') : __('app.admin_blog_btn_publish_post') }}
+                    <i class="fa-solid fa-save"></i> {{ $post->exists ? __('app.admin_blog_btn_save_changes') : __('app.admin_blog_btn_publish_post') }}
                 </button>
                 <a href="{{ route('admin.blog.index') }}" class="w-full h-11 inline-flex items-center justify-center bg-gray-100 dark:bg-dark-800 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-bold">{{ __('app.admin_blog_btn_cancel') }}</a>
                 @if($post->exists && $post->published_at)

@@ -15,7 +15,7 @@
                             <input name="sort_order" type="number" value="{{ $f->sort_order }}" placeholder="{{ __('app.admin_faqs_field_sort_order') }}"
                                    class="h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
                             <label class="h-11 flex items-center gap-2 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm cursor-pointer">
-                                <input type="checkbox" name="active" value="1" @checked(\$f->active) class="accent-primary-600"> {{ __('app.admin_faqs_label_active') }}
+                                <input type="checkbox" name="active" value="1" @checked($f->active) class="accent-primary-600"> {{ __('app.admin_faqs_label_active') }}
                             </label>
                         </div>
                         <input name="question" value="{{ $f->question }}" placeholder="{{ __('app.admin_faqs_field_question') }}"
