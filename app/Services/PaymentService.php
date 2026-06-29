@@ -69,14 +69,19 @@ class PaymentService
             /** @var \Nafezly\Payments\Interfaces\PaymentInterface $driver */
             $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
 
+            // Always charge the gateway in the BASE/default currency.
+            // The "total" stored on the order is already in base currency; we recompute
+            // defensively so any UI/currency-conversion regressions can never reach the gateway.
+            [$amount, $currencyCode] = $this->resolveChargeAmount($order);
+
             $response = $driver
                 ->setUserId((string) ($order->user_id ?? $order->id))
                 ->setUserFirstName($this->splitName($order->customer_name)[0])
                 ->setUserLastName($this->splitName($order->customer_name)[1])
                 ->setUserEmail($order->email)
                 ->setUserPhone($order->phone ?? '00000000000')
-                ->setAmount((float) $order->total)
-                ->setCurrency($order->currency ?: 'EGP')
+                ->setAmount($amount)
+                ->setCurrency($currencyCode)
                 ->pay();
 
             $hasRedirect = ! empty($response['redirect_url']);
