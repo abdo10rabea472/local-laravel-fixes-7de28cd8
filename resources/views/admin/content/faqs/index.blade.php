@@ -169,6 +169,39 @@
                 @endif
             </div>
         </x-admin.card>
+
+        {{-- SEO card --}}
+        <x-admin.card title="SEO" icon="fa-magnifying-glass-chart">
+            <form method="POST" action="{{ route('admin.faqs.seo.update') }}" class="space-y-3">
+                @csrf @method('PUT')
+                <div>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_pages_form_title_label') ?? 'العنوان' }}</label>
+                    <input type="text" name="title" value="{{ old('title', $seoPage->title) }}"
+                           class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_pages_form_seo_title') ?? 'SEO Title' }}</label>
+                    <input type="text" name="seo_title" value="{{ old('seo_title', $seoPage->seo_title) }}" maxlength="70"
+                           class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
+                    <p class="text-[11px] text-gray-400 mt-1">≤ 60 حرف موصى به</p>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_pages_form_seo_keywords') ?? 'Keywords' }}</label>
+                    <input type="text" name="seo_keywords" value="{{ old('seo_keywords', $seoPage->seo_keywords) }}"
+                           placeholder="faq, shipping, payment, support"
+                           class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_pages_form_seo_description') ?? 'Meta Description' }}</label>
+                    <textarea name="seo_description" rows="3" maxlength="160"
+                              class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">{{ old('seo_description', $seoPage->seo_description) }}</textarea>
+                    <p class="text-[11px] text-gray-400 mt-1">≤ 160 حرف</p>
+                </div>
+                <button class="w-full h-11 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl">
+                    <i class="fa-solid fa-floppy-disk"></i> حفظ بيانات السيو
+                </button>
+            </form>
+        </x-admin.card>
     </x-slot:side>
 </x-admin.page>
 
