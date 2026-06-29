@@ -52,16 +52,19 @@
             <div class="h-1.5 bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500"></div>
             <div class="p-6 sm:p-10 lg:p-14">
                 @if(trim((string) $page->content) !== '')
-                    <div class="prose prose-slate prose-lg max-w-none
+                    <div class="prose prose-slate prose-lg max-w-none break-words [overflow-wrap:anywhere]
                                 prose-headings:font-black prose-headings:tracking-tight
                                 prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4
                                 prose-h3:text-2xl prose-h3:mt-8
-                                prose-a:text-violet-600 prose-a:no-underline hover:prose-a:text-violet-700 hover:prose-a:underline
+                                prose-p:break-words
+                                prose-a:text-violet-600 prose-a:no-underline prose-a:break-all hover:prose-a:text-violet-700 hover:prose-a:underline
                                 prose-strong:text-slate-900
                                 prose-blockquote:border-violet-500 prose-blockquote:bg-violet-50/40 prose-blockquote:rounded-r-xl prose-blockquote:not-italic prose-blockquote:py-1
                                 prose-img:rounded-2xl prose-img:shadow-md
                                 prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-violet-700 prose-code:before:content-none prose-code:after:content-none
+                                prose-pre:whitespace-pre-wrap prose-pre:break-words
                                 prose-table:rounded-xl prose-table:overflow-hidden">
+
                         {!! $page->content !!}
                     </div>
                 @else
