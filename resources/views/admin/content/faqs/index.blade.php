@@ -209,17 +209,36 @@
 </x-admin.page>
 
 <script>
-    // Add-form: new category button
-    document.getElementById('faq-cat-new')?.addEventListener('click', function () {
-        const name = prompt('{{ __('app.admin_pages_form_add_faq') ?? 'اسم التصنيف الجديد' }}');
-        if (!name) return;
+    // Add-form: inline new-category input
+    (function () {
         const sel = document.getElementById('faq-add-category');
-        const opt = document.createElement('option');
-        opt.value = name; opt.textContent = name; opt.selected = true;
-        sel.appendChild(opt);
-    });
+        const inp = document.getElementById('faq-add-category-new');
+        const form = document.getElementById('faq-add-form');
+        if (!sel || !inp || !form) return;
+        sel.addEventListener('change', function () {
+            if (sel.value === '__new__') {
+                inp.classList.remove('hidden');
+                inp.focus();
+            } else {
+                inp.classList.add('hidden');
+                inp.value = '';
+            }
+        });
+        form.addEventListener('submit', function () {
+            if (sel.value === '__new__') {
+                const name = inp.value.trim();
+                if (name) {
+                    const opt = document.createElement('option');
+                    opt.value = name; opt.textContent = name; opt.selected = true;
+                    sel.appendChild(opt);
+                    sel.value = name;
+                } else {
+                    sel.value = '';
+                }
+            }
+        });
+    })();
 
-    // Per-row: new category button (inside each edit form)
     document.querySelectorAll('.faq-row .faq-cat-new').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const name = prompt('{{ __('app.admin_pages_form_add_faq') ?? 'اسم التصنيف الجديد' }}');
