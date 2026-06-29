@@ -21,13 +21,34 @@ class SitemapController extends Controller
             $urls[] = compact('loc','lastmod','changefreq','priority');
         };
 
-        // الروابط الأساسية فقط
-        $add(url('/'), $now, 'daily', '1.0');
-        $add(route('products.index'), $now, 'daily', '0.9');
-        $add(route('blog.index'), $now, 'daily', '0.7');
-        $add(route('pages.faqs'), $now, 'monthly', '0.5');
-        $add(route('pages.privacy'), $now, 'monthly', '0.5');
-        $add(route('pages.returns'), $now, 'monthly', '0.5');
+        // الصفحات الثابتة الأساسية (لتحسين SEO)
+        $statics = [
+            ['home',                  'daily',   '1.0'],
+            ['products.index',        'daily',   '0.9'],
+            ['offers',                'daily',   '0.8'],
+            ['blog.index',            'daily',   '0.7'],
+            ['about',                 'monthly', '0.6'],
+            ['contact',               'monthly', '0.5'],
+            ['track-order',           'monthly', '0.5'],
+            ['pages.faqs',            'monthly', '0.5'],
+            ['pages.privacy',         'yearly',  '0.3'],
+            ['pages.returns',         'yearly',  '0.3'],
+        ];
+        foreach ($statics as [$name, $freq, $pri]) {
+            try { $add(route($name), $now, $freq, $pri); } catch (\Throwable $e) {}
+        }
+
+        // الصفحات المخصّصة من جدول pages (غير المحجوزة)
+        $reserved = ['about','faqs','privacy-policy','returns-refunds','payment-success','checkout','contact','blog','offers'];
+        if (\Schema::hasTable('pages')) {
+            Page::query()
+                ->when(\Schema::hasColumn('pages','is_active'), fn($q) => $q->where('is_active', 1))
+                ->whereNotIn('slug', $reserved)
+                ->select(['slug','updated_at'])->limit(500)
+                ->get()->each(function ($p) use ($add) {
+                    if ($p->slug) $add(route('pages.show', $p->slug), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
+                });
+        }
 
         // المنتجات
         if (\Schema::hasTable('products')) {
