@@ -79,7 +79,9 @@
                             </div>
                             <div class="col-span-8">
                                 <textarea name="t[{{ $group }}][{{ $key }}]" rows="1" dir="auto"
-                                          class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-violet-400"
+                                          data-ai-group="{{ $group }}" data-ai-key="{{ $key }}"
+                                          data-ai-source="{{ e($source) }}"
+                                          class="ai-target w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-violet-400"
                                           placeholder="Translation in {{ $language->native_name }}…">{{ $value }}</textarea>
                             </div>
                         </div>
