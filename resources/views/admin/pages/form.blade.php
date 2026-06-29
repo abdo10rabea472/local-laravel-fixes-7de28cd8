@@ -24,7 +24,8 @@
 
         <div class="space-y-2">
             <label class="text-xs font-bold text-slate-500">المحتوى</label>
-            <textarea name="content" rows="10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">{{ old('content', $page->content) }}</textarea>
+            <textarea id="content-editor" name="content" rows="20" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm">{{ old('content', $page->content) }}</textarea>
+            <p class="text-[11px] text-slate-400">سيظهر هذا المحتوى في الصفحة العامة بدل القالب الافتراضي.</p>
         </div>
 
         <div class="border-t border-slate-100 pt-6">
@@ -92,4 +93,26 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#content-editor',
+        license_key: 'gpl',
+        height: 600,
+        directionality: 'ltr',
+        language: 'en',
+        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount emoticons codesample',
+        toolbar: 'undo redo | blocks fontsize | bold italic underline strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media table codesample | removeformat code fullscreen preview',
+        toolbar_mode: 'wrap',
+        menubar: 'edit view insert format tools table help',
+        image_advtab: true,
+        branding: false,
+        promotion: false,
+        content_style: 'body { font-family: Inter, system-ui, sans-serif; font-size: 15px; line-height: 1.7; }',
+    });
+</script>
+@endpush
 @endsection
+
