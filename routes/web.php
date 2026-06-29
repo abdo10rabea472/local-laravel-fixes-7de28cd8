@@ -154,6 +154,8 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::post('/settings/ai/test', [SiteSettingController::class, 'testAi'])->name('settings.ai.test');
     Route::post('/settings/mail/test', [SiteSettingController::class, 'testMail'])->name('settings.mail.test');
     Route::post('/settings/seo/ping-google', [\App\Http\Controllers\SitemapController::class, 'pingGoogle'])->name('settings.seo.ping');
+    Route::get('/seo/search-console', [\App\Http\Controllers\Admin\SearchConsoleController::class, 'index'])->name('seo.gsc');
+
 
     // Languages
     Route::get('/settings/languages', [\App\Http\Controllers\Admin\LanguageController::class, 'index'])->name('settings.languages.index');
