@@ -154,7 +154,7 @@
                                         </div>
                                     @endif
                                     @if((float)$g->extra_fees > 0)
-                                        <p class="text-xs text-amber-600 font-semibold mt-1">+ رسوم {{ number_format((float)$g->extra_fees, 2) }} {{ config('app.currency','EGP') }}</p>
+                                        <p class="text-xs text-amber-600 font-semibold mt-1">+ رسوم {{ money((float)$g->extra_fees) }}</p>
                                     @endif
                                 </div>
                             </label>
@@ -250,6 +250,11 @@
     let appliedCouponCode = null;
     let shippingCost = 0;
 
+    // Currency-aware formatter — uses global formatMoney() which applies exchange rate + symbol.
+    const fmt = (n) => (typeof window.formatMoney === 'function')
+        ? window.formatMoney(n)
+        : ((Number(n) || 0).toLocaleString() + ' EGP');
+
     function cartHasDiscountedItem() {
         return cart.some(i => discountedProductIds.includes(String(i.id)));
     }
@@ -333,7 +338,7 @@
         itemsEl.innerHTML = '';
         cart.forEach(item => {
             const qty = item.quantity || 1;
-            const lineTotal = ((item.price || 0) * qty).toLocaleString();
+            const lineTotal = fmt((item.price || 0) * qty);
             const max = Number(stockMap[item.id] ?? Infinity);
             const atMax = Number.isFinite(max) && qty >= max;
             const incClasses = atMax
@@ -360,7 +365,7 @@
                                     <i class="fa-solid fa-plus text-xs pointer-events-none"></i>
                                 </button>
                             </div>
-                            <p class="text-sm font-bold text-violet-600">${lineTotal} EGP</p>
+                            <p class="text-sm font-bold text-violet-600">${lineTotal}</p>
                         </div>
                     </div>
                 </div>
@@ -444,7 +449,7 @@
         country.regions.forEach(r => {
             const opt = document.createElement('option');
             opt.value = r.id;
-            const priceLabel = r.cost !== null && r.cost !== undefined ? ` (+${parseFloat(r.cost).toLocaleString()} EGP)` : '';
+            const priceLabel = r.cost !== null && r.cost !== undefined ? ` (+${fmt(parseFloat(r.cost))})` : '';
             opt.textContent = r.name + priceLabel;
             select.appendChild(opt);
         });
@@ -484,21 +489,21 @@
         // Re-cap discount in case cart shrank
         const discount = Math.min(discountAmount, st);
         const total = Math.max(0, st + shippingCost - discount);
-        subtotalEl.textContent = st.toLocaleString() + ' EGP';
-        totalEl.textContent = total.toLocaleString() + ' EGP';
+        subtotalEl.textContent = fmt(st);
+        totalEl.textContent = fmt(total);
 
         const shippingEl = document.getElementById('shipping-display');
         if (shippingCost === 0 && freeShippingEnabled && st >= freeThreshold) {
             shippingEl.textContent = 'Free';
             shippingEl.className = 'font-bold text-emerald-600';
         } else {
-            shippingEl.textContent = shippingCost.toLocaleString() + ' EGP';
+            shippingEl.textContent = fmt(shippingCost);
             shippingEl.className = 'font-bold text-slate-900';
         }
 
         if (discount > 0) {
             discountRow.classList.remove('hidden');
-            discountAmountEl.textContent = '-' + discount.toLocaleString() + ' EGP';
+            discountAmountEl.textContent = '-' + fmt(discount);
         } else {
             discountRow.classList.add('hidden');
         }
@@ -527,7 +532,7 @@
             if (json.ok) {
                 discountAmount = parseFloat(json.discount) || 0;
                 appliedCouponCode = code;
-                couponMsg.textContent = `تم تطبيق الكود ${code} — خصم ${discountAmount.toLocaleString()} EGP`;
+                couponMsg.textContent = `تم تطبيق الكود ${code} — خصم ${fmt(discountAmount)}`;
                 couponMsg.className = 'text-xs mt-2 text-emerald-600 font-bold';
                 window.UL?.toast(`✅ تم تطبيق الكوبون`, 'success');
             } else {
@@ -737,11 +742,11 @@
         const total = Math.max(0, st + shippingCost - discount);
         const shippingEl = document.getElementById('shipping-display');
         if (shippingEl) {
-            shippingEl.textContent = shippingCost.toLocaleString() + ' EGP';
+            shippingEl.textContent = fmt(shippingCost);
             shippingEl.className = 'font-bold text-slate-900';
         }
-        if (subtotalEl) subtotalEl.textContent = st.toLocaleString() + ' EGP';
-        if (totalEl)    totalEl.textContent    = total.toLocaleString() + ' EGP';
+        if (subtotalEl) subtotalEl.textContent = fmt(st);
+        if (totalEl)    totalEl.textContent    = fmt(total);
     }
 
     function debouncedRate() {
