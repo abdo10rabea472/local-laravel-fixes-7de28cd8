@@ -335,15 +335,38 @@
         (function () {
             var imgs = document.querySelectorAll('img');
             imgs.forEach(function (img, i) {
-                if (i < 2) return;
-                if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
-                if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+                if (i >= 2) {
+                    if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+                    if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+                }
+                // SEO: auto-fill missing alt text from nearest meaningful context
+                if (!img.hasAttribute('alt') || img.getAttribute('alt').trim() === '') {
+                    var alt = '';
+                    var data = img.closest('[data-alt-name]');
+                    if (data) alt = data.getAttribute('data-alt-name') || '';
+                    if (!alt) {
+                        var link = img.closest('a');
+                        if (link) alt = (link.getAttribute('aria-label') || link.getAttribute('title') || link.textContent || '').trim();
+                    }
+                    if (!alt) {
+                        var fig = img.closest('figure');
+                        var cap = fig ? fig.querySelector('figcaption') : null;
+                        if (cap) alt = cap.textContent.trim();
+                    }
+                    if (!alt) {
+                        var card = img.closest('article, section, .card, [class*="product"], [class*="post"]');
+                        var h = card ? card.querySelector('h1,h2,h3,h4') : null;
+                        if (h) alt = h.textContent.trim();
+                    }
+                    if (alt) img.setAttribute('alt', alt.replace(/\s+/g, ' ').slice(0, 125));
+                }
             });
             var iframes = document.querySelectorAll('iframe');
             iframes.forEach(function (f) {
                 if (!f.hasAttribute('loading')) f.setAttribute('loading', 'lazy');
             });
         })();
+
     </script>
     <style>
         /* Perf: keep aspect ratio so images without explicit width/height don't cause layout shift */
