@@ -38,7 +38,7 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
         {{-- Breadcrumb --}}
         <nav class="flex items-center gap-2 text-sm text-white/80 mb-6">
-            <a class="hover:text-white transition-colors" href="{{ route('home') }}">Home</a>
+            <a class="hover:text-white transition-colors" href="{{ route('home') }}">{{ __('app.cat_home') }}</a>
             <i class="fa-solid fa-chevron-right text-[10px] text-white/60"></i>
             @if(!$isCollege && $college)
                 <a class="hover:text-white transition-colors" href="{{ route('category.show', $college->slug) }}">{{ $college->name }}</a>
@@ -69,12 +69,13 @@
 
                 <div class="flex flex-wrap gap-2 mt-4">
                     <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold border border-white/20 backdrop-blur-sm">
-                        <i class="fa-solid fa-cube mr-1.5 text-[10px]"></i>{{ $totalProducts }} products
+                        <i class="fa-solid fa-cube mr-1.5 text-[10px]"></i>{{ $totalProducts }} {{ __('app.cat_products') }}
                     </span>
                     @if($departments->isNotEmpty())
                     <span class="px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold border border-white/20 backdrop-blur-sm">
-                        <i class="fa-solid fa-layer-group mr-1.5 text-[10px]"></i>{{ $departments->count() }} departments
+                        <i class="fa-solid fa-layer-group mr-1.5 text-[10px]"></i>{{ $departments->count() }} {{ __('app.cat_departments') }}
                     </span>
+
                     @endif
                 </div>
             </div>
@@ -86,14 +87,15 @@
                     <div class="relative flex-1">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                         <input type="search" name="search" value="{{ request('search') }}"
-                            placeholder="Search products..."
+                            placeholder="{{ __('app.cat_search_placeholder') }}"
                             class="w-full h-11 pl-10 pr-3 bg-white rounded-xl text-sm text-slate-800 outline-none placeholder:text-slate-400">
                     </div>
                     <button type="submit"
                         class="h-11 px-5 bg-white font-bold text-sm rounded-xl shrink-0 hover:bg-slate-50 transition-colors"
                         style="color: {{ $primary }}">
-                        Go
+                        {{ __('app.cat_search_go') }}
                     </button>
+
                 </div>
             </form>
         </div>
@@ -115,7 +117,7 @@
                               ? 'text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.15)]'
                               : 'text-slate-500 hover:text-slate-900 hover:bg-white/70' }}"
                    @if($allActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
-                    All {{ $college->name }}
+                    {{ __('app.cat_all_prefix', ['name' => $college->name]) }}
                 </a>
             @endif
 
@@ -160,13 +162,13 @@
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                    {{ $isCollege ? 'All ' . $category->name . ' Products' : $category->name . ' Products' }}
+                    {{ $isCollege ? __('app.cat_title_all', ['name' => $category->name]) : __('app.cat_title', ['name' => $category->name]) }}
                 </h2>
                 <p class="text-slate-500 text-sm mt-1">
                     @if(request('search'))
-                        {{ $totalProducts }} results for "{{ request('search') }}"
+                        {{ __('app.cat_results_for', ['count' => $totalProducts, 'term' => request('search')]) }}
                     @else
-                        {{ $totalProducts }} product{{ $totalProducts !== 1 ? 's' : '' }} available
+                        {{ __('app.cat_available', ['count' => $totalProducts]) }}
                     @endif
                 </p>
             </div>
@@ -174,11 +176,12 @@
                 @if(request('search'))<input type="hidden" name="search" value="{{ request('search') }}">@endif
                 <select name="sort" onchange="this.form.submit()"
                     class="h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm font-semibold outline-none shadow-sm hover:border-slate-300 transition-colors">
-                    <option value="newest" @selected(request('sort', 'newest') === 'newest')>Newest</option>
-                    <option value="price_asc" @selected(request('sort') === 'price_asc')>Price ↑</option>
-                    <option value="price_desc" @selected(request('sort') === 'price_desc')>Price ↓</option>
-                    <option value="name" @selected(request('sort') === 'name')>A → Z</option>
+                    <option value="newest" @selected(request('sort', 'newest') === 'newest')>{{ __('app.cat_sort_newest') }}</option>
+                    <option value="price_asc" @selected(request('sort') === 'price_asc')>{{ __('app.cat_sort_price_asc') }}</option>
+                    <option value="price_desc" @selected(request('sort') === 'price_desc')>{{ __('app.cat_sort_price_desc') }}</option>
+                    <option value="name" @selected(request('sort') === 'name')>{{ __('app.cat_sort_name') }}</option>
                 </select>
+
             </form>
         </div>
 
@@ -215,7 +218,7 @@
                                     </span>
                                 @endif
                                 <span class="absolute inset-0 m-auto h-fit w-fit z-30 px-4 py-2 text-xs font-black rounded-xl bg-slate-900/90 text-white shadow-xl uppercase tracking-widest backdrop-blur-sm border border-white/10 transform -rotate-3">
-                                    Sold Out
+                                    {{ __('app.cat_sold_out') }}
                                 </span>
                                 <img src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="lazy"
                                     onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'"
@@ -225,7 +228,7 @@
                             <div class="p-6 flex-1 flex flex-col justify-between bg-slate-50/30">
                                 <div>
                                     <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 mb-2">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Out of Stock
+                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> {{ __('app.cat_out_of_stock') }}
                                     </span>
                                     <h2 class="text-base font-extrabold text-slate-400 tracking-tight line-clamp-1">{{ $product->name }}</h2>
                                     @if($product->short_description)
@@ -234,10 +237,11 @@
                                 </div>
                                 <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-200/60">
                                     <div class="flex flex-col">
-                                        <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Investment</span>
+                                        <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">{{ __('app.cat_investment') }}</span>
                                         <span class="text-xl font-black text-slate-400 font-mono tracking-tight">
                                             {{ number_format($displayPrice, 2) }}
-                                            <span class="text-[11px] font-extrabold text-slate-300 ml-0.5">EGP</span>
+                                            <span class="text-[11px] font-extrabold text-slate-300 ml-0.5">{{ __('app.cat_egp') }}</span>
+
                                         </span>
                                     </div>
                                     <button disabled
@@ -264,12 +268,13 @@
 
                                 @if($hasDiscount && $discountPercent > 0)
                                     <div class="absolute top-4 right-4 z-10 bg-gradient-to-br from-rose-500 to-red-600 text-white font-black text-[11px] px-3 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(244,63,94,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-6 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
-                                        SAVE {{ $discountPercent }}%
+                                        {{ __('app.cat_save', ['percent' => $discountPercent]) }}
                                     </div>
                                 @elseif($product->featured)
                                     <div class="absolute top-4 right-4 z-10 bg-gradient-to-br from-amber-500 to-orange-600 text-white font-black text-[10px] px-2.5 py-1.5 rounded-xl shadow-[0_8px_16px_rgba(245,158,11,0.3),inset_0_2px_4px_rgba(255,255,255,0.2)] border-t border-white/20 transform rotate-2 group-hover:scale-110 group-hover:rotate-0 transition-all duration-300">
-                                        BEST SELLER
+                                        {{ __('app.cat_best_seller') }}
                                     </div>
+
                                 @endif
 
                                 <img src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="lazy"
@@ -284,13 +289,14 @@
                                         @if($lowStock)
                                             <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/70">
                                                 <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                                Only {{ $product->stock }} left
+                                                {{ __('app.cat_only_left', ['count' => $product->stock]) }}
                                             </span>
                                         @else
                                             <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70">
                                                 <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                In Stock ({{ $product->stock }} items)
+                                                {{ __('app.cat_in_stock', ['count' => $product->stock]) }}
                                             </span>
+
                                         @endif
                                     </div>
 
@@ -306,13 +312,14 @@
 
                                 <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-100">
                                     <div class="flex flex-col">
-                                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Investment</span>
+                                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{{ __('app.cat_investment') }}</span>
                                         @if($hasDiscount)
-                                            <del class="text-[11px] text-slate-400 font-bold">{{ number_format($compareAt, 2) }} EGP</del>
+                                            <del class="text-[11px] text-slate-400 font-bold">{{ number_format($compareAt, 2) }} {{ __('app.cat_egp') }}</del>
                                         @endif
                                         <span class="text-xl font-black text-slate-900 font-mono tracking-tight">
                                             {{ number_format($displayPrice, 2) }}
-                                            <span class="text-[11px] font-extrabold ml-0.5" style="color: {{ $primary }}">EGP</span>
+                                            <span class="text-[11px] font-extrabold ml-0.5" style="color: {{ $primary }}">{{ __('app.cat_egp') }}</span>
+
                                         </span>
                                     </div>
                                     <button type="button"
@@ -338,17 +345,18 @@
                 style="background: linear-gradient(135deg, {{ $primary }}22, {{ $secondary }}22);">
                 <i class="fa-solid fa-box-open text-3xl" style="color: {{ $primary }}"></i>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">No products found</h3>
+            <h3 class="text-lg font-bold text-slate-800">{{ __('app.cat_no_products_title') }}</h3>
             <p class="text-slate-500 text-sm mt-2">
                 @if(request('search'))
-                    Try another search term.
+                    {{ __('app.cat_try_another_search') }}
                 @else
-                    Products will appear here once added to this {{ $isCollege ? 'college' : 'department' }}.
+                    {{ $isCollege ? __('app.cat_no_products_college') : __('app.cat_no_products_department') }}
                 @endif
             </p>
             @if(request('search'))
                 <a href="{{ route('category.show', $category->slug) }}"
-                   class="inline-block mt-4 font-bold text-sm" style="color: {{ $primary }}">Clear search</a>
+                   class="inline-block mt-4 font-bold text-sm" style="color: {{ $primary }}">{{ __('app.cat_clear_search') }}</a>
+
             @endif
         </div>
         @endif
