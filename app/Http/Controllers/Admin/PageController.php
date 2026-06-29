@@ -15,11 +15,18 @@ class PageController extends Controller
     {
     }
 
+    private const SYSTEM_SLUGS = ['about', 'faqs', 'privacy-policy', 'returns-refunds'];
+    private const HIDDEN_SLUGS = ['checkout'];
+
     public function index(): View
     {
-        $pages = Page::orderBy('sort_order')->orderBy('title')->paginate(20);
+        $pages = Page::whereNotIn('slug', self::HIDDEN_SLUGS)
+            ->orderBy('sort_order')->orderBy('title')->paginate(20);
 
-        return view('admin.pages.index', compact('pages') + ['activeTab' => 'pages']);
+        return view('admin.pages.index', compact('pages') + [
+            'activeTab' => 'pages',
+            'systemSlugs' => self::SYSTEM_SLUGS,
+        ]);
     }
 
     public function create(): View
