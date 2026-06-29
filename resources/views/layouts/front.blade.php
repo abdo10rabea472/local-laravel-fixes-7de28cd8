@@ -7,7 +7,9 @@
 
     @php
         $seo = $seo ?? [];
-        $seoTitle = $seo['seo_title'] ?? 'UNI-LAB MARKET';
+        $siteName = site_setting('site_name', 'UNI-LAB MARKET');
+        $pageTitle = $seo['seo_title'] ?? null;
+        $seoTitle = $pageTitle ? ($pageTitle.' — '.$siteName) : $siteName;
         $seoDescription = $seo['seo_description'] ?? '';
         $seoKeywords = $seo['seo_keywords'] ?? '';
         $canonicalUrl = $seo['canonical_url'] ?? url()->current();

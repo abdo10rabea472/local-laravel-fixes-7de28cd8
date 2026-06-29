@@ -28,8 +28,11 @@ class HandleLocalePrefix
     protected array $excluded = [
         'admin', 'api', 'storage', 'build', 'vendor', 'up',
         'locale', 'currency', 'payments', 'livewire', 'broadcasting',
-        'sitemap.xml', 'robots.txt', 'favicon.ico',
+        'sitemap.xml', 'sitemap.xml.gz', 'robots.txt', 'favicon.ico',
     ];
+
+    /** Path prefixes to skip (regex segments) */
+    protected array $excludedPrefixes = ['#^sitemap-\d+\.xml(\.gz)?$#', '#^[a-f0-9]{32}\.txt$#'];
 
     public function handle(Request $request, Closure $next)
     {
@@ -38,11 +41,16 @@ class HandleLocalePrefix
         // ── Case A: URL has NO locale prefix ─────────────────────────────────
         if (!$first || !$this->languages->exists($first)) {
             // Only auto-redirect plain GET page requests to /{locale}/...
+            $isExcludedPrefix = false;
+            foreach ($this->excludedPrefixes as $rx) {
+                if ($first && preg_match($rx, $first)) { $isExcludedPrefix = true; break; }
+            }
             if (
                 $request->isMethod('GET')
                 && !$request->ajax()
                 && !$request->expectsJson()
                 && !in_array($first, $this->excluded, true)
+                && !$isExcludedPrefix
             ) {
                 $locale = $this->resolveLocale($request);
                 if ($locale) {

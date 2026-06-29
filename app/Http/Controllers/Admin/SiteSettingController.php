@@ -86,6 +86,7 @@ class SiteSettingController extends Controller
         }
 
         SiteSetting::clearCache();
+        \App\Http\Controllers\SitemapController::flushCache();
 
         return redirect()->route('admin.settings.index', ['tab' => $tab])->with('success', 'تم حفظ الإعدادات بنجاح.');
     }

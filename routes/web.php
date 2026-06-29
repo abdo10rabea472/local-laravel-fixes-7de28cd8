@@ -40,8 +40,12 @@ use App\Http\Controllers\CartController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // SEO: sitemap & robots (no locale prefix)
-Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
-Route::get('/robots.txt', [\App\Http\Controllers\SitemapController::class, 'robots'])->name('robots');
+Route::get('/sitemap.xml',          [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap.xml.gz',       [\App\Http\Controllers\SitemapController::class, 'gzip'])->name('sitemap.gz');
+Route::get('/sitemap-{n}.xml',      [\App\Http\Controllers\SitemapController::class, 'chunk'])->whereNumber('n')->name('sitemap.chunk');
+Route::get('/sitemap-{n}.xml.gz',   [\App\Http\Controllers\SitemapController::class, 'chunkGzip'])->whereNumber('n')->name('sitemap.chunk.gz');
+Route::get('/robots.txt',           [\App\Http\Controllers\SitemapController::class, 'robots'])->name('robots');
+Route::get('/{key}.txt', [\App\Http\Controllers\SitemapController::class, 'indexnowKey'])->where('key', '[a-f0-9]{32}');
 
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 // Checkout — all routes require an authenticated end-user (web guard).

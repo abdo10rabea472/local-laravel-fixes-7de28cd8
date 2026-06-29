@@ -1,5 +1,31 @@
 <div class="space-y-8" x-data="{ pingStatus:'', pinging:false }">
 
+    {{-- Site Identity (moved from General) --}}
+    <div>
+        <h4 class="text-sm font-bold text-slate-800 dark:text-gray-100 mb-4 flex items-center gap-2">
+            <span class="h-6 w-1 rounded-full bg-indigo-500"></span>
+            {{ __('app.admin_settings_general_site_name') }}
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 dark:text-gray-400">{{ __('app.admin_settings_general_site_name') }}</label>
+                <input type="text" name="site_name" value="{{ site_setting('site_name', 'UNI-LAB MARKET') }}" class="w-full h-11 px-4 bg-slate-50 dark:bg-dark-800 border border-slate-200 dark:border-gray-800 rounded-2xl text-sm text-slate-800 dark:text-gray-100">
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-slate-500 dark:text-gray-400">{{ __('app.admin_settings_general_primary_color') }}</label>
+                <div class="flex items-center gap-3">
+                    <input type="color" name="primary_color" value="{{ site_setting('primary_color', '#6366f1') }}" class="h-11 w-16 rounded-xl border border-slate-200 dark:border-gray-800 bg-white dark:bg-dark-800 p-1">
+                    <input type="text" name="primary_color_text" value="{{ site_setting('primary_color', '#6366f1') }}" class="flex-1 h-11 px-4 bg-slate-50 dark:bg-dark-800 border border-slate-200 dark:border-gray-800 rounded-2xl text-sm font-mono text-slate-800 dark:text-gray-100">
+                </div>
+            </div>
+            <div class="space-y-2 md:col-span-2">
+                <label class="text-xs font-bold text-slate-500 dark:text-gray-400">{{ __('app.admin_settings_general_welcome_message') }}</label>
+                <textarea name="welcome_message" rows="3" class="w-full px-4 py-3 bg-slate-50 dark:bg-dark-800 border border-slate-200 dark:border-gray-800 rounded-2xl text-sm text-slate-800 dark:text-gray-100">{{ site_setting('welcome_message') }}</textarea>
+            </div>
+        </div>
+    </div>
+
+
     {{-- Quick links / status --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <a href="{{ url('/sitemap.xml') }}" target="_blank"
