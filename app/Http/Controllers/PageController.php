@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
 use App\Models\Page;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class PageController extends Controller
