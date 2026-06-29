@@ -449,7 +449,7 @@
         country.regions.forEach(r => {
             const opt = document.createElement('option');
             opt.value = r.id;
-            const priceLabel = r.cost !== null && r.cost !== undefined ? ` (+${parseFloat(r.cost).toLocaleString()} EGP)` : '';
+            const priceLabel = r.cost !== null && r.cost !== undefined ? ` (+${fmt(parseFloat(r.cost))})` : '';
             opt.textContent = r.name + priceLabel;
             select.appendChild(opt);
         });
