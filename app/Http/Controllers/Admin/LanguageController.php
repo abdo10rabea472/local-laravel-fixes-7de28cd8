@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AdminOtpMail;
 use App\Models\AuditLog;
 use App\Models\Language;
 use Illuminate\Http\Request;
