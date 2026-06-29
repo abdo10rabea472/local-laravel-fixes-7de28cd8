@@ -45,20 +45,31 @@
     <link rel="alternate" hreflang="x-default" href="{{ $hreflangBase }}{{ !empty($hreflangParams) ? ('?' . http_build_query($hreflangParams)) : '' }}">
 
 
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:site_name" content="{{ $siteName }}">
+    <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
     <meta property="og:title" content="{{ $ogTitle }}">
     <meta property="og:description" content="{{ $ogDescription }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     @if($ogImage)
         <meta property="og:image" content="{{ $ogImage }}">
+        <meta property="og:image:alt" content="{{ $ogImageAlt }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
     @endif
+    @stack('og')
 
     <meta name="twitter:card" content="summary_large_image">
+    @if($twitterSite)
+        <meta name="twitter:site" content="{{ $twitterSite }}">
+    @endif
     <meta name="twitter:title" content="{{ $ogTitle }}">
     <meta name="twitter:description" content="{{ $ogDescription }}">
     @if($ogImage)
         <meta name="twitter:image" content="{{ $ogImage }}">
+        <meta name="twitter:image:alt" content="{{ $ogImageAlt }}">
     @endif
+
 
     @if($schemaMarkup)
         <script type="application/ld+json">{!! $schemaMarkup !!}</script>
