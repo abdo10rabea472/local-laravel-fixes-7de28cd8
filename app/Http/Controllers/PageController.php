@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Faq;
 use App\Models\Page;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
@@ -12,25 +11,9 @@ class PageController extends Controller
 {
     private const RESERVED_SLUGS = ['about', 'faqs', 'privacy-policy', 'returns-refunds', 'payment-success', 'checkout', 'contact', 'blog', 'offers'];
 
-    /** Reserved slug → canonical route name. */
-    private const RESERVED_REDIRECTS = [
-        'checkout'        => 'checkout',
-        'faqs'            => 'pages.faqs',
-        'privacy-policy'  => 'pages.privacy',
-        'returns-refunds' => 'pages.returns',
-        'payment-success' => 'pages.payment-success',
-        'blog'            => 'blog.index',
-        'offers'          => 'offers.index',
-        'contact'         => 'contact',
-    ];
-
-    public function show(string $slug): View|RedirectResponse
+    public function show(string $slug): View
     {
         if (in_array($slug, self::RESERVED_SLUGS, true)) {
-            $name = self::RESERVED_REDIRECTS[$slug] ?? null;
-            if ($name && \Route::has($name)) {
-                return redirect()->route($name, [], 301);
-            }
             abort(404);
         }
 
