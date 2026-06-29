@@ -4,7 +4,9 @@
 
 @section('settings-content')
 <style>[x-cloak]{display:none !important;}</style>
-<div class="space-y-6" x-data="{ open:false, edit:null, form:{} }">
+<div class="space-y-6" x-data="{ open:false, edit:null, form:{}, defOpen:false, defLang:{id:null,code:'',name:'',url:''} }">
+    {{-- /Alpine root --}}
+
     {{-- Alerts --}}
     @if(session('success'))<div class="p-4 rounded-2xl bg-emerald-50 text-emerald-700 text-sm font-bold border border-emerald-100">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-sm font-bold border border-rose-100">{{ session('error') }}</div>@endif
