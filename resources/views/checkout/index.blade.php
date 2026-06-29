@@ -742,11 +742,11 @@
         const total = Math.max(0, st + shippingCost - discount);
         const shippingEl = document.getElementById('shipping-display');
         if (shippingEl) {
-            shippingEl.textContent = shippingCost.toLocaleString() + ' EGP';
+            shippingEl.textContent = fmt(shippingCost);
             shippingEl.className = 'font-bold text-slate-900';
         }
-        if (subtotalEl) subtotalEl.textContent = st.toLocaleString() + ' EGP';
-        if (totalEl)    totalEl.textContent    = total.toLocaleString() + ' EGP';
+        if (subtotalEl) subtotalEl.textContent = fmt(st);
+        if (totalEl)    totalEl.textContent    = fmt(total);
     }
 
     function debouncedRate() {
