@@ -39,9 +39,17 @@ use App\Http\Controllers\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// SEO: sitemap & robots (no locale prefix)
+// SEO: sitemap index + segmented sitemaps + robots
 Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap-static.xml', [\App\Http\Controllers\SitemapController::class, 'staticPages'])->name('sitemap.static');
+Route::get('/sitemap-pages.xml', [\App\Http\Controllers\SitemapController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap-categories.xml', [\App\Http\Controllers\SitemapController::class, 'categories'])->name('sitemap.categories');
+Route::get('/sitemap-products-{page}.xml', [\App\Http\Controllers\SitemapController::class, 'products'])
+    ->where('page', '[0-9]+')->name('sitemap.products');
+Route::get('/sitemap-blog-{page}.xml', [\App\Http\Controllers\SitemapController::class, 'blog'])
+    ->where('page', '[0-9]+')->name('sitemap.blog');
 Route::get('/robots.txt', [\App\Http\Controllers\SitemapController::class, 'robots'])->name('robots');
+
 Route::get('/{key}.txt', [\App\Http\Controllers\SitemapController::class, 'indexnowKey'])->where('key', '[a-f0-9]{32}');
 
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
