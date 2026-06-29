@@ -39,6 +39,10 @@ use App\Http\Controllers\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// SEO: sitemap & robots (no locale prefix)
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [\App\Http\Controllers\SitemapController::class, 'robots'])->name('robots');
+
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 // Checkout — all routes require an authenticated end-user (web guard).
 Route::middleware('auth')->group(function () {
