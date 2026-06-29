@@ -148,6 +148,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::post('/settings/languages/{language}/default', [\App\Http\Controllers\Admin\LanguageController::class, 'setDefault'])->name('settings.languages.default');
     Route::get('/settings/languages/{language}/translations', [\App\Http\Controllers\Admin\LanguageController::class, 'translations'])->name('settings.languages.translations');
     Route::post('/settings/languages/{language}/translations', [\App\Http\Controllers\Admin\LanguageController::class, 'saveTranslations'])->name('settings.languages.translations.save');
+    Route::post('/settings/languages/{language}/translations/ai-one', [\App\Http\Controllers\Admin\LanguageController::class, 'aiTranslateOne'])->name('settings.languages.translations.ai_one');
 
     // Currencies
     Route::get('/settings/currencies', [\App\Http\Controllers\Admin\CurrencyController::class, 'index'])->name('settings.currencies.index');
