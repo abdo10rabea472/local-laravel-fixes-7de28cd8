@@ -489,21 +489,21 @@
         // Re-cap discount in case cart shrank
         const discount = Math.min(discountAmount, st);
         const total = Math.max(0, st + shippingCost - discount);
-        subtotalEl.textContent = st.toLocaleString() + ' EGP';
-        totalEl.textContent = total.toLocaleString() + ' EGP';
+        subtotalEl.textContent = fmt(st);
+        totalEl.textContent = fmt(total);
 
         const shippingEl = document.getElementById('shipping-display');
         if (shippingCost === 0 && freeShippingEnabled && st >= freeThreshold) {
             shippingEl.textContent = 'Free';
             shippingEl.className = 'font-bold text-emerald-600';
         } else {
-            shippingEl.textContent = shippingCost.toLocaleString() + ' EGP';
+            shippingEl.textContent = fmt(shippingCost);
             shippingEl.className = 'font-bold text-slate-900';
         }
 
         if (discount > 0) {
             discountRow.classList.remove('hidden');
-            discountAmountEl.textContent = '-' + discount.toLocaleString() + ' EGP';
+            discountAmountEl.textContent = '-' + fmt(discount);
         } else {
             discountRow.classList.add('hidden');
         }
