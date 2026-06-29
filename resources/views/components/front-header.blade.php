@@ -469,7 +469,7 @@
 
                 @if(($navCategories ?? collect())->isNotEmpty())
                 <div class="pt-2 border-t border-slate-100">
-                    <p class="text-xs font-black text-slate-400 uppercase tracking-wider px-4 mb-2">Colleges</p>
+                    <p class="text-xs font-black text-slate-400 uppercase tracking-wider px-4 mb-2">{{ __('nav.all_colleges') }}</p>
                     @foreach($navCategories ?? [] as $college)
                     <a href="{{ route('category.show', $college->slug) }}" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 font-semibold text-slate-700">
                         <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-[10px] font-black" style="background: linear-gradient(135deg, {{ $college->primary_color ?? '#7c3aed' }}, {{ $college->secondary_color ?? '#6366f1' }});">
