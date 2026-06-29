@@ -9,8 +9,9 @@
     $discountPercent = $product->discount_percent;
     $inStock = $product->stock > 0;
 @endphp
+@php $convertedPrice = convert_price($displayPrice); @endphp
+<article class="group flex flex-col rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300" data-id="{{ $product->id }}" data-price="{{ $convertedPrice }}">
 
-<article class="group flex flex-col rounded-2xl bg-white border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300" data-id="{{ $product->id }}" data-price="{{ $displayPrice }}">
     <a href="{{ route('product.show', $product->slug) }}" class="relative aspect-square bg-slate-50 flex items-center justify-center p-4 overflow-hidden">
         @if($hasDiscount && $discountPercent > 0)
             <span class="absolute top-3 left-3 z-10 bg-rose-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">-{{ $discountPercent }}%</span>
@@ -35,10 +36,11 @@
         <div class="mt-auto pt-4 flex items-end justify-between gap-2 border-t border-slate-100 mt-3">
             <div>
                 @if($hasDiscount)
-                    <del class="text-xs text-slate-400 block">{{ number_format($compareAt, 2) }} EGP</del>
+                    <del class="text-xs text-slate-400 block">{{ money($compareAt) }}</del>
                 @endif
-                <span class="text-lg font-black text-slate-900">{{ number_format($displayPrice, 2) }} <span class="text-xs font-bold text-slate-500">EGP</span></span>
+                <span class="text-lg font-black text-slate-900">{{ money($displayPrice) }}</span>
             </div>
+
             @if($inStock)
                 <button type="button" onclick="event.preventDefault(); addToCart(this);"
                     class="add-btn shrink-0 h-9 px-3 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold rounded-xl transition-colors">

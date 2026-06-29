@@ -251,7 +251,7 @@ function renderCart() {
                 <img src="${item.image}" alt="${item.name}" class="w-24 h-20 object-contain bg-slate-50 rounded-lg border">
                 <div class="flex-1">
                     <h4 class="font-semibold text-sm leading-tight mb-1">${item.name}</h4>
-                    <p class="text-emerald-600 font-bold">${item.price.toLocaleString()} EGP</p>
+                    <p class="text-emerald-600 font-bold">${window.formatMoney ? window.formatMoney(item.price) : item.price.toLocaleString() + ' EGP'}</p>
                     <div class="flex items-center justify-between mt-4">
                         <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden">
                             <button onclick="changeQuantity('${item.id}', -1)" class="px-3 py-1 text-lg hover:bg-amber-400">-</button>
@@ -273,7 +273,7 @@ function updateTotal() {
     const totalEl = document.querySelector('.price_cart_toral');
     if (!totalEl) return;
     const total = window.cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-    totalEl.textContent = `${total.toLocaleString()} EGP`;
+    totalEl.textContent = window.formatMoney ? window.formatMoney(total) : `${total.toLocaleString()} EGP`;
 }
 
 function showToast(msg) {
