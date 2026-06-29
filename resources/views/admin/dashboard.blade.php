@@ -254,7 +254,7 @@
                     labels: REVENUE_LABELS,
                     datasets: [
                         {
-                            label: 'Revenue (EGP)',
+                            label: @json(__('app.admin_dashboard_revenue_label', ['code' => optional($currentCurrency ?? null)->code ?? 'EGP'])),
                             data: REVENUE_DATA,
                             borderColor: '#22c55e',
                             backgroundColor: 'rgba(34,197,94,0.08)',
@@ -262,7 +262,7 @@
                             pointBackgroundColor: '#22c55e', pointRadius: 4,
                         },
                         {
-                            label: 'Orders',
+                            label: @json(__('app.admin_dashboard_orders_label')),
                             data: ORDERS_DATA,
                             borderColor: '#3b82f6',
                             backgroundColor: 'transparent',
