@@ -29,28 +29,16 @@ class PageController extends Controller
     {
         $page = Page::bySlug('faqs')->active()->first();
 
-        $defaultFaqs = [
-            ['q' => 'How long does delivery take?', 'a' => 'Standard delivery within Cairo and Giza takes 2–4 business days. Delivery to other governorates usually takes 4–7 business days.'],
-            ['q' => 'Do you ship to universities and laboratories?', 'a' => 'Yes! We offer special shipping and invoicing services for universities, research centers, and educational institutions across Egypt.'],
-            ['q' => 'What payment methods do you accept?', 'a' => 'We accept Vodafone Cash, Fawry, credit/debit cards, and Cash on Delivery through secure encrypted gateways.'],
-            ['q' => 'Do your products come with warranty?', 'a' => 'Most laboratory equipment comes with 1 to 3 years manufacturer warranty. Glassware and consumables are covered for manufacturing defects only.'],
-            ['q' => 'Can I return an item if I changed my mind?', 'a' => 'Yes, you can return most items within 30 days if they are in original unused condition with all packaging.'],
-            ['q' => 'Are the prices inclusive of VAT?', 'a' => 'All prices shown include VAT (14%). No additional tax will be added at checkout.'],
-            ['q' => 'Do you provide technical support after purchase?', 'a' => 'Our technical team helps with installation, calibration, and usage via phone, WhatsApp, and email.'],
-            ['q' => 'Can I get a quote for bulk orders?', 'a' => 'Yes. Send requirements to ' . (\App\Models\SiteSetting::get('contact_email') ?: 'ahmedkhamis@gmail.com') . ' and we will reply within 24 hours.'],
-        ];
-
-        // Prefer DB-managed FAQs (admin/faqs). Fall back to legacy page content / defaults.
-        $dbFaqs = [];
+        // Single source of truth: faqs table (managed from /admin/faqs).
+        $faqs = [];
         if (Schema::hasTable('faqs')) {
-            $dbFaqs = Faq::query()
+            $faqs = Faq::query()
                 ->where('active', true)
                 ->orderBy('category')->orderBy('sort_order')->orderBy('id')
                 ->get(['question', 'answer', 'category'])
                 ->map(fn ($f) => ['q' => $f->question, 'a' => $f->answer, 'category' => $f->category ?: 'General'])
                 ->all();
         }
-        $faqs = !empty($dbFaqs) ? $dbFaqs : $this->parseFaqs($page?->content, $defaultFaqs);
 
         return view('pages.faqs', [
             'page' => $page,
