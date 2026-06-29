@@ -289,13 +289,14 @@
                                         @if($lowStock)
                                             <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100/70">
                                                 <span class="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                                Only {{ $product->stock }} left
+                                                {{ __('app.cat_only_left', ['count' => $product->stock]) }}
                                             </span>
                                         @else
                                             <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100/70">
                                                 <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                In Stock ({{ $product->stock }} items)
+                                                {{ __('app.cat_in_stock', ['count' => $product->stock]) }}
                                             </span>
+
                                         @endif
                                     </div>
 
