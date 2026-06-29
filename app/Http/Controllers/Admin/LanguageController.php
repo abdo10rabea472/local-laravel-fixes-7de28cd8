@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class LanguageController extends Controller
 {
@@ -51,10 +56,59 @@ class LanguageController extends Controller
         return back()->with('success', 'Language deleted.');
     }
 
-    public function setDefault(Language $language)
+    public function setDefault(Request $request, Language $language)
     {
+        $admin = Auth::guard('admin')->user();
+        abort_unless($admin, 403);
+
+        // Rate-limit: 5 attempts / 10 min per admin+IP
+        $key = 'lang-default:'.$admin->id.'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages([
+                'confirm_code' => "Too many attempts. Try again in {$seconds}s.",
+            ]);
+        }
+
+        $request->validate([
+            'password'     => ['required', 'string'],
+            'confirm_code' => ['required', 'string'],
+            'understand'   => ['accepted'],
+        ]);
+
+        // Verify admin password
+        if (!Hash::check($request->password, $admin->password)) {
+            RateLimiter::hit($key, 600);
+            throw ValidationException::withMessages(['password' => 'Incorrect password.']);
+        }
+
+        // Verify typed confirmation matches the language code exactly (case-sensitive)
+        if (!hash_equals((string) $language->code, (string) $request->confirm_code)) {
+            RateLimiter::hit($key, 600);
+            throw ValidationException::withMessages([
+                'confirm_code' => 'Confirmation text does not match the language code.',
+            ]);
+        }
+
+        RateLimiter::clear($key);
+
+        $previous = Language::where('is_default', true)->where('id', '!=', $language->id)->pluck('code')->all();
         $language->update(['is_default' => true, 'is_active' => true]);
-        return back()->with('success', 'Default language updated.');
+
+        AuditLog::create([
+            'action'     => 'language.set_default',
+            'actor_type' => 'admin',
+            'actor_id'   => $admin->id,
+            'ip'         => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 500),
+            'context'    => json_encode([
+                'language_id'   => $language->id,
+                'language_code' => $language->code,
+                'previous'      => $previous,
+            ]),
+        ]);
+
+        return back()->with('success', 'Default language updated securely.');
     }
 
     /**
