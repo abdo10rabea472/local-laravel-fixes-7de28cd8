@@ -78,6 +78,11 @@ class PageController extends Controller
 
     public function destroy(Page $page): RedirectResponse
     {
+        if (in_array($page->slug, self::SYSTEM_SLUGS, true)) {
+            return redirect()->route('admin.pages.index')
+                ->with('error', 'This is a system page and cannot be deleted. You can disable it instead.');
+        }
+
         if ($page->og_image) {
             $this->imageService->deletePaths($page->og_image);
         }
