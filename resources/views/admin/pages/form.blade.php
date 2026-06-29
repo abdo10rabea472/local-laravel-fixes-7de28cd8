@@ -80,85 +80,22 @@
 
 
         @if($isFaqsPage)
-            <div class="space-y-3">
-                <div class="flex items-center justify-between gap-3 flex-wrap">
-                    <div>
-                        <label class="text-xs font-bold text-slate-500">{{ __('app.admin_pages_form_faqs_label') }}</label>
-                        <p class="text-[11px] text-slate-400 mt-1">
-                            {{ __('app.admin_pages_form_faq_total') }}: <span id="faq-total" class="font-bold text-slate-600">{{ count($faqItems) }}</span>
-                            — {{ __('app.admin_pages_form_faq_hint') }}
-                        </p>
-                    </div>
-                    <button type="button" id="faq-add" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-xl">
-                        <i class="fa-solid fa-plus"></i> {{ __('app.admin_pages_form_add_faq') }}
-                    </button>
+            <div class="bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-2xl p-6 text-center space-y-4">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm text-violet-600 text-2xl">
+                    <i class="fa-solid fa-circle-question"></i>
                 </div>
-
-                <div class="flex items-center gap-3 flex-wrap">
-                    <div class="relative flex-1 min-w-[220px]">
-                        <input type="text" id="faq-search" @lang('app.admin_pages_form_faq_search_placeholder')
-                               class="w-full h-11 ps-10 pe-4 bg-white border border-slate-200 rounded-xl text-sm focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 outline-none">
-                        <i class="fa-solid fa-magnifying-glass absolute start-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    </div>
-                    <select id="faq-perpage" class="h-11 px-3 bg-white border border-slate-200 rounded-xl text-sm">
-                        <option value="20">20 / {{ __('app.admin_pages_form_per_page') }}</option>
-                        <option value="50">50 / {{ __('app.admin_pages_form_per_page') }}</option>
-                        <option value="100">100 / {{ __('app.admin_pages_form_per_page') }}</option>
-                    </select>
+                <div>
+                    <h4 class="text-base font-bold text-slate-800">{{ __('app.admin_pages_form_faqs_label') }}</h4>
+                    <p class="text-sm text-slate-600 mt-2 max-w-lg mx-auto">
+                        {{ __('app.admin_faqs_moved_notice') ?? 'تتم إدارة الأسئلة الشائعة الآن من صفحة مخصصة بتصميم أفضل.' }}
+                    </p>
                 </div>
-
-                <div id="faq-list" class="space-y-3">
-                    @foreach($faqItems as $i => $item)
-                    <div class="faq-row bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3" data-idx="{{ $i }}">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-slate-500">{{ __('app.admin_pages_form_faq_num') }} <span class="faq-index">{{ $i + 1 }}</span></span>
-                            <button type="button" class="faq-remove text-rose-500 hover:text-rose-700 text-xs font-bold inline-flex items-center gap-1">
-                                <i class="fa-solid fa-trash"></i> حذف
-                            </button>
-                        </div>
-                        <input type="text" class="faq-q w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm" placeholder="السؤال" value="{{ $item['q'] }}">
-                        <textarea class="faq-a w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm" rows="3" placeholder="الإجابة">{{ $item['a'] }}</textarea>
-                        @php
-                            $defaultCats = ['Shipping', 'Payment', 'Warranty', 'Returns', 'Support', 'Orders', 'General'];
-                        @endphp
-                        <div class="flex items-center gap-2">
-                            <select class="faq-cat flex-1 h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs">
-                                <option value="">{{ __('app.admin_pages_form_select_category') }}</option>
-                                @foreach($defaultCats as $cat)
-                                    <option value="{{ $cat }}" @selected($item['category'] === $cat)>{{ $cat }}</option>
-                                @endforeach
-                                @if($item['category'] && !in_array($item['category'], $defaultCats, true))
-                                    <option value="{{ $item['category'] }}" selected>{{ $item['category'] }}</option>
-                                @endif
-                            </select>
-                            <button type="button" class="faq-cat-new inline-flex items-center gap-1 h-10 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold whitespace-nowrap">
-                                <i class="fa-solid fa-plus"></i> تصنيف جديد
-                            </button>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-
-
-                <div id="faq-empty" class="hidden text-center py-10 text-sm text-slate-500 bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
-                    لا توجد نتائج مطابقة للبحث.
-                </div>
-
-                <div id="faq-pager" class="flex items-center justify-between gap-3 pt-2">
-                    <button type="button" id="faq-prev" class="inline-flex items-center gap-2 h-10 px-4 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-chevron-right"></i> {{ __('app.admin_pages_form_prev') }}
-                    </button>
-                    <div class="text-xs text-slate-500">
-                        {{ __('app.admin_pages_form_page') }} <span id="faq-page" class="font-bold text-slate-700">1</span> {{ __('app.admin_pages_form_of') }} <span id="faq-pages" class="font-bold text-slate-700">1</span>
-                        · <span id="faq-shown">0</span> ظاهر
-                    </div>
-                    <button type="button" id="faq-next" class="inline-flex items-center gap-2 h-10 px-4 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
-                        {{ __('app.admin_pages_form_next') }} <i class="fa-solid fa-chevron-left"></i>
-                    </button>
-                </div>
-
-                <textarea name="content" id="content-editor" class="hidden">{{ old('content', $page->content) }}</textarea>
+                <a href="{{ route('admin.faqs.index') }}" class="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    {{ __('app.admin_faqs_manage') ?? 'إدارة الأسئلة الشائعة' }}
+                </a>
             </div>
+            <textarea name="content" class="hidden">{{ old('content', $page->content) }}</textarea>
         @elseif($isAboutPage)
             @php
                 $sectionClass = 'bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4';
