@@ -54,6 +54,11 @@ $tabs = [
         'icon' => 'fa-credit-card',
         'route' => route('admin.settings.payment-gateways.index'),
     ],
+    'seo' => [
+        'label' => __('app.admin_settings_layout_tab_seo'),
+        'icon' => 'fa-magnifying-glass-chart',
+        'route' => route('admin.settings.index', ['tab' => 'seo']),
+    ],
 ];
 
 $seoTabs = [

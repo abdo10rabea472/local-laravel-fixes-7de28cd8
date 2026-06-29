@@ -28,6 +28,7 @@ class HandleLocalePrefix
     protected array $excluded = [
         'admin', 'api', 'storage', 'build', 'vendor', 'up',
         'locale', 'currency', 'payments', 'livewire', 'broadcasting',
+        'sitemap.xml', 'robots.txt', 'favicon.ico',
     ];
 
     public function handle(Request $request, Closure $next)
