@@ -11,7 +11,7 @@
          style="background-image: radial-gradient(circle at 20% 20%, rgba(139,92,246,.35), transparent 40%), radial-gradient(circle at 80% 0%, rgba(59,130,246,.25), transparent 45%);"></div>
     <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-slate-50"></div>
 
-    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <div class="relative mx-auto px-4 sm:px-6 py-16 sm:py-20" style="max-width: 121rem;">
         <nav class="flex items-center gap-2 text-xs text-slate-300 mb-6">
             <a href="{{ url('/') }}" class="hover:text-white transition-colors">{{ __('messages.home') ?? 'Home' }}</a>
             <i class="fa-solid fa-angle-left text-[10px] opacity-60"></i>
