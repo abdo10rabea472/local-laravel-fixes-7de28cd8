@@ -93,6 +93,7 @@ class SitemapController extends Controller
 
     public function robots(): Response
     {
+        $this->useCanonicalRoot();
         $custom = trim((string) site_setting('robots_txt_content', ''));
         if ($custom === '') {
             $custom = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
