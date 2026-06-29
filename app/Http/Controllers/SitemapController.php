@@ -98,24 +98,7 @@ class SitemapController extends Controller
     {
         $custom = trim((string) site_setting('robots_txt_content', ''));
         if ($custom === '') {
-            $custom = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
-        }
-
-        // إلحاق Allow صريح لكل صفحات الموقع المأخوذة من sitemap
-        $allowLines = [];
-        try {
-            $xml = @simplexml_load_string($this->index()->getContent());
-            if ($xml) {
-                $base = rtrim(url('/'), '/');
-                foreach ($xml->url as $u) {
-                    $path = parse_url((string) $u->loc, PHP_URL_PATH) ?: '/';
-                    $allowLines[$path] = "Allow: {$path}";
-                }
-            }
-        } catch (\Throwable $e) {}
-
-        if ($allowLines) {
-            $custom .= "\n\n# جميع صفحات الموقع\n".implode("\n", $allowLines);
+            $custom = "User-agent: *\nAllow: /\n\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
         }
 
         $custom .= "\n\nSitemap: ".url('/sitemap.xml')."\n";
