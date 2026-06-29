@@ -233,7 +233,7 @@
 @push('scripts')
 <script>
     const REVENUE_LABELS = @json($revenueLabels);
-    const REVENUE_DATA   = @json($revenueSeries);
+    const REVENUE_DATA   = @json(collect($revenueSeries)->map(fn($v) => round(convert_price((float) $v), 2))->all());
     const ORDERS_DATA    = @json($ordersSeries);
     const CATEGORY_LABELS = @json($categoryStats->pluck('category_name'));
     const CATEGORY_DATA   = @json($categoryStats->pluck('count'));
