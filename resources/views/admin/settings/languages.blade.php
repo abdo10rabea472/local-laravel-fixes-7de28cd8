@@ -11,7 +11,9 @@
     @if(session('success'))<div class="p-4 rounded-2xl bg-emerald-50 text-emerald-700 text-sm font-bold border border-emerald-100">{{ session('success') }}</div>@endif
     @if(session('warning'))<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm font-bold border border-amber-200"><i class="fa-solid fa-triangle-exclamation mr-2"></i>{{ session('warning') }}</div>@endif
     @if(session('error'))<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-sm font-bold border border-rose-100"><i class="fa-solid fa-circle-xmark mr-2"></i>{{ session('error') }}</div>@endif
-    @if($errors->any())<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-sm border border-rose-100">{{ $errors->first() }}</div>@endif
+    {{-- Hide top error banner for default-modal field errors (shown inline inside the modal) --}}
+    @php $modalErrorKeys = ['password','confirm_code','understand']; $otherErrors = collect($errors->keys())->diff($modalErrorKeys); @endphp
+    @if($otherErrors->count())<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-sm border border-rose-100">{{ $errors->first($otherErrors->first()) }}</div>@endif
 
     {{-- Main Container --}}
     <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
