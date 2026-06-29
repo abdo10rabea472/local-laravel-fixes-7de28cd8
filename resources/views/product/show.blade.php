@@ -55,6 +55,16 @@
 
 @section('content')
 @php
+    $_breadItems = [['name' => 'الرئيسية', 'url' => url('/')]];
+    if ($product->category?->parent) { $_breadItems[] = ['name' => $product->category->parent->name, 'url' => url('/category/'.$product->category->parent->slug)]; }
+    if ($product->category) { $_breadItems[] = ['name' => $product->category->name, 'url' => url('/category/'.$product->category->slug)]; }
+    $_breadItems[] = ['name' => $product->name];
+@endphp
+<div class="max-w-7xl mx-auto px-4">
+    <x-breadcrumbs :items="$_breadItems" />
+</div>
+
+@php
     $primaryImage = $product->images->first();
     $imageUrl = $primaryImage ? $primaryImage->getUrl('large') : site_setting_url('default_product_image', asset('imges/products/default.jpg'));
     $hasDiscount = $product->sale_price && $product->sale_price < $product->price;
