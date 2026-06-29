@@ -38,4 +38,9 @@ return [
     'empty_title'          => 'No products found',
     'empty_subtitle'       => 'Try adjusting your filters or search term.',
     'empty_clear'          => 'Clear all filters',
+
+    // Product card
+    'card_add_to_cart'     => 'Add to cart',
+    'card_out_of_stock'    => 'Out',
+    'card_currency'        => 'EGP',
 ];
