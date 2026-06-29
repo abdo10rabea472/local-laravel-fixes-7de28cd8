@@ -45,6 +45,11 @@
                         {{ $group }} <span class="opacity-60">({{ count($data['keys']) }})</span>
                     </button>
                 @endforeach
+                <button type="button" @click="tab='__new__'"
+                        :class="tab==='__new__' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 border border-emerald-300'"
+                        class="px-3 py-1.5 rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-plus mr-1"></i> Add new keys
+                </button>
                 <div class="ml-auto">
                     <input type="text" x-model="q" placeholder="Search keys…"
                            class="h-9 px-3 bg-white border border-slate-200 rounded-xl text-sm">
