@@ -123,7 +123,8 @@ class SitemapController extends Controller
 
     public function pingGoogle()
     {
-        $sitemap = url('/sitemap.xml');
+        $this->useCanonicalRoot();
+        $sitemap = request()->getSchemeAndHttpHost().'/sitemap.xml';
         $host    = parse_url($sitemap, PHP_URL_HOST);
 
         // الموقع لازم يكون publicly accessible (مش localhost/127.0.0.1)
