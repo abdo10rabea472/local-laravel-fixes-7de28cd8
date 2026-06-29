@@ -102,10 +102,10 @@
 
                 <div class="flex items-end gap-3">
                     @if($hasDiscount)
-                        <span class="text-4xl font-black" style="color: {{ $accent }}">{{ number_format($displayPrice, 2) }} <span class="text-xl font-normal text-slate-500">EGP</span></span>
-                        <del class="text-lg text-slate-400">{{ number_format($product->price, 2) }} EGP</del>
+                        <span class="text-4xl font-black" style="color: {{ $accent }}">{{ money($displayPrice) }}</span>
+                        <del class="text-lg text-slate-400">{{ money($product->price) }}</del>
                     @else
-                        <span class="text-4xl font-black text-slate-900">{{ number_format($displayPrice, 2) }} <span class="text-xl font-normal text-slate-500">EGP</span></span>
+                        <span class="text-4xl font-black text-slate-900">{{ money($displayPrice) }}</span>
                     @endif
                 </div>
 
