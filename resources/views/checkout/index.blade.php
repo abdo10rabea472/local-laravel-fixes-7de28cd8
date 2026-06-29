@@ -365,7 +365,7 @@
                                     <i class="fa-solid fa-plus text-xs pointer-events-none"></i>
                                 </button>
                             </div>
-                            <p class="text-sm font-bold text-violet-600">${lineTotal} EGP</p>
+                            <p class="text-sm font-bold text-violet-600">${lineTotal}</p>
                         </div>
                     </div>
                 </div>
