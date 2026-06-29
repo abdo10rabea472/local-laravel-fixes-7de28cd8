@@ -24,6 +24,7 @@
 
         @php
             $isFaqsPage = $page->slug === 'faqs';
+            $isAboutPage = $page->slug === 'about';
             $faqItems = [];
             if ($isFaqsPage) {
                 $decoded = json_decode((string) old('content', $page->content), true);
@@ -38,7 +39,45 @@
                     $faqItems[] = ['q' => '', 'a' => '', 'category' => ''];
                 }
             }
+
+            $aboutDefaults = [
+                'hero' => [
+                    'title'    => __('app.about_hero_title'),
+                    'subtitle' => __('app.about_hero_subtitle'),
+                ],
+                'story' => [
+                    'title' => __('app.about_story_title'),
+                    'p1'    => __('app.about_story_p1', ['years' => 5]),
+                    'p2'    => __('app.about_story_p2'),
+                ],
+                'stats' => [
+                    ['label' => __('app.about_stat_products'),   'value' => '', 'color' => 'violet'],
+                    ['label' => __('app.about_stat_categories'), 'value' => '', 'color' => 'indigo'],
+                    ['label' => __('app.about_stat_customers'),  'value' => '', 'color' => 'emerald'],
+                    ['label' => __('app.about_stat_years'),      'value' => '', 'color' => 'amber'],
+                ],
+                'cards' => [
+                    ['icon' => 'fa-bullseye',  'title' => __('app.about_mission_title'), 'desc' => __('app.about_mission_desc'), 'color' => 'violet'],
+                    ['icon' => 'fa-eye',       'title' => __('app.about_vision_title'),  'desc' => __('app.about_vision_desc'),  'color' => 'indigo'],
+                    ['icon' => 'fa-handshake', 'title' => __('app.about_values_title'),  'desc' => __('app.about_values_desc'),  'color' => 'emerald'],
+                ],
+                'team_title' => __('app.about_team_title'),
+                'team' => [
+                    ['name' => __('app.about_team_member1_name'), 'role' => __('app.about_team_member1_role')],
+                    ['name' => __('app.about_team_member2_name'), 'role' => __('app.about_team_member2_role')],
+                    ['name' => __('app.about_team_member3_name'), 'role' => __('app.about_team_member3_role')],
+                    ['name' => __('app.about_team_member4_name'), 'role' => __('app.about_team_member4_role')],
+                ],
+            ];
+            $aboutData = $aboutDefaults;
+            if ($isAboutPage) {
+                $decoded = json_decode((string) old('content', $page->content), true);
+                if (is_array($decoded)) {
+                    $aboutData = array_replace_recursive($aboutDefaults, $decoded);
+                }
+            }
         @endphp
+
 
         @if($isFaqsPage)
             <div class="space-y-3">
@@ -120,6 +159,132 @@
 
                 <textarea name="content" id="content-editor" class="hidden">{{ old('content', $page->content) }}</textarea>
             </div>
+        @elseif($isAboutPage)
+            @php
+                $sectionClass = 'bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4';
+                $inputClass   = 'w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm';
+                $areaClass    = 'w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm';
+                $labelClass   = 'text-[11px] font-bold text-slate-500 uppercase tracking-wider';
+                $colorOptions = ['violet','indigo','emerald','amber','rose','sky','blue','fuchsia','teal','orange'];
+            @endphp
+
+            <div id="about-editor" class="space-y-5">
+                <p class="text-xs text-slate-500 -mb-1">تحكم في كل أقسام صفحة "من نحن". اترك الحقل فارغًا لاستخدام القيمة الافتراضية.</p>
+
+                {{-- Hero --}}
+                <div class="{{ $sectionClass }}">
+                    <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-violet-500"></i> قسم الهيرو (Hero)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="{{ $labelClass }}">العنوان</label>
+                            <input type="text" data-about="hero.title" value="{{ $aboutData['hero']['title'] }}" class="{{ $inputClass }}">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="{{ $labelClass }}">العنوان الفرعي</label>
+                            <input type="text" data-about="hero.subtitle" value="{{ $aboutData['hero']['subtitle'] }}" class="{{ $inputClass }}">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Story --}}
+                <div class="{{ $sectionClass }}">
+                    <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-indigo-500"></i> قسم القصة (Our Story)
+                    </h4>
+                    <div class="space-y-1.5">
+                        <label class="{{ $labelClass }}">العنوان</label>
+                        <input type="text" data-about="story.title" value="{{ $aboutData['story']['title'] }}" class="{{ $inputClass }}">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="{{ $labelClass }}">الفقرة الأولى</label>
+                        <textarea data-about="story.p1" rows="3" class="{{ $areaClass }}">{{ $aboutData['story']['p1'] }}</textarea>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="{{ $labelClass }}">الفقرة الثانية</label>
+                        <textarea data-about="story.p2" rows="3" class="{{ $areaClass }}">{{ $aboutData['story']['p2'] }}</textarea>
+                    </div>
+                </div>
+
+                {{-- Stats --}}
+                <div class="{{ $sectionClass }}">
+                    <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-emerald-500"></i> الإحصائيات (4 بطاقات)
+                    </h4>
+                    <p class="text-[11px] text-slate-400">اترك حقل القيمة فارغًا لحساب الرقم تلقائيًا من قاعدة البيانات.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($aboutData['stats'] as $i => $stat)
+                            <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-2" data-about-stat="{{ $i }}">
+                                <div class="text-[11px] font-bold text-slate-400">بطاقة {{ $i + 1 }}</div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <input type="text" data-about="stats.{{ $i }}.label" value="{{ $stat['label'] }}" placeholder="التسمية" class="col-span-2 h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                                    <input type="text" data-about="stats.{{ $i }}.value" value="{{ $stat['value'] }}" placeholder="قيمة (اختياري)" class="h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                                </div>
+                                <select data-about="stats.{{ $i }}.color" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                                    @foreach($colorOptions as $c)
+                                        <option value="{{ $c }}" @selected(($stat['color'] ?? 'violet') === $c)>{{ ucfirst($c) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Mission / Vision / Values --}}
+                <div class="{{ $sectionClass }}">
+                    <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-rose-500"></i> الرسالة والرؤية والقيم (3 بطاقات)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @foreach($aboutData['cards'] as $i => $card)
+                            <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-2">
+                                <div class="text-[11px] font-bold text-slate-400">بطاقة {{ $i + 1 }}</div>
+                                <input type="text" data-about="cards.{{ $i }}.icon" value="{{ $card['icon'] }}" placeholder="fa-bullseye" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs font-mono">
+                                <input type="text" data-about="cards.{{ $i }}.title" value="{{ $card['title'] }}" placeholder="العنوان" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                                <textarea data-about="cards.{{ $i }}.desc" rows="3" placeholder="الوصف" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs">{{ $card['desc'] }}</textarea>
+                                <select data-about="cards.{{ $i }}.color" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs">
+                                    @foreach($colorOptions as $c)
+                                        <option value="{{ $c }}" @selected(($card['color'] ?? 'violet') === $c)>{{ ucfirst($c) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Team --}}
+                <div class="{{ $sectionClass }}">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-users text-blue-500"></i> الفريق
+                        </h4>
+                        <button type="button" id="about-team-add" class="inline-flex items-center gap-1 text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg">
+                            <i class="fa-solid fa-plus"></i> إضافة عضو
+                        </button>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="{{ $labelClass }}">عنوان قسم الفريق</label>
+                        <input type="text" data-about="team_title" value="{{ $aboutData['team_title'] }}" class="{{ $inputClass }}">
+                    </div>
+                    <div id="about-team-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        @foreach($aboutData['team'] as $i => $m)
+                            <div class="about-team-row bg-white border border-slate-200 rounded-xl p-3 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[11px] font-bold text-slate-400">عضو {{ $i + 1 }}</span>
+                                    <button type="button" class="about-team-remove text-rose-500 hover:text-rose-700 text-xs font-bold">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="team-name w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="الاسم" value="{{ $m['name'] }}">
+                                <input type="text" class="team-role w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="المسمى الوظيفي" value="{{ $m['role'] }}">
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <textarea name="content" id="content-editor" class="hidden">{{ old('content', $page->content) }}</textarea>
+            </div>
         @else
             <div class="space-y-2">
                 <label class="text-xs font-bold text-slate-500">المحتوى</label>
@@ -127,6 +292,7 @@
                 <p class="text-[11px] text-slate-400">سيظهر هذا المحتوى في الصفحة العامة بدل القالب الافتراضي.</p>
             </div>
         @endif
+
 
         <div class="border-t border-slate-100 pt-6">
             <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
@@ -197,9 +363,10 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-    const IS_FAQS_PAGE = @json($isFaqsPage ?? false);
+    const IS_FAQS_PAGE  = @json($isFaqsPage ?? false);
+    const IS_ABOUT_PAGE = @json($isAboutPage ?? false);
 
-    if (!IS_FAQS_PAGE) {
+    if (!IS_FAQS_PAGE && !IS_ABOUT_PAGE) {
         tinymce.init({
             selector: '#content-editor',
             license_key: 'gpl',
@@ -215,7 +382,58 @@
             promotion: false,
             content_style: 'body { font-family: Inter, system-ui, sans-serif; font-size: 15px; line-height: 1.7; }',
         });
-    } else {
+    }
+
+    if (IS_ABOUT_PAGE) {
+        const editor = document.getElementById('about-editor');
+        const hidden = document.getElementById('content-editor');
+        const form   = hidden.closest('form');
+        const teamList = document.getElementById('about-team-list');
+
+        const setDeep = (obj, path, value) => {
+            const keys = path.split('.');
+            let cur = obj;
+            for (let i = 0; i < keys.length - 1; i++) {
+                const k = keys[i];
+                const nextIsIdx = /^\d+$/.test(keys[i + 1]);
+                if (cur[k] == null) cur[k] = nextIsIdx ? [] : {};
+                cur = cur[k];
+            }
+            cur[keys[keys.length - 1]] = value;
+        };
+
+        document.getElementById('about-team-add').addEventListener('click', () => {
+            const row = document.createElement('div');
+            row.className = 'about-team-row bg-white border border-slate-200 rounded-xl p-3 space-y-2';
+            row.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-slate-400">عضو جديد</span>
+                    <button type="button" class="about-team-remove text-rose-500 hover:text-rose-700 text-xs font-bold"><i class="fa-solid fa-trash"></i></button>
+                </div>
+                <input type="text" class="team-name w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="الاسم">
+                <input type="text" class="team-role w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs" placeholder="المسمى الوظيفي">
+            `;
+            teamList.appendChild(row);
+        });
+
+        teamList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.about-team-remove');
+            if (btn) btn.closest('.about-team-row').remove();
+        });
+
+        form.addEventListener('submit', () => {
+            const data = {};
+            editor.querySelectorAll('[data-about]').forEach(el => {
+                setDeep(data, el.dataset.about, el.value);
+            });
+            data.team = Array.from(teamList.querySelectorAll('.about-team-row')).map(r => ({
+                name: r.querySelector('.team-name').value.trim(),
+                role: r.querySelector('.team-role').value.trim(),
+            })).filter(m => m.name || m.role);
+            hidden.value = JSON.stringify(data);
+        });
+    } else if (IS_FAQS_PAGE) {
+
         const list      = document.getElementById('faq-list');
         const hidden    = document.getElementById('content-editor');
         const form      = hidden.closest('form');
