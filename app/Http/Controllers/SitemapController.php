@@ -17,9 +17,20 @@ class SitemapController extends Controller
         $entries = [];
         $now = now()->toAtomString();
 
+        $langs = app(\App\Services\LanguageService::class);
+        $codes = $langs->codes();
+        if (empty($codes)) $codes = [config('app.locale', 'en')];
+        $default = optional($langs->default())->code ?? $codes[0];
+
         // path هنا بدون بادئة اللغة (نضيفها لاحقًا لكل لغة)
-        $add = function (string $path, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.7') use (&$entries) {
+        $add = function (string $path, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.7') use (&$entries, $codes) {
             $path = '/' . ltrim(parse_url($path, PHP_URL_PATH) ?? '/', '/');
+            // أزل أي بادئة لغة موجودة (مثل /ar/... أو /en/...)
+            $segments = explode('/', ltrim($path, '/'), 2);
+            if (isset($segments[0]) && in_array($segments[0], $codes, true)) {
+                $path = '/' . ($segments[1] ?? '');
+            }
+            $path = rtrim($path, '/') ?: '/';
             $entries[$path] = compact('path','lastmod','changefreq','priority');
         };
 
@@ -74,11 +85,6 @@ class SitemapController extends Controller
                 });
         }
 
-        // اللغات النشطة + الافتراضية لإنشاء hreflang alternates
-        $langs = app(\App\Services\LanguageService::class);
-        $codes = $langs->codes();
-        if (empty($codes)) $codes = [config('app.locale', 'en')];
-        $default = optional($langs->default())->code ?? $codes[0];
         $base = rtrim(config('app.url'), '/');
 
         $localized = function (string $code, string $path) use ($base) {
