@@ -38,4 +38,9 @@ return [
     'empty_title'          => 'لا توجد منتجات',
     'empty_subtitle'       => 'حاول تعديل الفلاتر أو كلمة البحث.',
     'empty_clear'          => 'مسح كل الفلاتر',
+
+    // Product card
+    'card_add_to_cart'     => 'أضف للسلة',
+    'card_out_of_stock'    => 'نفد',
+    'card_currency'        => 'ج.م',
 ];
