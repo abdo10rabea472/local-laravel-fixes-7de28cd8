@@ -85,11 +85,6 @@ class SitemapController extends Controller
                 });
         }
 
-        // اللغات النشطة + الافتراضية لإنشاء hreflang alternates
-        $langs = app(\App\Services\LanguageService::class);
-        $codes = $langs->codes();
-        if (empty($codes)) $codes = [config('app.locale', 'en')];
-        $default = optional($langs->default())->code ?? $codes[0];
         $base = rtrim(config('app.url'), '/');
 
         $localized = function (string $code, string $path) use ($base) {
