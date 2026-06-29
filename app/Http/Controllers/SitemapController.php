@@ -101,7 +101,7 @@ class SitemapController extends Controller
             $custom = "User-agent: *\nAllow: /\n\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
         }
 
-        $custom .= "\n\nSitemap: ".url('/sitemap.xml')."\n";
+        $custom .= "\n\nSitemap: ".rtrim(config('app.url'), '/')."/sitemap.xml\n";
         return response($custom, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }
 
