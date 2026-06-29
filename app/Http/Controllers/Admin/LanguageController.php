@@ -154,6 +154,84 @@ class LanguageController extends Controller
         return back()->with('success', 'Translations saved for '.$language->name.'.');
     }
 
+    /**
+     * Translate ONE key via AI and save it immediately, so a partial run is
+     * preserved if the API quota / token budget runs out mid-batch.
+     * POST { group, key, source } -> { ok, translation }
+     */
+    public function aiTranslateOne(Request $request, Language $language)
+    {
+        $data = $request->validate([
+            'group'  => ['required', 'string', 'regex:/^[a-z0-9_\-]+$/i', 'max:60'],
+            'key'    => ['required', 'string', 'regex:/^[a-zA-Z0-9_\.\-]+$/', 'max:120'],
+            'source' => ['required', 'string', 'max:4000'],
+            'overwrite' => ['nullable', 'boolean'],
+        ]);
+
+        // Skip if already translated (unless overwrite=true)
+        $targetFile = base_path("resources/lang/{$language->code}/{$data['group']}.php");
+        if (!($data['overwrite'] ?? false) && is_file($targetFile)) {
+            $existing = include $targetFile;
+            if (is_array($existing) && !empty($existing[$data['key']])) {
+                return response()->json([
+                    'ok' => true,
+                    'translation' => (string) $existing[$data['key']],
+                    'skipped' => true,
+                ]);
+            }
+        }
+
+        $apiKey  = env('AI_TRANSLATE_API_KEY', env('OPENAI_API_KEY', env('LOVABLE_API_KEY')));
+        $baseUrl = rtrim(env('AI_TRANSLATE_BASE_URL', 'https://ai.gateway.lovable.dev/v1'), '/');
+        $model   = env('AI_TRANSLATE_MODEL', 'google/gemini-3-flash-preview');
+
+        if (!$apiKey) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'AI_TRANSLATE_API_KEY (or OPENAI_API_KEY / LOVABLE_API_KEY) is not set in .env',
+            ], 422);
+        }
+
+        $sys = "You are a professional UI translator. Translate the user's text from English to {$language->name} ({$language->native_name}, code: {$language->code}). "
+             . "Rules: keep placeholders like :name, :count, {0}, {{var}}, %s, HTML tags, and punctuation intact. "
+             . "Preserve leading/trailing whitespace. Do not add quotes, explanations, or extra text. Return ONLY the translation.";
+
+        try {
+            $resp = \Illuminate\Support\Facades\Http::withHeaders([
+                    'Authorization' => 'Bearer '.$apiKey,
+                ])
+                ->timeout(45)
+                ->post($baseUrl.'/chat/completions', [
+                    'model' => $model,
+                    'temperature' => 0.2,
+                    'messages' => [
+                        ['role' => 'system', 'content' => $sys],
+                        ['role' => 'user', 'content' => $data['source']],
+                    ],
+                ]);
+
+            if (!$resp->successful()) {
+                \Log::warning('AI translate failed', ['status' => $resp->status(), 'body' => $resp->body()]);
+                $msg = $resp->status().' '.($resp->json('error.message') ?: $resp->body());
+                return response()->json(['ok' => false, 'message' => 'AI error: '.$msg], $resp->status() >= 500 ? 502 : 422);
+            }
+
+            $translation = trim((string) ($resp->json('choices.0.message.content') ?? ''));
+            if ($translation === '') {
+                return response()->json(['ok' => false, 'message' => 'Empty translation returned.'], 422);
+            }
+
+            // Persist immediately to disk for this single key.
+            $this->writeGroups($language->code, [$data['group'] => [$data['key'] => $translation]]);
+            if (function_exists('opcache_reset')) { @opcache_reset(); }
+
+            return response()->json(['ok' => true, 'translation' => $translation]);
+        } catch (\Throwable $e) {
+            \Log::error('AI translate exception', ['err' => $e->getMessage()]);
+            return response()->json(['ok' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
     protected function writeGroups(string $code, array $payload): void
     {
         $targetDir = base_path("resources/lang/{$code}");
