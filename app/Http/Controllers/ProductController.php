@@ -48,7 +48,10 @@ class ProductController extends Controller
             'og_title' => $product->og_title ?: $product->seo_title,
             'og_description' => $product->og_description ?: $product->seo_description,
             'og_image' => $ogImage,
+            'og_image_alt' => $product->name,
+            'og_type' => 'product',
             'schema_markup' => $product->schema_markup ?: $this->defaultProductSchema($product, $ogImage),
+
         ];
 
         return view('product.show', compact('product', 'relatedProducts', 'seo'));
