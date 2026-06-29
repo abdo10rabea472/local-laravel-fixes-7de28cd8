@@ -44,6 +44,18 @@
 
 
 @section('content')
+@php
+    $_breadItems = [
+        ['name' => 'الرئيسية', 'url' => url('/')],
+        ['name' => 'المدونة', 'url' => route('blog.index')],
+    ];
+    if ($post->category) { $_breadItems[] = ['name' => $post->category->name, 'url' => route('blog.index', ['category' => $post->category->slug])]; }
+    $_breadItems[] = ['name' => $post->title];
+@endphp
+<div class="max-w-4xl mx-auto px-6 lg:px-8">
+    <x-breadcrumbs :items="$_breadItems" />
+</div>
+
 <div class="min-h-screen bg-[#F8FAFC] text-slate-800 font-sans selection:bg-indigo-500 selection:text-white pb-24">
 
     {{-- ============ HERO ============ --}}
