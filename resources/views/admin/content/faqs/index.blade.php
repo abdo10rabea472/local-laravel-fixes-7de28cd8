@@ -136,14 +136,14 @@
                             @foreach($allCats as $c)
                                 <option value="{{ $c }}">{{ $c }}</option>
                             @endforeach
-                            <option value="__new__">+ إضافة تصنيف جديد</option>
+                            <option value="__new__">{{ __('app.admin_faqs_add_new_category_opt') }}</option>
                         </select>
                     </div>
-                    <input type="text" id="faq-add-category-new" placeholder="اسم التصنيف الجديد"
+                    <input type="text" id="faq-add-category-new" placeholder="{{ __('app.admin_faqs_new_category_name') }}"
                            class="hidden w-full h-11 px-4 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-xl text-sm focus:border-violet-500 focus:outline-none">
                 </div>
 
-                <input name="sort_order" type="number" value="{{ $nextSort ?? '' }}" placeholder="{{ __('app.admin_faqs_field_sort_order') }} — تلقائي"
+                <input name="sort_order" type="number" value="{{ $nextSort ?? '' }}" placeholder="{{ __('app.admin_faqs_field_sort_order') }} — {{ __('app.admin_faqs_sort_auto') }}"
                        class="w-full h-11 px-4 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">
 
 
