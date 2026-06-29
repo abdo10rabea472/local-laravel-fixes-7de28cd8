@@ -91,20 +91,46 @@ class LanguageController extends Controller
     public function saveTranslations(Request $request, Language $language)
     {
         $payload = $request->input('t', []); // ['group' => ['key' => 'value', ...]]
-        if (!is_array($payload)) {
-            return back()->with('error', 'Invalid payload.');
-        }
+        $newKeys = $request->input('new', []); // [['group'=>..,'key'=>..,'en'=>..,'value'=>..], ...]
 
-        $targetDir = base_path("resources/lang/{$language->code}");
-        if (!is_dir($targetDir)) {
-            @mkdir($targetDir, 0755, true);
+        if (!is_array($payload)) $payload = [];
+        if (!is_array($newKeys)) $newKeys = [];
+
+        $this->writeGroups($language->code, $payload);
+
+        // Handle new keys: write source (en) + target language at once.
+        $enAdds = [];
+        $tgtAdds = [];
+        foreach ($newKeys as $row) {
+            if (!is_array($row)) continue;
+            $group = trim((string)($row['group'] ?? ''));
+            $key   = trim((string)($row['key'] ?? ''));
+            $en    = (string)($row['en'] ?? '');
+            $val   = (string)($row['value'] ?? '');
+            if ($group === '' || $key === '') continue;
+            if (!preg_match('/^[a-z0-9_\-]+$/i', $group)) continue;
+            if (!preg_match('/^[a-zA-Z0-9_\.\-]+$/', $key)) continue;
+            if ($en !== '')  $enAdds[$group][$key] = $en;
+            if ($val !== '') $tgtAdds[$group][$key] = $val;
+            // If only english given, still create the slot in target as empty? skip.
         }
+        if (!empty($enAdds)) $this->writeGroups('en', $enAdds);
+        if (!empty($tgtAdds) && $language->code !== 'en') $this->writeGroups($language->code, $tgtAdds);
+
+        if (function_exists('opcache_reset')) { @opcache_reset(); }
+
+        return back()->with('success', 'Translations saved for '.$language->name.'.');
+    }
+
+    protected function writeGroups(string $code, array $payload): void
+    {
+        $targetDir = base_path("resources/lang/{$code}");
+        if (!is_dir($targetDir)) @mkdir($targetDir, 0755, true);
 
         foreach ($payload as $group => $entries) {
             if (!is_string($group) || !preg_match('/^[a-z0-9_\-]+$/i', $group) || !is_array($entries)) {
                 continue;
             }
-            // Merge with existing so untouched keys are preserved.
             $existing = [];
             $file = $targetDir.'/'.$group.'.php';
             if (is_file($file)) {
@@ -121,16 +147,8 @@ class LanguageController extends Controller
                 }
             }
             ksort($existing);
-            file_put_contents(
-                $file,
-                "<?php\n\nreturn ".var_export($existing, true).";\n"
-            );
+            file_put_contents($file, "<?php\n\nreturn ".var_export($existing, true).";\n");
         }
-
-        // Clear translation cache.
-        if (function_exists('opcache_reset')) { @opcache_reset(); }
-
-        return back()->with('success', 'Translations saved for '.$language->name.'.');
     }
 
 

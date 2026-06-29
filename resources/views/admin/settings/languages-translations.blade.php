@@ -3,7 +3,15 @@
 @section('title', 'Translations — '.$language->name)
 
 @section('settings-content')
-<div class="space-y-6" x-data="{ tab: '{{ array_key_first($groups) ?? '' }}', q: '' }">
+<div class="space-y-6"
+     x-data="{
+        tab: '{{ array_key_first($groups) ?? '__new__' }}',
+        q: '',
+        newRows: [{ group: '{{ array_key_first($groups) ?? '' }}', key: '', en: '', value: '' }],
+        addRow() { this.newRows.push({ group: this.tab !== '__new__' ? this.tab : '{{ array_key_first($groups) ?? '' }}', key: '', en: '', value: '' }); },
+        removeRow(i) { this.newRows.splice(i, 1); if(!this.newRows.length) this.addRow(); }
+     }">
+
     @if(session('success'))<div class="p-4 rounded-2xl bg-emerald-50 text-emerald-700 text-sm font-bold">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="p-4 rounded-2xl bg-rose-50 text-rose-700 text-sm font-bold">{{ session('error') }}</div>@endif
 
@@ -37,6 +45,11 @@
                         {{ $group }} <span class="opacity-60">({{ count($data['keys']) }})</span>
                     </button>
                 @endforeach
+                <button type="button" @click="tab='__new__'"
+                        :class="tab==='__new__' ? 'bg-emerald-600 text-white' : 'bg-white text-emerald-700 border border-emerald-300'"
+                        class="px-3 py-1.5 rounded-xl text-xs font-bold">
+                    <i class="fa-solid fa-plus mr-1"></i> Add new keys
+                </button>
                 <div class="ml-auto">
                     <input type="text" x-model="q" placeholder="Search keys…"
                            class="h-9 px-3 bg-white border border-slate-200 rounded-xl text-sm">
@@ -65,6 +78,49 @@
                     @endforeach
                 </div>
             @endforeach
+
+            {{-- Add new keys panel --}}
+            <div x-show="tab==='__new__'" x-cloak class="p-5 space-y-3 bg-emerald-50/40">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800">Add new translation keys</h3>
+                        <p class="text-xs text-slate-500">Saved to <span class="font-mono">resources/lang/en/{group}.php</span> (source) and <span class="font-mono">{{ $language->code }}/{group}.php</span>.</p>
+                    </div>
+                    <button type="button" @click="addRow()" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">
+                        <i class="fa-solid fa-plus mr-1"></i> Add row
+                    </button>
+                </div>
+                <div class="grid grid-cols-12 gap-2 text-[11px] font-bold text-slate-500 uppercase px-1">
+                    <div class="col-span-2">Group</div>
+                    <div class="col-span-3">Key</div>
+                    <div class="col-span-3">English (source)</div>
+                    <div class="col-span-3">{{ $language->native_name }}</div>
+                    <div class="col-span-1"></div>
+                </div>
+                <template x-for="(row, i) in newRows" :key="i">
+                    <div class="grid grid-cols-12 gap-2 items-start">
+                        <input type="text" :name="`new[${i}][group]`" x-model="row.group"
+                               placeholder="home" list="group-suggestions"
+                               class="col-span-2 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-mono">
+                        <input type="text" :name="`new[${i}][key]`" x-model="row.key"
+                               placeholder="my_new_key"
+                               class="col-span-3 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-mono">
+                        <textarea :name="`new[${i}][en]`" x-model="row.en" rows="1" dir="ltr"
+                                  placeholder="English text…"
+                                  class="col-span-3 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm"></textarea>
+                        <textarea :name="`new[${i}][value]`" x-model="row.value" rows="1" dir="auto"
+                                  :placeholder="`Translation in {{ $language->native_name }}…`"
+                                  class="col-span-3 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm"></textarea>
+                        <button type="button" @click="removeRow(i)"
+                                class="col-span-1 h-10 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 text-sm">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </template>
+                <datalist id="group-suggestions">
+                    @foreach($groups as $g => $_) <option value="{{ $g }}"></option> @endforeach
+                </datalist>
+            </div>
 
             <div class="p-5 border-t border-slate-100 flex justify-end gap-2 bg-slate-50">
                 <a href="{{ route('admin.settings.languages.index') }}" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-sm font-bold text-slate-700">Cancel</a>
