@@ -297,7 +297,7 @@ class CheckoutController extends Controller
                     'payment_fees' => $payFees,
                     'payment_gateway' => $data['payment_gateway'],
                     'total' => $total,
-                    'currency' => 'EGP',
+                    'currency' => optional(app(\App\Services\CurrencyService::class)->default())->code ?: 'EGP',
                     'status' => 'pending',
                     'payment_status' => 'unpaid',
                     'shipping_status' => !empty($data['shipping_carrier_id']) ? 'queued' : 'no_carrier',

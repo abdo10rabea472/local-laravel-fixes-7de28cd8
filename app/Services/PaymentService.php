@@ -69,14 +69,19 @@ class PaymentService
             /** @var \Nafezly\Payments\Interfaces\PaymentInterface $driver */
             $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
 
+            // Always charge the gateway in the BASE/default currency.
+            // The "total" stored on the order is already in base currency; we recompute
+            // defensively so any UI/currency-conversion regressions can never reach the gateway.
+            [$amount, $currencyCode] = $this->resolveChargeAmount($order);
+
             $response = $driver
                 ->setUserId((string) ($order->user_id ?? $order->id))
                 ->setUserFirstName($this->splitName($order->customer_name)[0])
                 ->setUserLastName($this->splitName($order->customer_name)[1])
                 ->setUserEmail($order->email)
                 ->setUserPhone($order->phone ?? '00000000000')
-                ->setAmount((float) $order->total)
-                ->setCurrency($order->currency ?: 'EGP')
+                ->setAmount($amount)
+                ->setCurrency($currencyCode)
                 ->pay();
 
             $hasRedirect = ! empty($response['redirect_url']);
@@ -374,7 +379,8 @@ class PaymentService
         }
 
         try {
-            $amountCents = (int) round(((float) $order->total) * 100);
+            [$amount, $currencyCode] = $this->resolveChargeAmount($order);
+            $amountCents = (int) round($amount * 100);
             $reference = $order->order_number ?: ('ORD-' . $order->id);
             $billing = $this->paymobBillingData($order);
 
@@ -397,7 +403,7 @@ class PaymentService
                     'auth_token' => $authToken,
                     'delivery_needed' => false,
                     'amount_cents' => $amountCents,
-                    'currency' => $order->currency ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
+                    'currency' => $currencyCode ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
                     'merchant_order_id' => $reference,
                     'items' => [],
                 ]);
@@ -416,7 +422,7 @@ class PaymentService
                     'amount_cents' => $amountCents,
                     'order_id' => $paymobOrderId,
                     'billing_data' => $billing,
-                    'currency' => $order->currency ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
+                    'currency' => $currencyCode ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
                     'integration_id' => (int) ($useWallet ? $cfg['PAYMOB_WALLET_INTEGRATION_ID'] : $cfg['PAYMOB_INTEGRATION_ID']),
                     'lock_order_when_paid' => true,
                 ]);
@@ -810,5 +816,33 @@ class PaymentService
                 'error'    => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Compute the amount to charge at the gateway, in the BASE currency.
+     *
+     * Order columns (subtotal/shipping/total) are stored in base currency at
+     * placement time, but we recompute here from the actual order items so any
+     * upstream currency-conversion bug in the storefront cannot leak through.
+     * Returns [amount, currency_code].
+     */
+    protected function resolveChargeAmount(Order $order): array
+    {
+        $itemsTotal = (float) $order->items()->sum(\Illuminate\Support\Facades\DB::raw('unit_price * quantity'));
+        $shipping   = (float) ($order->shipping_cost ?? 0);
+        $fees       = (float) ($order->payment_fees ?? 0);
+        $discount   = (float) ($order->discount_amount ?? 0);
+
+        $amount = max(0.0, round($itemsTotal - $discount + $shipping + $fees, 2));
+
+        // Fallback to the stored total if items somehow weren't persisted.
+        if ($amount <= 0 && (float) $order->total > 0) {
+            $amount = (float) $order->total;
+        }
+
+        $base = app(\App\Services\CurrencyService::class)->default();
+        $code = $base?->code ?: ($order->currency ?: 'EGP');
+
+        return [$amount, strtoupper($code)];
     }
 }
