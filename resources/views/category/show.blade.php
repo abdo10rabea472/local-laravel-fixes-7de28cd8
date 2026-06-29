@@ -228,7 +228,7 @@
                             <div class="p-6 flex-1 flex flex-col justify-between bg-slate-50/30">
                                 <div>
                                     <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 mb-2">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> Out of Stock
+                                        <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span> {{ __('app.cat_out_of_stock') }}
                                     </span>
                                     <h2 class="text-base font-extrabold text-slate-400 tracking-tight line-clamp-1">{{ $product->name }}</h2>
                                     @if($product->short_description)
