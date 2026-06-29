@@ -14,14 +14,15 @@ class SitemapController extends Controller
 {
     public function index(): Response
     {
-        $urls = [];
+        $entries = [];
         $now = now()->toAtomString();
 
-        $add = function (string $loc, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.7') use (&$urls) {
-            $urls[] = compact('loc','lastmod','changefreq','priority');
+        // path هنا بدون بادئة اللغة (نضيفها لاحقًا لكل لغة)
+        $add = function (string $path, ?string $lastmod = null, string $changefreq = 'weekly', string $priority = '0.7') use (&$entries) {
+            $path = '/' . ltrim(parse_url($path, PHP_URL_PATH) ?? '/', '/');
+            $entries[$path] = compact('path','lastmod','changefreq','priority');
         };
 
-        // الصفحات الثابتة الأساسية (لتحسين SEO)
         $statics = [
             ['home',                  'daily',   '1.0'],
             ['products.index',        'daily',   '0.9'],
@@ -35,10 +36,9 @@ class SitemapController extends Controller
             ['pages.returns',         'yearly',  '0.3'],
         ];
         foreach ($statics as [$name, $freq, $pri]) {
-            try { $add(route($name), $now, $freq, $pri); } catch (\Throwable $e) {}
+            try { $add(route($name, [], false), $now, $freq, $pri); } catch (\Throwable $e) {}
         }
 
-        // الصفحات المخصّصة من جدول pages (غير المحجوزة)
         $reserved = ['about','faqs','privacy-policy','returns-refunds','payment-success','checkout','contact','blog','offers'];
         if (\Schema::hasTable('pages')) {
             Page::query()
@@ -46,59 +46,80 @@ class SitemapController extends Controller
                 ->whereNotIn('slug', $reserved)
                 ->select(['slug','updated_at'])->limit(500)
                 ->get()->each(function ($p) use ($add) {
-                    if ($p->slug) $add(route('pages.show', $p->slug), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
+                    if ($p->slug) $add(route('pages.show', $p->slug, false), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
                 });
         }
 
-        // المنتجات
         if (\Schema::hasTable('products')) {
             Product::query()
                 ->when(\Schema::hasColumn('products','status'), fn($q) => $q->where('status', 1))
                 ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
                 ->get()->each(function ($p) use ($add) {
-                    if ($p->slug) $add(route('product.show', $p->slug), optional($p->updated_at)?->toAtomString(), 'weekly', '0.8');
+                    if ($p->slug) $add(route('product.show', $p->slug, false), optional($p->updated_at)?->toAtomString(), 'weekly', '0.8');
                 });
         }
 
-        // التصنيفات
         if (\Schema::hasTable('categories')) {
             Category::query()->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(2000)
                 ->get()->each(function ($c) use ($add) {
-                    if ($c->slug) $add(route('category.show', $c->slug), optional($c->updated_at)?->toAtomString(), 'weekly', '0.7');
+                    if ($c->slug) $add(route('category.show', $c->slug, false), optional($c->updated_at)?->toAtomString(), 'weekly', '0.7');
                 });
         }
 
-        // مقالات المدونة (المنشورة فقط)
         if (\Schema::hasTable('blog_posts')) {
             BlogPost::published()
                 ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
                 ->get()->each(function ($b) use ($add) {
-                    if ($b->slug) $add(route('blog.show', $b->slug), optional($b->updated_at)?->toAtomString(), 'weekly', '0.6');
+                    if ($b->slug) $add(route('blog.show', $b->slug, false), optional($b->updated_at)?->toAtomString(), 'weekly', '0.6');
                 });
         }
 
+        // اللغات النشطة + الافتراضية لإنشاء hreflang alternates
+        $langs = app(\App\Services\LanguageService::class);
+        $codes = $langs->codes();
+        if (empty($codes)) $codes = [config('app.locale', 'en')];
+        $default = optional($langs->default())->code ?? $codes[0];
+        $base = rtrim(config('app.url'), '/');
+
+        $localized = function (string $code, string $path) use ($base) {
+            $path = $path === '/' ? '' : $path;
+            return $base . '/' . $code . $path;
+        };
+
         $xml  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'."\n"
+              . '        xmlns:xhtml="http://www.w3.org/1999/xhtml"'."\n"
               . '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'."\n"
               . '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'."\n";
-        foreach ($urls as $u) {
-            $xml .= "  <url>\n";
-            $xml .= "    <loc>".htmlspecialchars($u['loc'], ENT_XML1)."</loc>\n";
-            if (!empty($u['lastmod'])) $xml .= "    <lastmod>{$u['lastmod']}</lastmod>\n";
-            $xml .= "    <changefreq>{$u['changefreq']}</changefreq>\n";
-            $xml .= "    <priority>{$u['priority']}</priority>\n";
-            $xml .= "  </url>\n";
+
+        foreach ($entries as $e) {
+            foreach ($codes as $code) {
+                $loc = $localized($code, $e['path']);
+                $xml .= "  <url>\n";
+                $xml .= "    <loc>".htmlspecialchars($loc, ENT_XML1)."</loc>\n";
+                if (!empty($e['lastmod'])) $xml .= "    <lastmod>{$e['lastmod']}</lastmod>\n";
+                $xml .= "    <changefreq>{$e['changefreq']}</changefreq>\n";
+                $xml .= "    <priority>{$e['priority']}</priority>\n";
+                foreach ($codes as $alt) {
+                    $xml .= '    <xhtml:link rel="alternate" hreflang="'.$alt.'" href="'.htmlspecialchars($localized($alt, $e['path']), ENT_XML1).'"/>'."\n";
+                }
+                $xml .= '    <xhtml:link rel="alternate" hreflang="x-default" href="'.htmlspecialchars($localized($default, $e['path']), ENT_XML1).'"/>'."\n";
+                $xml .= "  </url>\n";
+            }
         }
         $xml .= '</urlset>';
 
         return response($xml, 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
     }
 
+
     public function robots(): Response
     {
         $custom = trim((string) site_setting('robots_txt_content', ''));
         if ($custom === '') {
-            $custom = "User-agent: *\nAllow: /\n\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
+            $custom = "User-agent: *\nAllow: /\n\n"
+                ."Disallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout\n"
+                ."Disallow: /*/admin\nDisallow: /*/account\nDisallow: /*/cart\nDisallow: /*/checkout";
         }
 
         $custom .= "\n\nSitemap: ".rtrim(config('app.url'), '/')."/sitemap.xml\n";
