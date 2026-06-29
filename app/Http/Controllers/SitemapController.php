@@ -31,14 +31,15 @@ class SitemapController extends Controller
             $urls[] = compact('loc','lastmod','changefreq','priority');
         };
 
-        // Static
+        // الروابط الأساسية فقط
         $add(url('/'), $now, 'daily', '1.0');
         $add(route('products.index'), $now, 'daily', '0.9');
         $add(route('blog.index'), $now, 'daily', '0.7');
         $add(route('pages.faqs'), $now, 'monthly', '0.5');
-        try { $add(route('about'), $now, 'monthly', '0.5'); } catch (\Throwable $e) {}
+        $add(route('pages.privacy'), $now, 'monthly', '0.5');
+        $add(route('pages.returns'), $now, 'monthly', '0.5');
 
-        // Products
+        // المنتجات
         if (\Schema::hasTable('products')) {
             Product::query()
                 ->when(\Schema::hasColumn('products','status'), fn($q) => $q->where('status', 1))
@@ -48,7 +49,7 @@ class SitemapController extends Controller
                 });
         }
 
-        // Categories
+        // التصنيفات
         if (\Schema::hasTable('categories')) {
             Category::query()->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(2000)
                 ->get()->each(function ($c) use ($add) {
@@ -56,24 +57,12 @@ class SitemapController extends Controller
                 });
         }
 
-        // Blog posts — use the same scope as the public show route.
+        // مقالات المدونة (المنشورة فقط)
         if (\Schema::hasTable('blog_posts')) {
             BlogPost::published()
                 ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
                 ->get()->each(function ($b) use ($add) {
                     if ($b->slug) $add(route('blog.show', $b->slug), optional($b->updated_at)?->toAtomString(), 'weekly', '0.6');
-                });
-        }
-
-        // Static pages — skip reserved slugs (they 404 on /p/{slug} and have dedicated routes).
-        $reserved = ['about','faqs','privacy-policy','returns-refunds','payment-success','checkout','contact','blog','offers'];
-        if (\Schema::hasTable('pages')) {
-            Page::query()
-                ->when(\Schema::hasColumn('pages','is_active'), fn($q) => $q->where('is_active', 1))
-                ->whereNotIn('slug', $reserved)
-                ->select(['slug','updated_at'])->limit(500)
-                ->get()->each(function ($p) use ($add) {
-                    if ($p->slug) $add(route('pages.show', $p->slug), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
                 });
         }
 
