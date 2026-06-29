@@ -39,10 +39,10 @@
          style="background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size: 22px 22px;"></div>
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
         <span class="inline-flex items-center gap-2 bg-white/10 ring-1 ring-white/20 backdrop-blur px-5 py-2 rounded-full text-sm font-semibold mb-6">
-            <i class="fa-solid fa-circle-question text-teal-300"></i>
+            <i class="fa-solid fa-circle-question text-violet-200"></i>
             {{ __('app.faq_badge') ?: 'Help Center' }}
         </span>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-5 bg-gradient-to-br from-white via-white to-teal-200 bg-clip-text text-transparent">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-5 bg-gradient-to-br from-white via-white to-violet-200 bg-clip-text text-transparent">
             {{ $page?->title ?: 'Frequently Asked Questions' }}
         </h1>
         <p class="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
@@ -51,13 +51,13 @@
 
         <div class="mt-10 flex flex-wrap justify-center gap-3 sm:gap-6 text-sm">
             <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 ring-1 ring-white/15">
-                <i class="fa-solid fa-headset text-teal-300"></i> 24/7 Support
+                <i class="fa-solid fa-headset text-violet-200"></i> 24/7 Support
             </div>
             <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 ring-1 ring-white/15">
                 <i class="fa-solid fa-truck-fast text-indigo-300"></i> Fast Shipping
             </div>
             <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 ring-1 ring-white/15">
-                <i class="fa-solid fa-shield-halved text-emerald-300"></i> Secure Payments
+                <i class="fa-solid fa-shield-halved text-indigo-200"></i> Secure Payments
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@
     {{-- Search --}}
     <div class="relative mb-8">
         <input type="text" id="faqSearch" placeholder="Search questions, keywords…"
-            class="w-full bg-white border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-2xl py-4 ps-14 pe-6 text-base outline-none shadow-lg shadow-slate-900/5 transition">
+            class="w-full bg-white border border-slate-200 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/15 rounded-2xl py-4 ps-14 pe-6 text-base outline-none shadow-lg shadow-slate-900/5 transition">
         <i class="fa-solid fa-magnifying-glass absolute start-6 top-1/2 -translate-y-1/2 text-slate-400 faq-search-icon"></i>
     </div>
 
@@ -105,7 +105,7 @@
         <div class="faq-card faq-item bg-white rounded-2xl border border-slate-200/80 overflow-hidden"
              data-cat="{{ $faq['category'] ?? 'General' }}">
             <button type="button" class="faq-toggle w-full text-start px-5 sm:px-6 py-5 flex items-center gap-4">
-                <span class="faq-icon flex-none w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-sm font-bold transition-colors">
+                <span class="faq-icon flex-none w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center text-sm font-bold transition-colors">
                     {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
                 </span>
                 <span class="flex-1 font-bold text-slate-900 text-base sm:text-lg leading-snug">{{ $faq['q'] }}</span>
@@ -138,7 +138,7 @@
         </div>
         <div class="flex flex-wrap gap-3">
             <a href="{{ url(app()->getLocale() . '/contact') }}"
-               class="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-teal-50 font-bold px-6 py-3 rounded-xl transition">
+               class="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-violet-50 font-bold px-6 py-3 rounded-xl transition">
                 <i class="fa-solid fa-envelope"></i> Contact us
             </a>
             @php $wa = \App\Models\SiteSetting::get('contact_whatsapp') ?: \App\Models\SiteSetting::get('contact_phone'); @endphp
