@@ -237,10 +237,11 @@
                                 </div>
                                 <div class="flex items-center justify-between mt-6 pt-5 border-t border-slate-200/60">
                                     <div class="flex flex-col">
-                                        <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Investment</span>
+                                        <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider">{{ __('app.cat_investment') }}</span>
                                         <span class="text-xl font-black text-slate-400 font-mono tracking-tight">
                                             {{ number_format($displayPrice, 2) }}
-                                            <span class="text-[11px] font-extrabold text-slate-300 ml-0.5">EGP</span>
+                                            <span class="text-[11px] font-extrabold text-slate-300 ml-0.5">{{ __('app.cat_egp') }}</span>
+
                                         </span>
                                     </div>
                                     <button disabled
