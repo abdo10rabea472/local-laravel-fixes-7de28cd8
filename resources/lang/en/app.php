@@ -194,6 +194,7 @@ return [
     'products_empty_title' => 'No products found',
     'products_empty_subtitle' => 'Try adjusting your filters or search term.',
     'products_empty_clear' => 'Clear all filters',
+    'products_card_out_of_stock' => 'Out of stock',
     'shared_clear_filters' => 'Clear filters',
 
     // Blog
