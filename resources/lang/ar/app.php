@@ -194,6 +194,7 @@ return [
     'products_empty_title' => 'لا توجد منتجات',
     'products_empty_subtitle' => 'حاول تعديل الفلاتر أو كلمة البحث.',
     'products_empty_clear' => 'مسح كل الفلاتر',
+    'products_card_out_of_stock' => 'غير متوفر',
     'shared_clear_filters' => 'مسح الفلاتر',
 
     // Blog
