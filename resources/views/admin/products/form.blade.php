@@ -53,7 +53,7 @@
             </div>
             <div class="mt-4">
                 <label class="text-xs font-bold text-gray-500 dark:text-gray-400 block mb-1.5">{{ __('app.admin_product_form_description') }}</label>
-                <textarea name="description" rows="8"
+                <textarea id="product-description-editor" name="description" rows="15"
                           placeholder="{{ __('app.admin_product_form_description_ph') }}"
                           class="w-full px-4 py-3 bg-gray-50 dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:border-primary-500 focus:outline-none">{{ old('description', $product->description) }}</textarea>
             </div>
