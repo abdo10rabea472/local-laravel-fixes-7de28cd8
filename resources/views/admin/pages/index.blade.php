@@ -51,12 +51,12 @@
                         <div class="flex items-center justify-end gap-2">
                             @php
                                 $viewUrl = match($page->slug) {
-                                    'about'           => url(app()->getLocale() . '/about'),
-                                    'faqs'            => url(app()->getLocale() . '/faqs'),
-                                    'privacy-policy'  => url(app()->getLocale() . '/privacy-policy'),
-                                    'returns-refunds' => url(app()->getLocale() . '/returns-refunds'),
-                                    'contact'         => url(app()->getLocale() . '/contact'),
-                                    default           => url(app()->getLocale() . '/p/' . $page->slug),
+                                    'about'           => route('about'),
+                                    'faqs'            => route('pages.faqs'),
+                                    'privacy-policy'  => route('pages.privacy'),
+                                    'returns-refunds' => route('pages.returns'),
+                                    'contact'         => route('contact'),
+                                    default           => route('pages.show', ['slug' => $page->slug]),
                                 };
                             @endphp
                             <a href="{{ $viewUrl }}" target="_blank"
