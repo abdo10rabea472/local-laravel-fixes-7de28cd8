@@ -56,20 +56,21 @@ class SitemapController extends Controller
                 });
         }
 
-        // Blog posts
+        // Blog posts — use the same scope as the public show route.
         if (\Schema::hasTable('blog_posts')) {
-            BlogPost::query()
-                ->when(\Schema::hasColumn('blog_posts','published_at'), fn($q) => $q->whereNotNull('published_at'))
+            BlogPost::published()
                 ->select(['slug','updated_at'])->orderByDesc('updated_at')->limit(5000)
                 ->get()->each(function ($b) use ($add) {
                     if ($b->slug) $add(route('blog.show', $b->slug), optional($b->updated_at)?->toAtomString(), 'weekly', '0.6');
                 });
         }
 
-        // Static pages
+        // Static pages — skip reserved slugs (they 404 on /p/{slug} and have dedicated routes).
+        $reserved = ['about','faqs','privacy-policy','returns-refunds','payment-success','checkout','contact','blog','offers'];
         if (\Schema::hasTable('pages')) {
             Page::query()
                 ->when(\Schema::hasColumn('pages','is_active'), fn($q) => $q->where('is_active', 1))
+                ->whereNotIn('slug', $reserved)
                 ->select(['slug','updated_at'])->limit(500)
                 ->get()->each(function ($p) use ($add) {
                     if ($p->slug) $add(route('pages.show', $p->slug), optional($p->updated_at)?->toAtomString(), 'monthly', '0.5');
