@@ -403,7 +403,7 @@ class PaymentService
                     'auth_token' => $authToken,
                     'delivery_needed' => false,
                     'amount_cents' => $amountCents,
-                    'currency' => $order->currency ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
+                    'currency' => $currencyCode ?: ($cfg['PAYMOB_CURRENCY'] ?? 'EGP'),
                     'merchant_order_id' => $reference,
                     'items' => [],
                 ]);
