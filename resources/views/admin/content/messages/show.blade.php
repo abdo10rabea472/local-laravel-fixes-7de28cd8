@@ -12,11 +12,11 @@
             <div>
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $message->subject }}</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {{ __('app.admin_messages_from') }} <strong class="text-gray-700 dark:text-gray-200">{{ \$message->name }}</strong>
+                    {{ __('app.admin_messages_from') }} <strong class="text-gray-700 dark:text-gray-200">{{ $message->name }}</strong>
                     &lt;<span class="font-mono">{{ $message->email }}</span>&gt;
                 </p>
                 @if($message->phone)
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('app.admin_messages_phone') }} <span class="font-mono">{{ \$message->phone }}</span></p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('app.admin_messages_phone') }} <span class="font-mono">{{ $message->phone }}</span></p>
                 @endif
                 <p class="text-xs text-gray-400 mt-1">{{ $message->created_at->format('Y-m-d H:i') }}</p>
             </div>
