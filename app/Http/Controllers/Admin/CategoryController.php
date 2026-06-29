@@ -272,7 +272,7 @@ class CategoryController extends Controller
         ]);
 
         if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
+            $validated['slug'] = arabic_slug($validated['name']) ?: Str::slug($validated['name']);
         }
 
         return $validated;
@@ -306,7 +306,7 @@ class CategoryController extends Controller
 
         if (empty($validated['slug'])) {
             $parent = Category::find($validated['parent_id']);
-            $validated['slug'] = Str::slug(($parent?->name ?? '') . '-' . $validated['name']);
+            $validated['slug'] = arabic_slug(($parent?->name ?? '') . '-' . $validated['name']) ?: Str::slug(($parent?->name ?? '') . '-' . $validated['name']);
         }
 
         return $validated;
