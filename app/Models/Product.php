@@ -47,7 +47,7 @@ class Product extends Model
     {
         static::creating(function (Product $product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name);
+                $product->slug = arabic_slug($product->name) ?: Str::slug($product->name);
             }
         });
     }
