@@ -282,7 +282,12 @@
                 </div>
                 <input type="text" class="faq-q w-full h-11 px-4 bg-white border border-slate-200 rounded-xl text-sm" placeholder="السؤال">
                 <textarea class="faq-a w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm" rows="3" placeholder="الإجابة"></textarea>
-                <input type="text" class="faq-cat w-full h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="التصنيف (اختياري)">
+                <div class="flex items-center gap-2">
+                    <input type="text" list="faq-categories" class="faq-cat flex-1 h-10 px-4 bg-white border border-slate-200 rounded-xl text-xs" placeholder="اختر تصنيف أو اكتب جديد…">
+                    <button type="button" class="faq-cat-new inline-flex items-center gap-1 h-10 px-3 bg-violet-50 hover:bg-violet-100 text-violet-700 rounded-xl text-xs font-bold whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i> تصنيف جديد
+                    </button>
+                </div>
             `;
             return wrap;
         };
