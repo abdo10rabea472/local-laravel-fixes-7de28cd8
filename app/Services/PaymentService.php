@@ -432,7 +432,9 @@ class PaymentService
 
             $paymentToken = $paymentKey->json('token');
             if (! $paymentKey->successful() || ! $paymentToken) {
-                return ['ok' => false, 'message' => 'تعذر إنشاء مفتاح دفع Paymob: ' . $this->paymobError($paymentKey->json(), $paymentKey->body())];
+                $msg = $this->paymobError($paymentKey->json(), $paymentKey->body());
+                Log::error('paymob.payment_key.failed', ['order_id' => $order->id, 'status' => $paymentKey->status(), 'amount_cents' => $amountCents, 'currency' => $currencyCode, 'integration_id' => (int) ($useWallet ? $cfg['PAYMOB_WALLET_INTEGRATION_ID'] : $cfg['PAYMOB_INTEGRATION_ID']), 'response' => $paymentKey->json() ?? $paymentKey->body(), 'message' => $msg]);
+                return ['ok' => false, 'message' => 'تعذر إنشاء مفتاح دفع Paymob: ' . $msg];
             }
 
             if ($useWallet) {
