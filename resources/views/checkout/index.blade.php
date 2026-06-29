@@ -532,7 +532,7 @@
             if (json.ok) {
                 discountAmount = parseFloat(json.discount) || 0;
                 appliedCouponCode = code;
-                couponMsg.textContent = `تم تطبيق الكود ${code} — خصم ${discountAmount.toLocaleString()} EGP`;
+                couponMsg.textContent = `تم تطبيق الكود ${code} — خصم ${fmt(discountAmount)}`;
                 couponMsg.className = 'text-xs mt-2 text-emerald-600 font-bold';
                 window.UL?.toast(`✅ تم تطبيق الكوبون`, 'success');
             } else {
