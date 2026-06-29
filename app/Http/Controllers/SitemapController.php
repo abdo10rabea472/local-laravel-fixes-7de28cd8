@@ -12,18 +12,8 @@ use Illuminate\Support\Facades\URL;
 
 class SitemapController extends Controller
 {
-    /**
-     * Strip any locale prefix from generated URLs so sitemap/robots always
-     * expose canonical, un-prefixed URLs (e.g. /products not /ar/products).
-     */
-    protected function useCanonicalRoot(): void
-    {
-        URL::forceRootUrl(request()->getSchemeAndHttpHost());
-    }
-
     public function index(): Response
     {
-        $this->useCanonicalRoot();
         $urls = [];
         $now = now()->toAtomString();
 
@@ -83,7 +73,6 @@ class SitemapController extends Controller
 
     public function robots(): Response
     {
-        $this->useCanonicalRoot();
         $custom = trim((string) site_setting('robots_txt_content', ''));
         if ($custom === '') {
             $custom = "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /account\nDisallow: /cart\nDisallow: /checkout";
@@ -113,8 +102,7 @@ class SitemapController extends Controller
 
     public function pingGoogle()
     {
-        $this->useCanonicalRoot();
-        $sitemap = request()->getSchemeAndHttpHost().'/sitemap.xml';
+        $sitemap = url('/sitemap.xml');
         $host    = parse_url($sitemap, PHP_URL_HOST);
 
         // الموقع لازم يكون publicly accessible (مش localhost/127.0.0.1)
