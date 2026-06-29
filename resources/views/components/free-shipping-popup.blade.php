@@ -37,7 +37,7 @@ $image = site_setting_url('free_shipping_popup_image');
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Minimum order value</p>
                     <div class="inline-flex items-center gap-2 h-12 px-5 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl">
                         <i class="fa-solid fa-tag text-slate-400"></i>
-                        <span class="text-slate-800 font-mono font-bold tracking-wider">{{ number_format($threshold, 0) }} EGP</span>
+                        <span class="text-slate-800 font-mono font-bold tracking-wider">{{ money($threshold) }}</span>
                     </div>
                 </div>
 
