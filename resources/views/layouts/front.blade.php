@@ -10,9 +10,25 @@
         $siteName = site_setting('site_name', 'UNI-LAB MARKET');
         $pageTitle = $seo['seo_title'] ?? null;
         $seoTitle = $pageTitle ? ($pageTitle.' — '.$siteName) : $siteName;
-        $seoDescription = $seo['seo_description'] ?? '';
+        // SEO: keep <title> under 60 chars; <meta description> 150-160 chars
+        if (mb_strlen($seoTitle) > 60) {
+            $seoTitle = mb_substr($seoTitle, 0, 57) . '…';
+        }
+        $seoDescription = trim((string) ($seo['seo_description'] ?? ''));
+        $seoDescription = preg_replace('/\s+/u', ' ', strip_tags($seoDescription));
+        if (mb_strlen($seoDescription) > 160) {
+            $seoDescription = mb_substr($seoDescription, 0, 157) . '…';
+        }
         $seoKeywords = $seo['seo_keywords'] ?? '';
-        $canonicalUrl = $seo['canonical_url'] ?? url()->current();
+        // Canonical must self-reference the current URL (strip tracking/lang params to avoid duplicates)
+        $_cu = $seo['canonical_url'] ?? url()->current();
+        $_cuParts = parse_url($_cu);
+        if (!empty($_cuParts['query'])) {
+            parse_str($_cuParts['query'], $_cuQ);
+            foreach (['utm_source','utm_medium','utm_campaign','utm_term','utm_content','fbclid','gclid','lang','ref'] as $k) unset($_cuQ[$k]);
+            $_cu = ($_cuParts['scheme'] ?? 'https').'://'.($_cuParts['host'] ?? '').($_cuParts['path'] ?? '').(!empty($_cuQ) ? '?'.http_build_query($_cuQ) : '');
+        }
+        $canonicalUrl = $_cu;
         $ogTitle = $seo['og_title'] ?? $seoTitle;
         $ogDescription = $seo['og_description'] ?? $seoDescription;
         $ogImage = $seo['og_image'] ?? site_setting_url('default_og_image', asset('imges/photo_٢٠٢٦-٠٢-٢٥_٠٨-٤٧-٣٧-removebg-preview.png'));
@@ -20,6 +36,7 @@
         $ogImageAlt = $seo['og_image_alt'] ?? $ogTitle ?? $siteName;
         $twitterSite = site_setting('twitter_site_handle');
         $schemaMarkup = $seo['schema_markup'] ?? null;
+
 
     @endphp
 
