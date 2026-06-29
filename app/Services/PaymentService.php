@@ -69,10 +69,9 @@ class PaymentService
             /** @var \Nafezly\Payments\Interfaces\PaymentInterface $driver */
             $driver = (new \Nafezly\Payments\Factories\PaymentFactory())->get($driverName);
 
-            // Always charge the gateway in the BASE/default currency.
-            // The "total" stored on the order is already in base currency; we recompute
-            // defensively so any UI/currency-conversion regressions can never reach the gateway.
-            [$amount, $currencyCode] = $this->resolveChargeAmount($order);
+            // Charge the gateway in ITS configured currency, converting from
+            // our base currency using the site's saved exchange rates.
+            [$amount, $currencyCode] = $this->resolveChargeAmount($order, $gateway);
 
             $response = $driver
                 ->setUserId((string) ($order->user_id ?? $order->id))
