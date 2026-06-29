@@ -424,6 +424,34 @@ return [
     'acc_profile_pass_sub' => 'استخدم كلمة مرور قوية لتأمين حسابك',
     'acc_profile_danger_title' => 'منطقة الخطر',
     'acc_profile_danger_sub' => 'حذف الحساب نهائي ولا يمكن التراجع عنه',
+
+    // Auth — Login
+    'auth_login_title' => 'تسجيل الدخول',
+    'auth_login_subtitle' => 'أدخل بياناتك للوصول إلى حسابك',
+    'auth_login_success_toast' => 'تم تسجيل الدخول بنجاح',
+    'auth_email_label' => 'البريد الإلكتروني',
+    'auth_email_placeholder' => 'you@example.com',
+    'auth_password_label' => 'كلمة المرور',
+    'auth_password_placeholder' => '••••••••',
+    'auth_forgot_password' => 'نسيت كلمة المرور؟',
+    'auth_remember_me' => 'تذكّرني على هذا الجهاز',
+    'auth_show_password' => 'إظهار كلمة المرور',
+    'auth_login_submit' => 'تسجيل الدخول',
+    'auth_no_account' => 'ليس لديك حساب؟',
+    'auth_create_account_link' => 'أنشئ حسابًا جديدًا',
+
+    // Auth — Register
+    'auth_register_title' => 'إنشاء حساب',
+    'auth_register_subtitle' => 'انضم إلينا في أقل من دقيقة',
+    'auth_register_success_toast' => 'تم إنشاء الحساب بنجاح',
+    'auth_name_label' => 'الاسم بالكامل',
+    'auth_name_placeholder' => 'مثال: أحمد محمد',
+    'auth_password_register_placeholder' => '8 أحرف على الأقل',
+    'auth_password_confirm_label' => 'تأكيد كلمة المرور',
+    'auth_password_confirm_placeholder' => 'أعد إدخال كلمة المرور',
+    'auth_register_submit' => 'إنشاء الحساب',
+    'auth_have_account' => 'لديك حساب بالفعل؟',
+    'auth_login_link' => 'سجّل دخولك',
 ];
 
 
