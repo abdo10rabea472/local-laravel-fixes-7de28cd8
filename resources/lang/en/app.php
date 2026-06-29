@@ -155,6 +155,7 @@ return [
     'home_why_5_desc' => 'Save more when you order with classmates or your association.',
     'home_why_6_title' => 'Real support',
     'home_why_6_desc' => 'Talk to humans who understand what your professor actually asked for.',
+    'home_newsletter_title' => 'Stay in the loop',
     'home_newsletter_subtitle' => 'Get new arrivals, semester deals, and lab guides straight to your inbox.',
     'home_newsletter_placeholder' => 'your@email.com',
     'product_buy_now' => 'Buy now',
