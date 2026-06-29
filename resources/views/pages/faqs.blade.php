@@ -125,24 +125,28 @@
 
     {{-- FAQ list --}}
     <div class="space-y-4" id="faqContainer">
-        @foreach($faqs as $i => $faq)
+        @php $_i = 0; @endphp
+        @foreach($faqs as $_group)
+        @foreach($_group as $faq)
+        @php $_i++; @endphp
         <div class="faq-card faq-item bg-white rounded-2xl border border-slate-200/80 overflow-hidden"
-             data-cat="{{ $faq['category'] ?? 'General' }}">
+             data-cat="{{ $faq->category ?? 'General' }}">
             <button type="button" class="faq-toggle w-full text-start px-5 sm:px-6 py-5 flex items-center gap-4">
                 <span class="faq-icon flex-none w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center text-sm font-bold transition-colors">
-                    {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}
+                    {{ str_pad((string)$_i, 2, '0', STR_PAD_LEFT) }}
                 </span>
-                <span class="flex-1 font-bold text-slate-900 text-base sm:text-lg leading-snug">{{ $faq['q'] }}</span>
+                <span class="flex-1 font-bold text-slate-900 text-base sm:text-lg leading-snug">{{ $faq->question }}</span>
                 <i class="fa-solid fa-chevron-down faq-chevron text-slate-400 transition-transform flex-none"></i>
             </button>
             <div class="faq-answer">
                 <div>
                     <div class="px-5 sm:px-6 pb-6 ps-[4.5rem] text-slate-600 leading-relaxed border-t border-slate-100 pt-4">
-                        {{ $faq['a'] }}
+                        {!! $faq->answer !!}
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
         @endforeach
     </div>
 
