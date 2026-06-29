@@ -8,11 +8,22 @@ use App\Models\Page;
 use App\Models\Product;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
 
 class SitemapController extends Controller
 {
+    /**
+     * Strip any locale prefix from generated URLs so sitemap/robots always
+     * expose canonical, un-prefixed URLs (e.g. /products not /ar/products).
+     */
+    protected function useCanonicalRoot(): void
+    {
+        URL::forceRootUrl(request()->getSchemeAndHttpHost());
+    }
+
     public function index(): Response
     {
+        $this->useCanonicalRoot();
         $urls = [];
         $now = now()->toAtomString();
 

@@ -56,7 +56,7 @@
         <meta name="msvalidate.01" content="{{ $bsv }}">
     @endif
     @if(site_setting('sitemap_enabled','1') === '1')
-        <link rel="sitemap" type="application/xml" href="{{ url('/sitemap.xml') }}">
+        <link rel="sitemap" type="application/xml" href="{{ request()->getSchemeAndHttpHost() }}/sitemap.xml">
     @endif
     @if($gaId = site_setting('google_analytics_id'))
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
