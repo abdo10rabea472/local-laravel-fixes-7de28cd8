@@ -78,7 +78,7 @@ class BlogPost extends Model
             $value = $parts ? end($parts) : $value;
         }
 
-        $slug = Str::slug($value);
+        $slug = arabic_slug($value) ?: Str::slug($value);
 
         if ($slug === '') {
             $slug = preg_replace('/[^\pL\pN]+/u', '-', $value) ?: '';

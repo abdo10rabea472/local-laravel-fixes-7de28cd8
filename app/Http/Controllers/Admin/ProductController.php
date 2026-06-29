@@ -83,7 +83,7 @@ class ProductController extends Controller
         $validated['status'] = $request->boolean('status', true);
 
         if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
+            $validated['slug'] = arabic_slug($validated['name']) ?: Str::slug($validated['name']);
         }
 
         $product = Product::create($validated);
@@ -102,7 +102,7 @@ class ProductController extends Controller
         $validated['status'] = $request->boolean('status', true);
 
         if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($validated['name']);
+            $validated['slug'] = arabic_slug($validated['name']) ?: Str::slug($validated['name']);
         }
 
         $product->update($validated);

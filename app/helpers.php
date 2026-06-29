@@ -82,3 +82,31 @@ if (! function_exists('is_rtl')) {
         return $lang ? $lang->isRtl() : false;
     }
 }
+
+if (! function_exists('arabic_slug')) {
+    /**
+     * Produce a clean URL slug that preserves Arabic / Unicode letters.
+     * - Lowercases ASCII
+     * - Strips punctuation (keeps letters/numbers in any script + hyphen)
+     * - Collapses whitespace and separators into a single hyphen
+     */
+    function arabic_slug(?string $value, string $separator = '-'): string
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return '';
+        }
+
+        // Normalize whitespace + common separators to the chosen separator
+        $value = preg_replace('/[\s_\-–—]+/u', $separator, $value);
+
+        // Keep only letters (any language), numbers, and the separator
+        $value = preg_replace('/[^\p{L}\p{N}' . preg_quote($separator, '/') . ']+/u', '', $value);
+
+        // Collapse repeated separators and trim
+        $value = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $value);
+        $value = trim($value, $separator);
+
+        return mb_strtolower($value, 'UTF-8');
+    }
+}

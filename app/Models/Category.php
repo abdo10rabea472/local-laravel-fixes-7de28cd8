@@ -41,7 +41,7 @@ class Category extends Model
     {
         static::creating(function (Category $category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = arabic_slug($category->name) ?: Str::slug($category->name);
             }
         });
     }
