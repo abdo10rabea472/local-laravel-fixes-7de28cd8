@@ -2,7 +2,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/Return-Refunds.css') }}">
-<link rel="stylesheet" href="{{ asset('css/FAQS-PAGE.css') }}">
 @endpush
 
 @section('content')
@@ -33,7 +32,7 @@
         ] as $i => $section)
         <section class="policy-card bg-white rounded-3xl shadow-sm p-8 lg:p-10 border border-slate-100">
             <div class="flex items-center gap-3 mb-5">
-                <span class="w-10 h-10 bg-teal-100 text-teal-700 rounded-xl flex items-center justify-center font-black text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                <span class="w-10 h-10 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center font-black text-sm">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                 <h2 class="text-2xl font-bold text-slate-900">{{ $section['title'] }}</h2>
             </div>
             <p class="text-slate-700 leading-relaxed">{{ $section['body'] }}</p>

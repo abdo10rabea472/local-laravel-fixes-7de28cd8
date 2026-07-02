@@ -13,7 +13,7 @@
             <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
                 <i class="fas fa-heart-broken text-6xl text-slate-300 mb-4"></i>
                 <p class="text-slate-600 mb-4">قائمة المفضلة فارغة</p>
-                <a href="{{ route('products.index') }}" class="inline-block bg-violet-600 text-white px-6 py-2.5 rounded-lg hover:bg-violet-700">تصفح المنتجات</a>
+                <a href="{{ route('products.index') }}" class="inline-block bg-sky-600 text-white px-6 py-2.5 rounded-lg hover:bg-sky-700">تصفح المنتجات</a>
             </div>
         @else
             <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -26,9 +26,9 @@
 
                     </a>
                     <div class="p-4">
-                        <a href="{{ route('product.show', $p->slug) }}" class="font-semibold text-slate-800 line-clamp-2 hover:text-violet-600">{{ $p->name }}</a>
+                        <a href="{{ route('product.show', $p->slug) }}" class="font-semibold text-slate-800 line-clamp-2 hover:text-sky-600">{{ $p->name }}</a>
                         <div class="mt-2 flex justify-between items-center">
-                            <span class="text-violet-700 font-bold">{{ money($p->sale_price ?? $p->price) }}</span>
+                            <span class="text-sky-700 font-bold">{{ money($p->sale_price ?? $p->price) }}</span>
                             <form method="POST" action="{{ route('wishlist.destroy', $item->id) }}">
                                 @csrf @method('DELETE')
                                 <button class="text-rose-500 hover:text-rose-700"><i class="fas fa-trash"></i></button>

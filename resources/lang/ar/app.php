@@ -134,7 +134,7 @@ return [
     'home_featured_eyebrow' => 'اختيار المحرر',
     'home_featured_title' => 'أفضل اختيارات للطلاب',
     'home_deals_eyebrow' => 'أفضل العروض',
-    'home_deals_title' => 'أحدث الأجهزة وأقل الأسعار',
+    'home_deals_title' => 'أحدث الأدوات وأقل الأسعار',
     'home_deals_browse_all' => 'تصفّح كل العروض',
     'home_college_tiles_eyebrow' => 'حسب الكلية',
     'home_college_tiles_title' => 'استكشف كل التخصصات',

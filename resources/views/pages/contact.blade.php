@@ -1,10 +1,10 @@
 @extends('layouts.front')
 
 @section('content')
-<section class="bg-gradient-to-br from-violet-600 to-indigo-800 text-white py-16">
+<section class="bg-gradient-to-br from-sky-600 to-indigo-800 text-white py-16">
     <div class="max-w-6xl mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-3">{{ __('app.contact_hero_title') }}</h1>
-        <p class="text-violet-100">{{ __('app.contact_hero_subtitle') }}</p>
+        <p class="text-sky-100">{{ __('app.contact_hero_subtitle') }}</p>
     </div>
 </section>
 
@@ -13,7 +13,7 @@
         <div class="lg:col-span-1 space-y-4">
             @php
                 $infoCards = [
-                    ['fa-phone',         __('app.contact_info_phone'),   site_setting('contact_phone',   '+966 50 000 0000'),                       'violet'],
+                    ['fa-phone',         __('app.contact_info_phone'),   site_setting('contact_phone',   '+966 50 000 0000'),                       'sky'],
                     ['fa-envelope',      __('app.contact_info_email'),   site_setting('contact_email',   'support@unilab.com'),                     'indigo'],
                     ['fa-location-dot',  __('app.contact_info_address'), site_setting('contact_address', __('app.contact_default_address')),       'emerald'],
                     ['fa-clock',         __('app.contact_info_hours'),   site_setting('contact_hours',   __('app.contact_default_hours')),         'amber'],
@@ -45,13 +45,13 @@
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">{{ __('app.contact_form_name') }} *</label>
                         <input type="text" name="name" value="{{ old('name') }}" required
-                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
                         @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">{{ __('app.contact_form_email') }} *</label>
                         <input type="email" name="email" value="{{ old('email') }}" required
-                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
                         @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
@@ -59,22 +59,22 @@
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">{{ __('app.contact_form_phone') }}</label>
                         <input type="text" name="phone" value="{{ old('phone') }}"
-                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">{{ __('app.contact_form_subject') }} *</label>
                         <input type="text" name="subject" value="{{ old('subject') }}" required
-                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+                               class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
                         @error('subject') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">{{ __('app.contact_form_message') }} *</label>
                     <textarea name="message" rows="6" required
-                              class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">{{ old('message') }}</textarea>
+                              class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500">{{ old('message') }}</textarea>
                     @error('message') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
-                <button type="submit" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-3 rounded-lg font-semibold transition">
+                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-lg font-semibold transition">
                     <i class="fas fa-paper-plane"></i> {{ __('app.contact_form_submit') }}
                 </button>
             </form>

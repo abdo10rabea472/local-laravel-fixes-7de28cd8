@@ -3,9 +3,7 @@
 @section('account_content')
 <div class="space-y-6">
     {{-- Header --}}
-    <div class="bg-gradient-to-l from-violet-600 via-indigo-600 to-violet-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-violet-500/20 relative overflow-hidden">
-        <div class="absolute -left-10 -top-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute -right-10 -bottom-10 w-56 h-56 bg-amber-400/10 rounded-full blur-3xl"></div>
+    <div class="bg-gradient-to-br from-sky-600 to-indigo-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-blue-500/20 relative overflow-hidden">
         <div class="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-4xl font-black shrink-0">
                 {{ mb_substr(auth()->user()->name, 0, 1) }}
@@ -39,7 +37,7 @@
     {{-- Info card --}}
     <section id="info" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden scroll-mt-24">
         <header class="px-6 sm:px-8 py-5 bg-gradient-to-l from-slate-50 to-white border-b border-slate-100 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
                 <i class="fa-solid fa-id-card"></i>
             </div>
             <div>

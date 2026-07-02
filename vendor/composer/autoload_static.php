@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
+class ComposerStaticInitff941e9fcd80ef26b11ea8b0488b4d5a
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -629,16 +629,23 @@ class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\GenerateSitemap' => __DIR__ . '/../..' . '/app/Console/Commands/GenerateSitemap.php',
         'App\\Http\\Controllers\\AccountController' => __DIR__ . '/../..' . '/app/Http/Controllers/AccountController.php',
         'App\\Http\\Controllers\\Admin\\AdminAuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminAuthController.php',
         'App\\Http\\Controllers\\Admin\\AdminDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminDashboardController.php',
         'App\\Http\\Controllers\\Admin\\AdminNotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminNotificationController.php',
+        'App\\Http\\Controllers\\Admin\\BlogPostController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BlogPostController.php',
         'App\\Http\\Controllers\\Admin\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CategoryController.php',
+        'App\\Http\\Controllers\\Admin\\ContactMessageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ContactMessageController.php',
         'App\\Http\\Controllers\\Admin\\CouponController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CouponController.php',
+        'App\\Http\\Controllers\\Admin\\CurrencyController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CurrencyController.php',
         'App\\Http\\Controllers\\Admin\\CustomerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CustomerController.php',
         'App\\Http\\Controllers\\Admin\\CustomerGroupController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CustomerGroupController.php',
+        'App\\Http\\Controllers\\Admin\\FaqController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/FaqController.php',
         'App\\Http\\Controllers\\Admin\\HeaderMenuController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/HeaderMenuController.php',
         'App\\Http\\Controllers\\Admin\\HomePageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/HomePageController.php',
+        'App\\Http\\Controllers\\Admin\\LanguageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LanguageController.php',
+        'App\\Http\\Controllers\\Admin\\NewsletterSubscriberController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/NewsletterSubscriberController.php',
         'App\\Http\\Controllers\\Admin\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OrderController.php',
         'App\\Http\\Controllers\\Admin\\PageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PageController.php',
         'App\\Http\\Controllers\\Admin\\PaymentGatewayController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/PaymentGatewayController.php',
@@ -648,6 +655,7 @@ class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
         'App\\Http\\Controllers\\Admin\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ReportController.php',
         'App\\Http\\Controllers\\Admin\\ReturnRequestController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ReturnRequestController.php',
         'App\\Http\\Controllers\\Admin\\ReviewController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ReviewController.php',
+        'App\\Http\\Controllers\\Admin\\SearchConsoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/SearchConsoleController.php',
         'App\\Http\\Controllers\\Admin\\ShippingCarrierController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ShippingCarrierController.php',
         'App\\Http\\Controllers\\Admin\\ShippingRateController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ShippingRateController.php',
         'App\\Http\\Controllers\\Admin\\SiteSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/SiteSettingController.php',
@@ -661,33 +669,55 @@ class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
         'App\\Http\\Controllers\\Auth\\PasswordResetLinkController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/PasswordResetLinkController.php',
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
         'App\\Http\\Controllers\\Auth\\VerifyEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerifyEmailController.php',
+        'App\\Http\\Controllers\\BlogController' => __DIR__ . '/../..' . '/app/Http/Controllers/BlogController.php',
         'App\\Http\\Controllers\\CartController' => __DIR__ . '/../..' . '/app/Http/Controllers/CartController.php',
         'App\\Http\\Controllers\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/CategoryController.php',
         'App\\Http\\Controllers\\CheckoutController' => __DIR__ . '/../..' . '/app/Http/Controllers/CheckoutController.php',
+        'App\\Http\\Controllers\\CompareController' => __DIR__ . '/../..' . '/app/Http/Controllers/CompareController.php',
+        'App\\Http\\Controllers\\ContactController' => __DIR__ . '/../..' . '/app/Http/Controllers/ContactController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\CustomerReturnController' => __DIR__ . '/../..' . '/app/Http/Controllers/CustomerReturnController.php',
+        'App\\Http\\Controllers\\FaqController' => __DIR__ . '/../..' . '/app/Http/Controllers/FaqController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\NewsletterController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsletterController.php',
+        'App\\Http\\Controllers\\OffersController' => __DIR__ . '/../..' . '/app/Http/Controllers/OffersController.php',
         'App\\Http\\Controllers\\PageController' => __DIR__ . '/../..' . '/app/Http/Controllers/PageController.php',
+        'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',
         'App\\Http\\Controllers\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaymentController.php',
         'App\\Http\\Controllers\\ProductCatalogController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProductCatalogController.php',
         'App\\Http\\Controllers\\ProductController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProductController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\ShippingWebhookController' => __DIR__ . '/../..' . '/app/Http/Controllers/ShippingWebhookController.php',
+        'App\\Http\\Controllers\\SitemapController' => __DIR__ . '/../..' . '/app/Http/Controllers/SitemapController.php',
+        'App\\Http\\Controllers\\TrackOrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/TrackOrderController.php',
+        'App\\Http\\Controllers\\WishlistController' => __DIR__ . '/../..' . '/app/Http/Controllers/WishlistController.php',
         'App\\Http\\Middleware\\AjaxResponse' => __DIR__ . '/../..' . '/app/Http/Middleware/AjaxResponse.php',
+        'App\\Http\\Middleware\\HandleLocalePrefix' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleLocalePrefix.php',
         'App\\Http\\Middleware\\IsAdmin' => __DIR__ . '/../..' . '/app/Http/Middleware/IsAdmin.php',
+        'App\\Http\\Middleware\\SetCurrency' => __DIR__ . '/../..' . '/app/Http/Middleware/SetCurrency.php',
+        'App\\Http\\Middleware\\SetLocale' => __DIR__ . '/../..' . '/app/Http/Middleware/SetLocale.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Jobs\\CreateCarrierShipment' => __DIR__ . '/../..' . '/app/Jobs/CreateCarrierShipment.php',
+        'App\\Mail\\AdminOtpMail' => __DIR__ . '/../..' . '/app/Mail/AdminOtpMail.php',
         'App\\Mail\\CustomerNotificationMail' => __DIR__ . '/../..' . '/app/Mail/CustomerNotificationMail.php',
+        'App\\Mail\\NewsletterArticleMail' => __DIR__ . '/../..' . '/app/Mail/NewsletterArticleMail.php',
         'App\\Mail\\OrderStatusMail' => __DIR__ . '/../..' . '/app/Mail/OrderStatusMail.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\AuditLog' => __DIR__ . '/../..' . '/app/Models/AuditLog.php',
+        'App\\Models\\BlogComment' => __DIR__ . '/../..' . '/app/Models/BlogComment.php',
+        'App\\Models\\BlogPost' => __DIR__ . '/../..' . '/app/Models/BlogPost.php',
         'App\\Models\\CartItem' => __DIR__ . '/../..' . '/app/Models/CartItem.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
+        'App\\Models\\ContactMessage' => __DIR__ . '/../..' . '/app/Models/ContactMessage.php',
         'App\\Models\\Coupon' => __DIR__ . '/../..' . '/app/Models/Coupon.php',
         'App\\Models\\CouponRedemption' => __DIR__ . '/../..' . '/app/Models/CouponRedemption.php',
+        'App\\Models\\Currency' => __DIR__ . '/../..' . '/app/Models/Currency.php',
         'App\\Models\\CustomerGroup' => __DIR__ . '/../..' . '/app/Models/CustomerGroup.php',
+        'App\\Models\\Faq' => __DIR__ . '/../..' . '/app/Models/Faq.php',
         'App\\Models\\HeaderMenuItem' => __DIR__ . '/../..' . '/app/Models/HeaderMenuItem.php',
+        'App\\Models\\Language' => __DIR__ . '/../..' . '/app/Models/Language.php',
+        'App\\Models\\NewsletterSubscriber' => __DIR__ . '/../..' . '/app/Models/NewsletterSubscriber.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
         'App\\Models\\OrderItem' => __DIR__ . '/../..' . '/app/Models/OrderItem.php',
         'App\\Models\\OrderStatusHistory' => __DIR__ . '/../..' . '/app/Models/OrderStatusHistory.php',
@@ -705,15 +735,23 @@ class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
         'App\\Models\\ShippingRegion' => __DIR__ . '/../..' . '/app/Models/ShippingRegion.php',
         'App\\Models\\SiteSetting' => __DIR__ . '/../..' . '/app/Models/SiteSetting.php',
         'App\\Models\\StockMovement' => __DIR__ . '/../..' . '/app/Models/StockMovement.php',
+        'App\\Models\\Translation' => __DIR__ . '/../..' . '/app/Models/Translation.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
+        'App\\Models\\Wishlist' => __DIR__ . '/../..' . '/app/Models/Wishlist.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
+        'App\\Services\\AiService' => __DIR__ . '/../..' . '/app/Services/AiService.php',
         'App\\Services\\AramexService' => __DIR__ . '/../..' . '/app/Services/AramexService.php',
+        'App\\Services\\CurrencyService' => __DIR__ . '/../..' . '/app/Services/CurrencyService.php',
         'App\\Services\\ImageService' => __DIR__ . '/../..' . '/app/Services/ImageService.php',
+        'App\\Services\\InternalLinker' => __DIR__ . '/../..' . '/app/Services/InternalLinker.php',
+        'App\\Services\\LanguageService' => __DIR__ . '/../..' . '/app/Services/LanguageService.php',
         'App\\Services\\NavigationService' => __DIR__ . '/../..' . '/app/Services/NavigationService.php',
         'App\\Services\\PaymentService' => __DIR__ . '/../..' . '/app/Services/PaymentService.php',
+        'App\\Services\\SearchConsoleService' => __DIR__ . '/../..' . '/app/Services/SearchConsoleService.php',
         'App\\Services\\ShippingDispatchService' => __DIR__ . '/../..' . '/app/Services/ShippingDispatchService.php',
         'App\\Services\\ShippingTrackingService' => __DIR__ . '/../..' . '/app/Services/ShippingTrackingService.php',
         'App\\Services\\StockService' => __DIR__ . '/../..' . '/app/Services/StockService.php',
+        'App\\Support\\MailHealth' => __DIR__ . '/../..' . '/app/Support/MailHealth.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -8222,9 +8260,9 @@ class ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit53b5d56b3b7e3cbac1713e68c8850f6c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitff941e9fcd80ef26b11ea8b0488b4d5a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitff941e9fcd80ef26b11ea8b0488b4d5a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitff941e9fcd80ef26b11ea8b0488b4d5a::$classMap;
 
         }, null, ClassLoader::class);
     }

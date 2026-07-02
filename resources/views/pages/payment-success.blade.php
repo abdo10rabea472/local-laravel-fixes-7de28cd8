@@ -3,10 +3,10 @@
 @section('content')
 <main class="max-w-3xl mx-auto px-4 py-12">
     <div class="text-center mb-10">
-        <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl mb-6 border border-emerald-100">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-sky-50 text-sky-600 rounded-3xl mb-6 border border-sky-100">
             <i class="fa-solid fa-check text-3xl"></i>
         </div>
-        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600 mb-2">Order Successfully Placed</p>
+        <p class="text-sm font-bold uppercase tracking-widest text-sky-600 mb-2">Order Successfully Placed</p>
         <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3">{{ $page?->title ?: 'Your tools are on the way!' }}</h1>
         <p class="text-slate-500">{{ $page?->content ?: 'Thank you for shopping with UNI-LAB MARKET.' }}</p>
         <p class="text-slate-600 mt-2">Receipt sent to <strong id="success-email">your email</strong></p>
@@ -18,8 +18,8 @@
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Invoice</span>
                 <h2 class="text-xl font-bold font-mono" id="success-invoice">#HZ-000000</h2>
             </div>
-            <div class="bg-emerald-500/20 border border-emerald-500/30 px-4 py-2 rounded-xl self-start">
-                <span class="text-emerald-400 text-xs font-extrabold uppercase">● Success</span>
+            <div class="bg-sky-500/20 border border-sky-500/30 px-4 py-2 rounded-xl self-start">
+                <span class="text-sky-400 text-xs font-extrabold uppercase">● Success</span>
             </div>
         </div>
 

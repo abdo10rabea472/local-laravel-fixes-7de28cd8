@@ -48,7 +48,7 @@
             <h1 class="text-2xl font-black text-amber-600">بانتظار إتمام الدفع</h1>
             <p class="mt-2 text-slate-500">لم نستلم تأكيد الدفع من بوابة الدفع بعد.</p>
         @else
-            <div class="mb-3 text-5xl text-violet-600"><i class="fa-solid fa-receipt"></i></div>
+            <div class="mb-3 text-5xl text-sky-600"><i class="fa-solid fa-receipt"></i></div>
             <h1 class="text-2xl font-black text-slate-900">تفاصيل الطلب</h1>
         @endif
 
@@ -67,7 +67,7 @@
         <div class="mt-6 flex flex-wrap justify-center gap-2">
             @if(! $isPaid && ! $isCod && $order->payment_gateway)
                 <a href="{{ route('checkout.pay', $order) }}?gateway={{ urlencode($order->payment_gateway) }}"
-                   class="inline-flex h-11 items-center rounded-xl bg-violet-600 px-5 text-sm font-bold text-white transition-colors hover:bg-violet-700">
+                   class="inline-flex h-11 items-center rounded-xl bg-sky-600 px-5 text-sm font-bold text-white transition-colors hover:bg-sky-700">
                     <i class="fa-solid fa-rotate-right ms-1"></i> إعادة محاولة الدفع
                 </a>
             @endif

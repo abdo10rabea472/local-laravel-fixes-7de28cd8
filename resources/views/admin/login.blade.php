@@ -153,7 +153,7 @@
 
     <script>
 function quickLogin() {
-    document.getElementById('email').value = 'abdo10rabea472@gmail.com';
+    document.getElementById('email').value = 'akhames084@gmail.com';
     document.getElementById('password').value = 'password';
 
     setTimeout(() => {

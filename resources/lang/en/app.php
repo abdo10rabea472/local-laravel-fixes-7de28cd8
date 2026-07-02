@@ -134,7 +134,7 @@ return [
     'home_featured_eyebrow' => 'Editor\'s Pick',
     'home_featured_title' => 'Top picks for students',
     'home_deals_eyebrow' => 'Best deals',
-    'home_deals_title' => 'Latest equipment & lowest prices',
+    'home_deals_title' => 'The latest tools and the lowest prices.',
     'home_deals_browse_all' => 'Browse all deals',
     'home_college_tiles_eyebrow' => 'By college',
     'home_college_tiles_title' => 'Explore every faculty',

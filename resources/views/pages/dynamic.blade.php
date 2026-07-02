@@ -6,7 +6,7 @@
     $readMins = max(1, (int) ceil(str_word_count(strip_tags((string) $page->content)) / 200));
 @endphp
 
-<section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-900 text-white">
+<section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-sky-900 text-white">
     <div class="absolute inset-0 opacity-30 pointer-events-none"
          style="background-image: radial-gradient(circle at 20% 20%, rgba(139,92,246,.35), transparent 40%), radial-gradient(circle at 80% 0%, rgba(59,130,246,.25), transparent 45%);"></div>
     <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-slate-50"></div>
@@ -49,7 +49,7 @@
 <main class="bg-slate-50 pb-20 -mt-10 relative">
     <div class="mx-auto px-4 sm:px-6" style="max-width: 121rem;">
         <article class="bg-white rounded-3xl shadow-xl shadow-slate-900/5 border border-slate-100 overflow-hidden">
-            <div class="h-1.5 bg-gradient-to-r from-violet-500 via-indigo-500 to-blue-500"></div>
+            <div class="h-1.5 bg-gradient-to-r from-sky-500 via-indigo-500 to-blue-500"></div>
             <div class="p-6 sm:p-10 lg:p-14">
                 @if(trim((string) $page->content) !== '')
                     <div class="prose prose-slate prose-lg max-w-none break-words [overflow-wrap:anywhere]
@@ -57,11 +57,11 @@
                                 prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4
                                 prose-h3:text-2xl prose-h3:mt-8
                                 prose-p:break-words
-                                prose-a:text-violet-600 prose-a:no-underline prose-a:break-all hover:prose-a:text-violet-700 hover:prose-a:underline
+                                prose-a:text-sky-600 prose-a:no-underline prose-a:break-all hover:prose-a:text-sky-700 hover:prose-a:underline
                                 prose-strong:text-slate-900
-                                prose-blockquote:border-violet-500 prose-blockquote:bg-violet-50/40 prose-blockquote:rounded-r-xl prose-blockquote:not-italic prose-blockquote:py-1
+                                prose-blockquote:border-sky-500 prose-blockquote:bg-sky-50/40 prose-blockquote:rounded-r-xl prose-blockquote:not-italic prose-blockquote:py-1
                                 prose-img:rounded-2xl prose-img:shadow-md
-                                prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-violet-700 prose-code:before:content-none prose-code:after:content-none
+                                prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sky-700 prose-code:before:content-none prose-code:after:content-none
                                 prose-pre:whitespace-pre-wrap prose-pre:break-words
                                 prose-table:rounded-xl prose-table:overflow-hidden">
 
@@ -87,11 +87,11 @@
                 <div class="flex items-center gap-2">
                     <span class="text-xs font-bold text-slate-500 me-1">Share:</span>
                     <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($page->title) }}" target="_blank" rel="noopener"
-                       class="h-8 w-8 inline-flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 hover:text-violet-600 hover:border-violet-300 transition">
+                       class="h-8 w-8 inline-flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 hover:text-sky-600 hover:border-sky-300 transition">
                         <i class="fa-brands fa-x-twitter text-xs"></i>
                     </a>
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" rel="noopener"
-                       class="h-8 w-8 inline-flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 hover:text-violet-600 hover:border-violet-300 transition">
+                       class="h-8 w-8 inline-flex items-center justify-center rounded-full bg-white border border-slate-200 text-slate-500 hover:text-sky-600 hover:border-sky-300 transition">
                         <i class="fa-brands fa-facebook-f text-xs"></i>
                     </a>
                     <a href="https://wa.me/?text={{ urlencode($page->title . ' ' . request()->fullUrl()) }}" target="_blank" rel="noopener"
@@ -103,7 +103,7 @@
         </article>
 
         <div class="mt-8 text-center">
-            <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-violet-600 transition">
+            <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-sky-600 transition">
                 <i class="fa-solid fa-arrow-right-long"></i>
                 {{ __('messages.back_home') ?? 'Back to home' }}
             </a>

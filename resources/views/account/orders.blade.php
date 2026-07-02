@@ -24,11 +24,11 @@
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <h1 class="text-2xl font-black text-slate-900 flex items-center gap-2">
-                <i class="fa-solid fa-receipt text-violet-600"></i> {{ __('app.acc_orders_title') }}
+                <i class="fa-solid fa-receipt text-blue-600"></i> {{ __('app.acc_orders_title') }}
             </h1>
             <p class="text-sm text-slate-500 mt-1">{{ __('app.acc_orders_subtitle') }}</p>
         </div>
-        <a href="{{ route('home') }}" class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-violet-600 text-white text-sm font-bold hover:bg-violet-700 transition shadow-sm shadow-violet-500/30">
+        <a href="{{ route('home') }}" class="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 transition shadow-sm shadow-blue-500/30">
             <i class="fa-solid fa-bag-shopping"></i> {{ __('app.acc_shop_more') }}
         </a>
     </div>
@@ -36,7 +36,7 @@
     {{-- Stats --}}
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         @php $cards = [
-            [__('app.acc_stat_all'),$stats['total'],'violet','fa-list'],
+            [__('app.acc_stat_all'),$stats['total'],'blue','fa-list'],
             [__('app.acc_stat_pending'),$stats['pending'],'amber','fa-clock'],
             [__('app.acc_stat_shipped'),$stats['shipped'],'sky','fa-truck'],
             [__('app.acc_stat_delivered'),$stats['delivered'],'emerald','fa-check-double'],
@@ -59,9 +59,9 @@
         <div class="flex-1 min-w-[200px] relative">
             <i class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
             <input type="text" name="q" value="{{ request('q') }}" placeholder="{{ __('app.acc_search_orders') }}"
-                   class="w-full h-11 pr-9 pl-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-violet-500 focus:bg-white focus:outline-none">
+                   class="w-full h-11 pr-9 pl-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-blue-500 focus:bg-white focus:outline-none">
         </div>
-        <select name="status" class="h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-violet-500 focus:bg-white focus:outline-none">
+        <select name="status" class="h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:border-blue-500 focus:bg-white focus:outline-none">
             @foreach($statusLabels as $k=>$v)
                 <option value="{{ $k }}" @selected(request('status')===$k)>{{ $v }}</option>
             @endforeach
@@ -80,9 +80,9 @@
     @forelse($orders as $o)
         @php $c = $o->statusBadgeColor(); @endphp
         <a href="{{ route('account.orders.show', $o) }}"
-           class="group block bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-violet-300 transition overflow-hidden">
+           class="group block bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition overflow-hidden">
             <div class="p-4 sm:p-5 flex flex-wrap items-center gap-4">
-                <div class="w-12 h-12 rounded-xl bg-violet-50 text-violet-600 grid place-items-center text-lg shrink-0">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 grid place-items-center text-lg shrink-0">
                     <i class="fa-solid fa-box"></i>
                 </div>
                 <div class="min-w-0 flex-1">
@@ -101,19 +101,19 @@
                     <p class="text-[11px] text-slate-500 font-bold">{{ __('app.acc_total') }}</p>
                     <p class="text-lg font-black text-slate-900">{{ number_format($o->total, 2) }} <span class="text-xs text-slate-500">{{ $o->currency }}</span></p>
                 </div>
-                <div class="shrink-0 text-violet-600 group-hover:translate-x-[-4px] transition">
+                <div class="shrink-0 text-blue-600 group-hover:translate-x-[-4px] transition">
                     <i class="fa-solid fa-arrow-left"></i>
                 </div>
             </div>
         </a>
     @empty
         <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-            <div class="w-20 h-20 rounded-2xl bg-violet-50 text-violet-600 grid place-items-center text-3xl mx-auto mb-4">
+            <div class="w-20 h-20 rounded-2xl bg-blue-50 text-blue-600 grid place-items-center text-3xl mx-auto mb-4">
                 <i class="fa-solid fa-box-open"></i>
             </div>
             <h3 class="font-black text-slate-900 text-lg mb-1">{{ __('app.acc_no_orders_yet') }}</h3>
             <p class="text-sm text-slate-500 mb-5">{{ __('app.acc_start_shopping_hint') }}</p>
-            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-violet-600 text-white font-bold hover:bg-violet-700 transition">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
                 <i class="fa-solid fa-bag-shopping"></i> {{ __('app.acc_start_shopping') }}
             </a>
         </div>

@@ -44,9 +44,9 @@
     if ($category->parent) { $_breadItems[] = ['name' => $category->parent->name, 'url' => url('/category/'.$category->parent->slug)]; }
     $_breadItems[] = ['name' => $category->name];
 @endphp
-<div class="max-w-7xl mx-auto px-4">
+<!-- <div class="max-w-7xl mx-auto px-4">
     <x-breadcrumbs :items="$_breadItems" />
-</div>
+</div> -->
 
 @php
     $primary = $themeCategory?->primary_color ?? '#7c3aed';   // emerald-500
@@ -78,13 +78,13 @@
         <img src="{{ $category->banner_url ?? $college?->banner_url }}" alt=""
             onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'"
             class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" loading="eager">
-
     @endif
-    <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20"></div>
+    <div class="container">
+    <!-- <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20"></div> -->
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12 sm:py-16">
         {{-- Breadcrumb --}}
-        <nav class="flex items-center gap-2 text-sm text-white/80 mb-6">
+        <nav class="flex items-center gap-2 text-sm text-white/70 mb-6">
             <a class="hover:text-white transition-colors" href="{{ route('home') }}">{{ __('app.cat_home') }}</a>
             <i class="fa-solid fa-chevron-right text-[10px] text-white/60"></i>
             @if(!$isCollege && $college)
@@ -109,9 +109,9 @@
                 @if(!$isCollege && $college)
                     <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-white/70">{{ $college->name }}</span>
                 @endif
-                <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight mt-1">{{ $category->name }}</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-white">{{ $category->name }}</h1>
                 @if($category->description)
-                    <p class="text-white/85 mt-2 text-sm sm:text-base leading-relaxed max-w-2xl">{{ $category->description }}</p>
+                    <p class="text-white/80 mt-1 text-sm sm:text-base leading-relaxed max-w-2xl">{{ $category->description }}</p>
                 @endif
 
                 <div class="flex flex-wrap gap-2 mt-4">
@@ -127,25 +127,30 @@
                 </div>
             </div>
 
-            {{-- Search --}}
-            <form action="{{ route('category.show', $category->slug) }}" method="get"
+              {{-- Search --}}
+          <form action="{{ route('category.show', $category->slug) }}" method="get"
                 class="w-full sm:w-auto sm:min-w-[320px]">
-                <div class="bg-white/15 backdrop-blur-md border border-white/25 rounded-2xl p-1.5 flex gap-1.5 shadow-lg">
-                    <div class="relative flex-1">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="search" name="search" value="{{ request('search') }}"
-                            placeholder="{{ __('app.cat_search_placeholder') }}"
-                            class="w-full h-11 pl-10 pr-3 bg-white rounded-xl text-sm text-slate-800 outline-none placeholder:text-slate-400">
-                    </div>
-                    <button type="submit"
-                        class="h-11 px-5 bg-white font-bold text-sm rounded-xl shrink-0 hover:bg-slate-50 transition-colors"
-                        style="color: {{ $primary }}">
-                        {{ __('app.cat_search_go') }}
-                    </button>
+              
+            <div class="bg-white/15 backdrop-blur-md rounded-2xl p-1.5 flex gap-1.5 shadow-lg">
+        
+            <div class="flex items-center flex-1 bg-white rounded-xl pl-3.5 gap-1.5">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm shrink-0"></i>
+            <input type="search" name="search" value="{{ request('search') }}"
+                placeholder="{{ __('app.cat_search_placeholder') }}"
+                class="w-full h-11 bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400 border-0 focus:ring-0 p-0">
+           </div>
 
-                </div>
-            </form>
+        <button type="submit"
+            class="h-11 px-5 bg-white font-bold text-sm rounded-xl shrink-0 hover:bg-slate-50 transition-colors"
+            style="color: {{ $primary }}">
+            {{ __('app.cat_search_go') }}
+        </button>
+
+          </div>
+          </form>
+
         </div>
+    </div>
     </div>
 </section>
 
@@ -299,8 +304,7 @@
                     </article>
                 @else
                     {{-- ============ IN-STOCK PRODUCT CARD ============ --}}
-                    <article
-                        class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-2 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.12),0_20px_40px_-20px_rgba(16,185,129,0.15)]"
+                    <article class="group relative flex flex-col rounded-3xl bg-white border border-slate-200/70 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] hover:-translate-y-2 hover:shadow-[0_30px_60px_-15px_rgba(15,23,42,0.12),0_20px_40px_-20px_rgba(16,185,129,0.15)]"
                         data-id="{{ $product->id }}">
                         <a href="{{ route('product.show', $product->slug) }}" class="block flex-1 flex flex-col focus:outline-none">
                             <div class="relative aspect-square w-full bg-slate-50 overflow-hidden flex items-center justify-center p-8 border-b border-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.01)]">

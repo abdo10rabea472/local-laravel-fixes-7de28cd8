@@ -1,230 +1,330 @@
 @extends('layouts.front')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/product.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/product.css') }}">
 @endpush
 
 @push('schemas')
-@php
+  @php
     $_pimg = $product->images->first();
     $_pimgUrl = $_pimg ? $_pimg->getUrl('large') : site_setting_url('default_product_image', asset('imges/products/default.jpg'));
     $_price = $product->effective_price;
     $_avg = round((float) $product->reviews()->approved()->avg('rating'), 1);
     $_count = (int) $product->reviews()->approved()->count();
     $_productSchema = array_filter([
-        '@context' => 'https://schema.org',
-        '@type' => 'Product',
-        'name' => $product->name,
-        'description' => strip_tags($product->short_description ?: $product->description ?: ''),
-        'sku' => $product->sku,
-        'image' => $_pimgUrl,
-        'category' => $product->category?->name,
-        'offers' => [
-            '@type' => 'Offer',
-            'url' => url()->current(),
-            'priceCurrency' => site_setting('currency_code', 'USD'),
-            'price' => number_format((float) $_price, 2, '.', ''),
-            'availability' => ($product->stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        ],
-        'aggregateRating' => $_count > 0 ? [
-            '@type' => 'AggregateRating',
-            'ratingValue' => $_avg,
-            'reviewCount' => $_count,
-        ] : null,
+      '@context' => 'https://schema.org',
+      '@type' => 'Product',
+      'name' => $product->name,
+      'description' => strip_tags($product->short_description ?: $product->description ?: ''),
+      'sku' => $product->sku,
+      'image' => $_pimgUrl,
+      'category' => $product->category?->name,
+      'offers' => [
+        '@type' => 'Offer',
+        'url' => url()->current(),
+        'priceCurrency' => site_setting('currency_code', 'USD'),
+        'price' => number_format((float) $_price, 2, '.', ''),
+        'availability' => ($product->stock > 0) ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      ],
+      'aggregateRating' => $_count > 0 ? [
+        '@type' => 'AggregateRating',
+        'ratingValue' => $_avg,
+        'reviewCount' => $_count,
+      ] : null,
     ]);
     $_crumbs = [['name' => 'Home', 'url' => url('/')]];
     if ($product->category?->parent) {
-        $_crumbs[] = ['name' => $product->category->parent->name, 'url' => url('/category/'.$product->category->parent->slug)];
+      $_crumbs[] = ['name' => $product->category->parent->name, 'url' => url('/category/' . $product->category->parent->slug)];
     }
     if ($product->category) {
-        $_crumbs[] = ['name' => $product->category->name, 'url' => url('/category/'.$product->category->slug)];
+      $_crumbs[] = ['name' => $product->category->name, 'url' => url('/category/' . $product->category->slug)];
     }
     $_crumbs[] = ['name' => $product->name, 'url' => url()->current()];
     $_breadSchema = [
-        '@context' => 'https://schema.org',
-        '@type' => 'BreadcrumbList',
-        'itemListElement' => array_map(fn($i, $c) => [
-            '@type' => 'ListItem', 'position' => $i + 1, 'name' => $c['name'], 'item' => $c['url'],
-        ], array_keys($_crumbs), $_crumbs),
+      '@context' => 'https://schema.org',
+      '@type' => 'BreadcrumbList',
+      'itemListElement' => array_map(fn($i, $c) => [
+        '@type' => 'ListItem',
+        'position' => $i + 1,
+        'name' => $c['name'],
+        'item' => $c['url'],
+      ], array_keys($_crumbs), $_crumbs),
     ];
-@endphp
-<script type="application/ld+json">{!! json_encode($_productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
-<script type="application/ld+json">{!! json_encode($_breadSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+  @endphp
+  <script
+    type="application/ld+json">{!! json_encode($_productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+  <script
+    type="application/ld+json">{!! json_encode($_breadSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endpush
 
 
 @section('content')
-@php
+  @php
     $_breadItems = [['name' => 'الرئيسية', 'url' => url('/')]];
-    if ($product->category?->parent) { $_breadItems[] = ['name' => $product->category->parent->name, 'url' => url('/category/'.$product->category->parent->slug)]; }
-    if ($product->category) { $_breadItems[] = ['name' => $product->category->name, 'url' => url('/category/'.$product->category->slug)]; }
+    if ($product->category?->parent) {
+      $_breadItems[] = ['name' => $product->category->parent->name, 'url' => url('/category/' . $product->category->parent->slug)];
+    }
+    if ($product->category) {
+      $_breadItems[] = ['name' => $product->category->name, 'url' => url('/category/' . $product->category->slug)];
+    }
     $_breadItems[] = ['name' => $product->name];
-@endphp
-<div class="max-w-7xl mx-auto px-4">
-    <x-breadcrumbs :items="$_breadItems" />
-</div>
+  @endphp
+  <!-- <div class="max-w-7xl mx-auto px-4">
+      <x-breadcrumbs :items="$_breadItems" />
+  </div> -->
 
-@php
+  @php
     $primaryImage = $product->images->first();
     $imageUrl = $primaryImage ? $primaryImage->getUrl('large') : site_setting_url('default_product_image', asset('imges/products/default.jpg'));
     $hasDiscount = $product->sale_price && $product->sale_price < $product->price;
     $displayPrice = $product->effective_price;
     $college = $product->category?->parent;
-    $accent = $college?->primary_color ?? '#6366f1';
+    $accent = $college?->primary_color ?? 'linear-gradient(to right, #075985, #2563eb)';
+    $accentt = $college?->color ?? '#2563eb';
     $reviewsAvg = round((float) $product->reviews()->approved()->avg('rating'), 1);
     $reviewsCount = (int) $product->reviews()->approved()->count();
-@endphp
+  @endphp
 
-@push('styles')
-@if($reviewsCount > 0)
-<script type="application/ld+json">
-{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type' => 'Product',
-    'name' => $product->name,
-    'image' => [$imageUrl],
-    'description' => $product->short_description ?: $product->description,
-    'sku' => $product->sku,
-    'offers' => [
-        '@type' => 'Offer',
-        'price' => number_format((float)$displayPrice, 2, '.', ''),
-        'priceCurrency' => 'EGP',
-        'availability' => $product->isInStock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-        'url' => url()->current(),
-    ],
-    'aggregateRating' => [
-        '@type' => 'AggregateRating',
-        'ratingValue' => $reviewsAvg,
-        'reviewCount' => $reviewsCount,
-        'bestRating' => 5,
-        'worstRating' => 1,
-    ],
-], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}
-</script>
-@endif
-@endpush
+  @push('styles')
+    @if($reviewsCount > 0)
+      <script type="application/ld+json">
+      {!! json_encode([
+          '@context' => 'https://schema.org',
+          '@type' => 'Product',
+          'name' => $product->name,
+          'image' => [$imageUrl],
+          'description' => $product->short_description ?: $product->description,
+          'sku' => $product->sku,
+          'offers' => [
+            '@type' => 'Offer',
+            'price' => number_format((float) $displayPrice, 2, '.', ''),
+            'priceCurrency' => 'EGP',
+            'availability' => $product->isInStock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            'url' => url()->current(),
+          ],
+          'aggregateRating' => [
+            '@type' => 'AggregateRating',
+            'ratingValue' => $reviewsAvg,
+            'reviewCount' => $reviewsCount,
+            'bestRating' => 5,
+            'worstRating' => 1,
+          ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+      </script>
+    @endif
+  @endpush
 
-<main class="bg-slate-50 min-h-screen py-8 sm:py-12">
+  <main class="bg-slate-50 min-h-screen py-8 sm:py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav class="flex flex-wrap items-center gap-2 text-sm bg-white/80 backdrop-blur px-5 py-4 rounded-2xl border border-slate-100 mb-8 shadow-sm">
-            <a href="{{ route('home') }}" class="text-slate-500 hover:text-violet-600 font-medium"><i class="fa-solid fa-house mr-1"></i> Home</a>
-            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
-            <a href="{{ route('products.index') }}" class="text-slate-500 hover:text-violet-600 font-medium">Products</a>
+      <nav
+        class="flex flex-wrap items-center gap-2 text-sm bg-white/80 backdrop-blur px-5 py-4 rounded-2xl border border-slate-100 mb-8 shadow-sm">
+        <a href="{{ route('home') }}" class="text-slate-500 hover:text-blue-600 font-medium"><i
+            class="fa-solid fa-house mr-1"></i> Home</a>
+        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
+        <a href="{{ route('products.index') }}" class="text-slate-500 hover:text-blue-600 font-medium">Products</a>
+        @if($product->category)
+          <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
+          <a href="{{ route('category.show', $product->category->slug) }}"
+            class="text-slate-500 hover:text-blue-600 font-medium">{{ $product->category->name }}</a>
+        @endif
+        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
+        <span class="text-slate-900 font-semibold truncate max-w-[200px]">{{ $product->name }}</span>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16" data-id="{{ $product->id }}"
+        data-price="{{ $displayPrice }}">
+        <div class="space-y-4">
+          <div class="relative rounded-3xl overflow-hidden bg-white shadow-xl border border-slate-200">
+            <img id="main-product-image" src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="eager"
+              fetchpriority="high" decoding="async" class="w-full aspect-square object-contain bg-slate-50 p-6"
+              onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'">
             @if($product->category)
-            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
-            <a href="{{ route('category.show', $product->category->slug) }}" class="text-slate-500 hover:text-violet-600 font-medium">{{ $product->category->name }}</a>
+              <div class="absolute top-4 left-4 text-white text-xs font-bold px-4 py-1.5 rounded-xl shadow-lg"
+                style="background: {{ $accent }}">
+                {{ $product->category->name }}
+              </div>
             @endif
-            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300"></i>
-            <span class="text-slate-900 font-semibold truncate max-w-[200px]">{{ $product->name }}</span>
-        </nav>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16" data-id="{{ $product->id }}" data-price="{{ $displayPrice }}">
-            <div class="space-y-4">
-                <div class="relative rounded-3xl overflow-hidden bg-white shadow-xl border border-slate-200">
-                    <img id="main-product-image" src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="eager" fetchpriority="high" decoding="async" class="w-full aspect-square object-contain bg-slate-50 p-6" onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'">
-                    @if($product->category)
-                    <div class="absolute top-4 left-4 text-white text-xs font-bold px-4 py-1.5 rounded-xl shadow-lg" style="background: {{ $accent }}">
-                        {{ $product->category->name }}
-                    </div>
-                    @endif
-                </div>
-                @if($product->images->count() > 1)
-                <div class="grid grid-cols-4 gap-3">
-                    @foreach($product->images as $image)
-                    <button type="button" onclick="document.getElementById('main-product-image').src='{{ $image->getUrl('large') }}'"
-                        class="aspect-square rounded-2xl border-2 border-transparent hover:border-violet-300 overflow-hidden bg-white p-1">
-                        <img src="{{ $image->getUrl('thumb') }}" alt="" loading="lazy" decoding="async" class="w-full h-full object-contain" onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'">
-                    </button>
-                    @endforeach
-                </div>
-                @endif
+          </div>
+          @if($product->images->count() > 1)
+            <div class="grid grid-cols-4 gap-3">
+              @foreach($product->images as $image)
+                <button type="button"
+                  onclick="document.getElementById('main-product-image').src='{{ $image->getUrl('large') }}'"
+                  class="aspect-square rounded-2xl border-2 border-transparent hover:border-blue-300 overflow-hidden bg-white p-1">
+                  <img src="{{ $image->getUrl('thumb') }}" alt="" loading="lazy" decoding="async"
+                    class="w-full h-full object-contain"
+                    onerror="this.onerror=null;this.src='{{ site_setting_url('default_product_image') ?: asset('imges/products/default.jpg') }}'">
+                </button>
+              @endforeach
             </div>
-
-            <div class="space-y-6">
-                <div>
-                    @if($product->featured)
-                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full mb-3">Featured</span>
-                    @endif
-                    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">{{ $product->name }}</h1>
-                    <div class="flex items-center gap-2 mt-2">
-                        @php $full = (int) round($reviewsAvg); @endphp
-                        <span class="text-amber-500 text-lg leading-none" aria-label="{{ $reviewsAvg }} من 5">@for($i=0;$i<$full;$i++)★@endfor<span class="text-slate-300">@for($i=0;$i<5-$full;$i++)★@endfor</span></span>
-                        @if($reviewsCount > 0)
-                            <span class="text-sm font-bold text-slate-700">{{ number_format($reviewsAvg, 1) }}</span>
-                            <a href="#reviews" class="text-xs text-slate-500 hover:text-violet-600">({{ $reviewsCount }} مراجعة)</a>
-                        @else
-                            <a href="#reviews" class="text-xs text-slate-400 hover:text-violet-600">لا توجد مراجعات بعد</a>
-                        @endif
-                    </div>
-                    @if($product->sku)<p class="text-sm text-slate-400 mt-2">SKU: {{ $product->sku }}</p>@endif
-                </div>
-
-                <div class="flex items-end gap-3">
-                    @if($hasDiscount)
-                        <span class="text-4xl font-black" style="color: {{ $accent }}">{{ money($displayPrice) }}</span>
-                        <del class="text-lg text-slate-400">{{ money($product->price) }}</del>
-                    @else
-                        <span class="text-4xl font-black text-slate-900">{{ money($displayPrice) }}</span>
-                    @endif
-                </div>
-
-
-                <p class="font-semibold {{ $product->isInStock() ? 'text-emerald-600' : 'text-rose-600' }}">
-                    {{ $product->isInStock() ? 'In stock · ' . $product->stock . ' available' : 'Out of stock' }}
-                </p>
-
-                @if($product->isInStock())
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button type="button" onclick="addToCart(this)" class="add-btn flex-1 text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition active:scale-95" style="background: {{ $accent }}">
-                        Add to Cart
-                    </button>
-                    <button type="button" onclick="addToCart(this); window.location.href='{{ route('checkout') }}'"
-                        class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition">
-                        Buy Now
-                    </button>
-                </div>
-                @endif
-
-                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200">
-                    <div class="text-center"><i class="fa-solid fa-truck text-2xl mb-2" style="color: {{ $accent }}"></i><p class="text-xs font-semibold text-slate-600">Free Shipping</p></div>
-                    <div class="text-center"><i class="fa-solid fa-shield-halved text-2xl mb-2" style="color: {{ $accent }}"></i><p class="text-xs font-semibold text-slate-600">Warranty</p></div>
-                    <div class="text-center"><i class="fa-solid fa-rotate text-2xl mb-2" style="color: {{ $accent }}"></i><p class="text-xs font-semibold text-slate-600">30-Day Return</p></div>
-                </div>
-
-                @if($product->short_description)
-                <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
-                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <span class="h-6 w-1 rounded-full" style="background: {{ $accent }}"></span>
-                        {{ __('app.product_short_description') ?? 'Description' }}
-                    </h2>
-                    <div class="text-slate-700 leading-relaxed whitespace-pre-line">{{ $product->short_description }}</div>
-                </div>
-                @endif
-            </div>
+          @endif
         </div>
 
-        @if($product->description)
-        <div class="mt-10 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
-            <h2 class="text-2xl font-bold mb-5 flex items-center gap-2">
-                <span class="h-7 w-1.5 rounded-full" style="background: {{ $accent }}"></span>
-                {{ __('app.product_detailed_description') ?? 'Detailed Description' }}
-            </h2>
-            <div class="text-slate-700 leading-relaxed whitespace-pre-line text-base">{{ $product->description }}</div>
-        </div>
-        @endif
+        <div class="space-y-6">
+          <div>
+            @if($product->featured)
+              <span
+                class="inline-block px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full mb-3">Featured</span>
+            @endif
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 leading-tight">{{ $product->name }}</h1>
+            <div class="flex items-center gap-3 mt-2 bg-white border border-slate-100 rounded-full px-4 py-1.5 shadow-sm max-w-max antialiased">
 
-        @if($relatedProducts->isNotEmpty())
-        <div class="mt-16">
-            <h2 class="text-2xl font-black text-slate-900 mb-6">Related Products</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                @foreach($relatedProducts as $related)
-                    @include('components.product-card', ['product' => $related])
-                @endforeach
+              <!-- قسم التقييم الرقمي والنجوم -->
+              <div class="flex items-center gap-2">
+                @if($reviewsCount > 0)
+                  <!-- الرقم بخط عريض وواضح -->
+                  <span class="text-base font-extrabold text-slate-800 tracking-tight">
+                    {{ number_format($reviewsAvg, 1) }}
+                  </span>
+                @endif
+
+                @php $full = (int) round($reviewsAvg); @endphp
+
+                <!-- النجوم بدقة متناهية وألوان متناسقة -->
+                <div class="flex items-center gap-0.5 text-amber-400" aria-label="{{ $reviewsAvg }} من 5">
+                  @for($i = 0; $i < $full; $i++)
+                    <svg class="w-4 h-4 fill-current drop-shadow-[0_1px_1px_rgba(245,158,11,0.2)]" viewBox="0 0 20 20">
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  @endfor
+                  @for($i = 0; $i < 5 - $full; $i++)
+                    <svg class="w-4 h-4 text-slate-200 fill-current" viewBox="0 0 20 20">
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  @endfor
+                </div>
+              </div>
+
+              <!-- الفاصل العمودي الأنيق -->
+              <div class="h-4 w-px bg-slate-200"></div>
+
+              <!-- رابط المراجعات -->
+              <div>
+                @if($reviewsCount > 0)
+                  <a href="#reviews"
+                    class="text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors duration-150 underline-offset-4 hover:underline">
+                    {{ $reviewsCount }} review
+                  </a>
+                @else
+                  <a href="#reviews"
+                    class="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors duration-150">
+                     No reviews yet
+                  </a>
+                @endif
+              </div>
+
             </div>
-        </div>
-        @endif
+            @if($product->sku)
+            <p class="text-sm text-slate-400 mt-2">SKU: {{ $product->sku }}</p>@endif
+          </div>
+
+          <div class="flex items-end gap-3">
+            @if($hasDiscount)
+              <span class="text-4xl font-black" style="color: {{ $accent }}">{{ money($displayPrice) }}</span>
+              <del class="text-lg text-slate-400">{{ money($product->price) }}</del>
+            @else
+              <span class="text-4xl font-black text-slate-900">{{ money($displayPrice) }}</span>
+            @endif
+          </div>
+
+
+<div class="flex items-center gap-3 mt-2 bg-white border border-slate-100 rounded-full px-4 py-1.5 shadow-sm max-w-max antialiased">
+    
+    <!-- Status Dot Indicator (Animated Pulse for In Stock) -->
+    <div class="flex items-center justify-center">
+        <span class="relative flex h-2 w-2">
+            @if($product->isInStock())
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            @else
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            @endif
+        </span>
     </div>
-@include('product.partials.reviews', ['product' => $product])
-</main>
+
+    <!-- Stock Status Text -->
+    <div>
+        <span class="text-xs font-bold tracking-wide {{ $product->isInStock() ? 'text-emerald-700' : 'text-rose-700' }}">
+            {{ $product->isInStock() ? 'In stock' : 'Out of stock' }}
+        </span>
+    </div>
+
+    @if($product->isInStock())
+        <!-- Clean Vertical Divider -->
+        <div class="h-4 w-px bg-slate-200"></div>
+
+        <!-- Available Quantity -->
+        <div>
+            <span class="text-xs font-semibold text-slate-500">
+                {{ $product->stock }} available
+            </span>
+        </div>
+    @endif
+
+</div>
+
+          @if($product->isInStock())
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button type="button" onclick="addToCart(this)"
+                class="add-btn flex-1 text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition active:scale-95"
+                style="background: {{ $accent }}">
+                Add to Cart
+              </button>
+              <button type="button" onclick="addToCart(this); window.location.href='{{ route('checkout') }}'"
+                class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition">
+                Buy Now
+              </button>
+            </div>
+          @endif
+
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-200">
+            <div class="text-center"><i class="fa-solid fa-truck text-2xl mb-2" style="color: {{ $accentt }}"></i>
+              <p class="text-xs font-semibold text-slate-600">Free Shipping</p>
+            </div>
+            <div class="text-center"><i class="fa-solid fa-shield-halved text-2xl mb-2" style="color: {{ $accentt }}"></i>
+              <p class="text-xs font-semibold text-slate-600">Warranty</p>
+            </div>
+            <div class="text-center"><i class="fa-solid fa-rotate text-2xl mb-2" style="color: {{ $accentt }}"></i>
+              <p class="text-xs font-semibold text-slate-600">30-Day Return</p>
+            </div>
+          </div>
+
+          @if($product->short_description)
+            <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+              <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <span class="h-6 w-1 rounded-full" style="background: {{ $accent }}"></span>
+                {{ __('app.product_short_description') ?? 'Description' }}
+              </h2>
+              <div class="text-slate-700 leading-relaxed whitespace-pre-line">{{ $product->short_description }}</div>
+            </div>
+          @endif
+        </div>
+      </div>
+
+      @if($product->description)
+        <div class="mt-10 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+          <h2 class="text-2xl font-bold mb-5 flex items-center gap-2">
+            <span class="h-7 w-1.5 rounded-full" style="background: {{ $accent }}"></span>
+            {{ __('app.product_detailed_description') ?? 'Detailed Description' }}
+          </h2>
+          <div class="text-slate-700 leading-relaxed whitespace-pre-line text-base">{{ $product->description }}</div>
+        </div>
+      @endif
+
+      @if($relatedProducts->isNotEmpty())
+        <div class="mt-16">
+          <h2 class="text-2xl font-black text-slate-900 mb-6">Related Products</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            @foreach($relatedProducts as $related)
+              @include('components.product-card', ['product' => $related])
+            @endforeach
+          </div>
+        </div>
+      @endif
+    </div>
+    @include('product.partials.reviews', ['product' => $product])
+  </main>
 
 @endsection

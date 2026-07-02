@@ -10,10 +10,10 @@
 
         <form method="GET" action="{{ route('track-order') }}" class="bg-white p-6 rounded-2xl shadow-sm grid md:grid-cols-3 gap-3">
             <input type="text" name="order_number" value="{{ request('order_number') }}" placeholder="{{ __('app.track_order_number') }}" required
-                   class="md:col-span-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500">
+                   class="md:col-span-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500">
             <input type="email" name="email" value="{{ request('email') }}" placeholder="{{ __('app.track_email') }}" required
-                   class="md:col-span-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-violet-500">
-            <button class="md:col-span-1 bg-violet-600 hover:bg-violet-700 text-white py-3 rounded-lg font-semibold">
+                   class="md:col-span-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+            <button class="md:col-span-1 bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-lg font-semibold">
                 <i class="fas fa-search"></i> {{ __('app.track_button') }}
             </button>
         </form>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="mt-4 pt-4 border-t flex justify-between font-bold text-lg">
                         <span>{{ __('app.track_total') }}</span>
-                        <span class="text-violet-700">{{ number_format($order->total, 2) }} {{ __('app.shared_currency_egp') }}</span>
+                        <span class="text-sky-700">{{ number_format($order->total, 2) }} {{ __('app.shared_currency_egp') }}</span>
                     </div>
                 </div>
 

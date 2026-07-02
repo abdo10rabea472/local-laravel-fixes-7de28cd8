@@ -38,11 +38,11 @@
                 </div>
                 <input type="text" name="title" value="{{ $userReview->title ?? '' }}" placeholder="Review title (optional)" class="w-full h-11 px-3 border border-slate-200 rounded-xl text-sm mb-3">
                 <textarea name="body" rows="4" required class="w-full p-3 border border-slate-200 rounded-xl text-sm mb-3" placeholder="Share your thoughts about this product...">{{ $userReview->body ?? '' }}</textarea>
-                <button class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl">{{ $userReview ? 'Update Review' : 'Post Review' }}</button>
+                <button class="px-6 py-2.5 bg-gradient-to-r from-sky-800 to-blue-600 hover:opacity-90 transition shadow-md shadow-blue-500/30 text-white font-bold rounded-xl">{{ $userReview ? 'Update Review' : 'Post Review' }}</button>
             </form>
         @else
             <div class="bg-slate-50 p-4 rounded-xl text-sm text-slate-600 mb-6">
-                <a href="{{ route('login') }}" class="text-violet-600 font-bold">Sign in</a> to write a review.
+                <a href="{{ route('login') }}" class="text-blue-600 font-bold">Sign in</a> to write a review.
             </div>
         @endauth
 
@@ -59,8 +59,8 @@
                 @if($r->title)<h4 class="font-bold mb-1">{{ $r->title }}</h4>@endif
                 <p class="text-sm text-slate-700">{{ $r->body }}</p>
                 @if($r->admin_reply)
-                <div class="mt-3 p-3 bg-violet-50 rounded-xl text-sm">
-                    <b class="text-violet-700"><i class="fa-solid fa-reply mr-1"></i> Admin reply:</b> {{ $r->admin_reply }}
+                <div class="mt-3 p-3 bg-blue-50 rounded-xl text-sm">
+                    <b class="text-blue-700"><i class="fa-solid fa-reply mr-1"></i> Admin reply:</b> {{ $r->admin_reply }}
                 </div>
                 @endif
             </div>
