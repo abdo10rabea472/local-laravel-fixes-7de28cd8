@@ -9,14 +9,14 @@
     <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950"></div>
     <!-- صورة خلفية مع تأثير Overlay (شفافية + مزج) -->
     <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071')] 
-                          bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+                              bg-cover bg-center opacity-20 mix-blend-overlay"></div>
     </div>
 
     <div
       class="relative z-10 max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
       <div>
         <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 
-                                          rounded-full px-6 py-2.5 text-sm text-white mb-8">
+                                              rounded-full px-6 py-2.5 text-sm text-white mb-8">
           <i class="fa-solid fa-flask-vial text-amber-300"></i>
           {{ __('app.home_hero_badge') }}
         </span>
@@ -37,16 +37,16 @@
 
         <div class="flex flex-wrap gap-4 mb-12">
           <a href="{{ route('products.index') }}" class="group inline-flex items-center justify-center gap-3 bg-amber-400 hover:bg-amber-500 
-                                      text-slate-950 font-semibold text-lg px-10 py-4 rounded-2xl transition-all 
-                                      duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30">
+                                          text-slate-950 font-semibold text-lg px-10 py-4 rounded-2xl transition-all 
+                                          duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1v-5m10-10l2 2m-2-2v10a1 1 0 01-1 1v-5m-6 0a1 1 0 001-1v5" />
             </svg> {{ __('app.home_hero_shop_all') }}
           </a>
           <a href="#colleges" class="group inline-flex items-center justify-center gap-3 border-2 border-white/70 hover:border-white 
-                                  text-white font-semibold text-lg px-10 py-4 rounded-2xl transition-all duration-300 
-                                  hover:bg-white/10">
+                                      text-white font-semibold text-lg px-10 py-4 rounded-2xl transition-all duration-300 
+                                      hover:bg-white/10">
             <!-- أيقونة سهم -->
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transition-transform group-hover:translate-x-1"
               fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,6 +99,189 @@
       </div>
     </div>
   </section>
+  {{-- ═══════════════ سلايدات عروض وخصومات ═══════════════ --}}
+  @php
+    // مصفوفة البيانات المخصصة لعروض وخصومات متجر أدوات الكليات العملية
+    $slides = [
+      [
+        "id" => 1,
+        "badge_icon" => "fa-fire",
+        "badge_text" => "🔥 عرض حصري",
+        "title_white" => "خصم فوري 10%",
+        "title_gradient" => "على سلة مشترياتك",
+        "desc" => "استمتع بخصم تلقائي 10% (بحد أقصى 50 جنيه) عند تسوقك منتجات بقيمة 2000 جنيه أو أكثر.",
+        "link" => "/shop/offers",
+        "btn_text" => "تسوق العروض الآن",
+        "type" => "standard",
+        "bg_gradient" => "from-neutral-950 via-stone-900 to-neutral-950",
+        "image" => "https://m.media-amazon.com/images/I/71WXyKg87NL._AC_SX569_.jpg",
+        "image_position" => "right",
+        "active" => true
+      ],
+      [
+        "id" => 2,
+        "badge_icon" => "fa-gift",
+        "badge_text" => "🎁 هدية ترحيبية للطلاب",
+        "title_white" => "أول مرة تطلب للمرحلة؟",
+        "title_gradient" => "إليك خصم إضافي 5%",
+        "desc" => "اطلب بـ 300 جنيه أو أكثر، واستخدم كود الخصم التالي في سلة المشتريات لتحصل على الخصم فوراً.",
+        "link" => "#",
+        "btn_text" => "نسخ الكود",
+        "type" => "promo",
+        "promo_code" => "UNI_START_2026",
+        "bg_gradient" => "from-slate-950 via-purple-950 to-slate-950",
+        "image" => "https://store.ehabona.com/web/image/product.product/75/image_1024/%D8%A7%D9%84%D8%A8%D8%A7%D9%83%D8%AF%D8%AC%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%20%D8%A7%D9%84%D9%85%D8%AA%D9%83%D8%A7%D9%85%D9%84:%20Vital%20Signs%20%26%20Suture%20Bundle?unique=a94a61d",
+        "image_position" => "left",
+        "active" => false
+      ],
+      [
+        "id" => 3,
+        "badge_icon" => "fa-stethoscope",
+        "badge_text" => "🩺 باقات كليات الطبية",
+        "title_white" => "وفر حتى 15% عند شراء",
+        "title_gradient" => "الحقيبة الطبية المتكاملة",
+        "desc" => "الباقة تحتوي على البالطو القطني، سماعة الطبيب، وجهاز ضغط الدم، بالإضافة إلى طقم التشريح المعقم.",
+        "link" => "/shop/medical",
+        "btn_text" => "اكتشف الباقات الطبية",
+        "type" => "standard",
+        "bg_gradient" => "from-slate-950 via-emerald-950 to-slate-950",
+        "image" => "https://i.postimg.cc/TPhmzS5v/1.jpg",
+        "image_position" => "right",
+        "active" => false
+      ]
+    ];
+
+    $heroIcons = [
+      ['fa-microscope', 'from-blue-500/20 to-cyan-500/20 text-cyan-400', __('app.home_hero_card_microscopes')],
+      ['fa-vial', 'from-purple-500/20 to-indigo-500/20 text-purple-400', __('app.home_hero_card_glassware')],
+      ['fa-stethoscope', 'from-emerald-500/20 to-teal-500/20 text-emerald-400', __('app.home_hero_card_medical')],
+      ['fa-screwdriver-wrench', 'from-amber-500/20 to-orange-500/20 text-amber-400', __('app.home_hero_card_engineering')],
+    ];
+  @endphp
+
+  <div id="hero-slider"
+    class="relative w-full overflow-hidden rounded-2xl bg-neutral-950 my-8 shadow-2xl border border-neutral-900">
+
+    <div class="relative min-h-[550px] md:min-h-[500px] flex items-center">
+
+      @foreach($slides as $index => $slide)
+        <div
+          class="slider-slide {{ $slide['active'] ? 'flex' : 'hidden' }} w-full min-h-[550px] md:min-h-[500px] grid grid-cols-1 md:grid-cols-2 gap-8 items-center px-8 md:px-20 py-16 transition-all duration-500 ease-in-out bg-gradient-to-r {{ $slide['bg_gradient'] }}"
+          dir="rtl">
+
+          <div
+            class="flex flex-col items-center md:items-start text-center md:text-right space-y-6 {{ $slide['image_position'] == 'left' ? 'md:order-2' : 'md:order-1' }}">
+            <span
+              class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold bg-red-500/10 border border-red-500/20 text-red-400 backdrop-blur-sm">
+              <i class="fas {{ $slide['badge_icon'] }}"></i>
+              {{ $slide['badge_text'] }}
+            </span>
+
+            <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+              {{ $slide['title_white'] }}
+              <span
+                class="block text-3xl md:text-5xl mt-3 bg-gradient-to-l from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent opacity-90">
+                {{ $slide['title_gradient'] }}
+              </span>
+            </h2>
+
+            <p class="text-base md:text-lg text-neutral-400 max-w-xl leading-relaxed">
+              {{ $slide['desc'] }}
+            </p>
+
+            <div class="pt-4">
+              @if($slide['type'] == 'promo')
+                <div
+                  class="flex items-center gap-2 bg-neutral-900/80 border border-purple-500/30 rounded-xl p-2 backdrop-blur-sm">
+                  <span
+                    class="px-4 font-mono text-purple-400 tracking-wider font-bold text-lg">{{ $slide['promo_code'] }}</span>
+                  <button onclick="navigator.clipboard.writeText('{{ $slide['promo_code'] }}')"
+                    class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold transition-all">
+                    {{ $slide['btn_text'] }}
+                  </button>
+                </div>
+              @else
+                <a href="{{ $slide['link'] }}"
+                  class="inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold rounded-xl shadow-lg shadow-red-500/20 transform hover:-translate-y-0.5 transition-all duration-200 text-base">
+                  {{ $slide['btn_text'] }}
+                </a>
+              @endif
+            </div>
+          </div>
+
+          <div
+            class="flex justify-center items-center relative {{ $slide['image_position'] == 'left' ? 'md:order-1' : 'md:order-2' }}">
+            <div class="absolute w-80 h-80 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <img src="{{ asset($slide['image']) }}" alt="{{ $slide['title_white'] }}"
+              class="relative max-h-[350px] md:max-h-[420px] object-contain drop-shadow-[0_0_50px_rgba(239,68,68,0.25)] transform hover:scale-105 transition-transform duration-500">
+          </div>
+
+        </div>
+      @endforeach
+
+    </div>
+
+    <button id="prev-btn"
+      class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-neutral-900/60 hover:bg-neutral-800 text-white flex items-center justify-center border border-neutral-800 backdrop-blur-sm transition-all z-10">
+      <i class="fas fa-chevron-left text-base"></i>
+    </button>
+    <button id="next-btn"
+      class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-neutral-900/60 hover:bg-neutral-800 text-white flex items-center justify-center border border-neutral-800 backdrop-blur-sm transition-all z-10">
+      <i class="fas fa-chevron-right text-base"></i>
+    </button>
+
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+      @foreach($slides as $index => $slide)
+        <button
+          class="slider-dot h-2.5 rounded-full transition-all duration-300 {{ $slide['active'] ? 'w-8 bg-emerald-500' : 'w-2.5 bg-neutral-600' }}"
+          onclick="goToSlide({{ $index }})"></button>
+      @endforeach
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slider-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+
+    function showSlide(index) {
+      if (index >= slides.length) currentSlide = 0;
+      else if (index < 0) currentSlide = slides.length - 1;
+      else currentSlide = index;
+
+      slides.forEach((slide, i) => {
+        if (i === currentSlide) {
+          slide.classList.remove('hidden');
+          slide.classList.add('flex');
+        } else {
+          slide.classList.remove('flex');
+          slide.classList.add('hidden');
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (i === currentSlide) {
+          dot.classList.remove('w-2.5', 'bg-neutral-600');
+          dot.classList.add('w-8', 'bg-emerald-500');
+        } else {
+          dot.classList.add('w-2.5', 'bg-neutral-600');
+          dot.classList.remove('w-8', 'bg-emerald-500');
+        }
+      });
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => showSlide(currentSlide + 1));
+    document.getElementById('prev-btn').addEventListener('click', () => showSlide(currentSlide - 1));
+
+    function goToSlide(index) {
+      showSlide(index);
+    }
+
+    setInterval(() => {
+      showSlide(currentSlide + 1);
+    }, 5000);
+  </script>
+
 
   {{-- ═══════════════ COLLEGE TILES (BIG) ═══════════════ --}}
   @if($mainCategories->isNotEmpty())
@@ -428,95 +611,95 @@
 
 
   <!-- {{-- ═══════════════ COLLEGES (CATEGORY CIRCLES) ═══════════════ --}}
-              @if($mainCategories->isNotEmpty())
-                <section id="colleges" class="bg-slate-50 py-10 overflow-hidden">
-                  <div class="max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8">
+                  @if($mainCategories->isNotEmpty())
+                    <section id="colleges" class="bg-slate-50 py-10 overflow-hidden">
+                      <div class="max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8">
 
-                    <div class="flex items-end justify-between mb-6">
-                      <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-violet-600">
-                          {{ __('app.home_colleges_eyebrow') }}
-                        </span>
+                        <div class="flex items-end justify-between mb-6">
+                          <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-violet-600">
+                              {{ __('app.home_colleges_eyebrow') }}
+                            </span>
 
-                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                          {{ __('app.home_colleges_title') }}
-                        </h2>
-                      </div>
+                            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                              {{ __('app.home_colleges_title') }}
+                            </h2>
+                          </div>
 
-                      <div class="hidden md:flex gap-3">
-                        <button type="button" aria-label="Previous slide"
-                          class="college-icons-prev w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
-                          <i class="fa-solid fa-chevron-left"></i>
-                        </button>
+                          <div class="hidden md:flex gap-3">
+                            <button type="button" aria-label="Previous slide"
+                              class="college-icons-prev w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                              <i class="fa-solid fa-chevron-left"></i>
+                            </button>
 
-                        <button type="button" aria-label="Next slide"
-                          class="college-icons-next w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
-                          <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-                      </div>
-                    </div>
+                            <button type="button" aria-label="Next slide"
+                              class="college-icons-next w-11 h-11 rounded-full bg-white shadow hover:bg-violet-600 hover:text-white transition">
+                              <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                          </div>
+                        </div>
 
-                    <div class="swiper collegeIconsSwiper">
+                        <div class="swiper collegeIconsSwiper">
 
-                      <div class="swiper-wrapper">
+                          <div class="swiper-wrapper">
 
-                        @foreach($mainCategories as $cat)
+                            @foreach($mainCategories as $cat)
 
-                          <div class="swiper-slide !w-[150px]">
+                              <div class="swiper-slide !w-[150px]">
 
-                            <a href="{{ route('category.show', $cat->slug) }}" class="group flex flex-col items-center gap-2.5">
+                                <a href="{{ route('category.show', $cat->slug) }}" class="group flex flex-col items-center gap-2.5">
 
-                              <div
-                                class="relative w-full aspect-square rounded-2xl bg-white border border-slate-200 group-hover:border-violet-400 transition-all duration-300 p-2 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-lg group-hover:-translate-y-1">
+                                  <div
+                                    class="relative w-full aspect-square rounded-2xl bg-white border border-slate-200 group-hover:border-violet-400 transition-all duration-300 p-2 flex items-center justify-center overflow-hidden shadow-sm group-hover:shadow-lg group-hover:-translate-y-1">
 
-                                @if($cat->image)
+                                    @if($cat->image)
 
-                                  <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" loading="lazy"
-                                    class="w-full h-full object-contain"
-                                    onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
+                                      <img src="{{ asset('storage/' . $cat->image) }}" alt="{{ $cat->name }}" loading="lazy"
+                                        class="w-full h-full object-contain"
+                                        onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
 
-                                  <div class="hidden absolute inset-0 items-center justify-center text-2xl text-white"
-                                    style="background:linear-gradient(135deg,
-                                                                                                     {{ $cat->primary_color ?? '#6366f1' }},
-                                                                                                     {{ $cat->secondary_color ?? '#8b5cf6' }});">
+                                      <div class="hidden absolute inset-0 items-center justify-center text-2xl text-white"
+                                        style="background:linear-gradient(135deg,
+                                                                                                         {{ $cat->primary_color ?? '#6366f1' }},
+                                                                                                         {{ $cat->secondary_color ?? '#8b5cf6' }});">
 
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                        <i class="fa-solid fa-graduation-cap"></i>
+
+                                      </div>
+
+                                    @else
+
+                                      <div class="w-full h-full rounded-xl flex items-center justify-center text-3xl text-white"
+                                        style="background:linear-gradient(135deg,
+                                                                                                         {{ $cat->primary_color ?? '#6366f1' }},
+                                                                                                         {{ $cat->secondary_color ?? '#8b5cf6' }});">
+
+                                        <i class="fa-solid fa-graduation-cap"></i>
+
+                                      </div>
+
+                                    @endif
 
                                   </div>
 
-                                @else
+                                  <span
+                                    class="text-xs font-bold text-slate-700 group-hover:text-violet-700 text-center leading-tight line-clamp-2">
+                                    {{ $cat->name }}
+                                  </span>
 
-                                  <div class="w-full h-full rounded-xl flex items-center justify-center text-3xl text-white"
-                                    style="background:linear-gradient(135deg,
-                                                                                                     {{ $cat->primary_color ?? '#6366f1' }},
-                                                                                                     {{ $cat->secondary_color ?? '#8b5cf6' }});">
-
-                                    <i class="fa-solid fa-graduation-cap"></i>
-
-                                  </div>
-
-                                @endif
+                                </a>
 
                               </div>
 
-                              <span
-                                class="text-xs font-bold text-slate-700 group-hover:text-violet-700 text-center leading-tight line-clamp-2">
-                                {{ $cat->name }}
-                              </span>
-
-                            </a>
+                            @endforeach
 
                           </div>
 
-                        @endforeach
+                        </div>
 
                       </div>
-
-                    </div>
-
-                  </div>
-                </section>
-              @endif   -->
+                    </section>
+                  @endif   -->
 
 
   {{-- ═══════════════ FEATURES STRIP ═══════════════ --}}
