@@ -191,8 +191,13 @@ class CategoryController extends Controller
         }
 
         $oldSlug = $category->slug;
+        $oldParentId = $category->parent_id;
         $category->update($validated);
         $this->clearCategoryCache($category, $oldSlug);
+        $this->clearParentCache((int) $validated['parent_id']);
+        if ($oldParentId && $oldParentId !== (int) $validated['parent_id']) {
+            $this->clearParentCache((int) $oldParentId);
+        }
 
         return redirect()->route('admin.subcategories.index')->with('success', 'تم تحديث التصنيف الفرعي بنجاح.');
     }
