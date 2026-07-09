@@ -152,10 +152,13 @@ class CategoryController extends Controller
             $validated['image'] = $this->imageService->storeCategoryImage($request->file('image'), 'image');
         }
 
-        Category::create($validated);
-        $this->clearCategoryCache();
+        $sub = Category::create($validated);
+        $this->clearCategoryCache($sub);
+        $this->clearParentCache((int) $validated['parent_id']);
 
-        return redirect()->route('admin.subcategories.index')->with('success', 'تم إضافة التصنيف الفرعي بنجاح.');
+        return redirect()
+            ->route('admin.subcategories.index', ['college_id' => $validated['parent_id']])
+            ->with('success', 'تم إضافة التصنيف الفرعي بنجاح.');
     }
 
     public function subcategoriesEdit(Category $category): View|RedirectResponse
