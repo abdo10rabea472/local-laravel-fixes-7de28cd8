@@ -353,4 +353,12 @@ class CategoryController extends Controller
             Cache::forget("category_page_{$category->slug}");
         }
     }
+
+    private function clearParentCache(int $parentId): void
+    {
+        $parent = Category::find($parentId);
+        if ($parent?->slug) {
+            Cache::forget("category_page_{$parent->slug}");
+        }
+    }
 }
