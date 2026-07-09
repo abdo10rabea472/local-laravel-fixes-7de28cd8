@@ -213,9 +213,13 @@ class CategoryController extends Controller
                 ->with('error', 'لا يمكن حذف تصنيف مرتبط بمنتجات.');
         }
 
+        $parentId = $category->parent_id;
         $this->imageService->deletePaths($category->image, $category->banner);
         $category->delete();
         $this->clearCategoryCache($category);
+        if ($parentId) {
+            $this->clearParentCache((int) $parentId);
+        }
 
         return redirect()->route('admin.subcategories.index')->with('success', 'تم حذف التصنيف الفرعي بنجاح.');
     }
