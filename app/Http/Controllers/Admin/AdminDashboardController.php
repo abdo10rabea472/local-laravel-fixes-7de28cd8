@@ -23,7 +23,7 @@ class AdminDashboardController extends Controller
                 . ' COALESCE(SUM(stock), 0) as total_stock,'
                 . ' COALESCE(SUM(COALESCE(sale_price, price) * stock), 0) as total_stock_value,'
                 . ' SUM(CASE WHEN stock = 0 THEN 1 ELSE 0 END) as out_of_stock_count,'
-                . ' SUM(CASE WHEN stock > 0 AND stock <= 5 THEN 1 ELSE 0 END) as low_stock_count'
+                . ' SUM(CASE WHEN stock > 0 AND stock <= COALESCE(low_stock_threshold, 5) THEN 1 ELSE 0 END) as low_stock_count'
             )->first();
         });
 
@@ -103,10 +103,10 @@ class AdminDashboardController extends Controller
         $lowStockProducts = Product::query()
             ->with('category:id,name')
             ->where('stock', '>', 0)
-            ->where('stock', '<=', 5)
+            ->whereColumn('stock', '<=', 'low_stock_threshold')
             ->orderBy('stock')
             ->limit(5)
-            ->get(['id', 'name', 'stock', 'category_id']);
+            ->get(['id', 'name', 'stock', 'low_stock_threshold', 'category_id']);
 
         $recentProducts = Product::query()
             ->select(['id', 'name', 'slug', 'price', 'sale_price', 'stock', 'category_id', 'created_at'])
