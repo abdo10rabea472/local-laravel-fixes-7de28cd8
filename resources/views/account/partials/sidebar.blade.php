@@ -9,9 +9,6 @@
                 <div class="min-w-0">
                     <p class="font-black truncate">{{ $user->name }}</p>
                     <p class="text-[11px] text-sky-100 truncate">{{ $user->email }}</p>
-                    @if($user->customerGroup)
-                        <span class="inline-block mt-1 px-2 py-0.5 text-[10px] rounded-full bg-amber-300 text-sky-900 font-black">{{ $user->customerGroup->name }}</span>
-                    @endif
                 </div>
             </div>
         </div>

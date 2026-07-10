@@ -89,15 +89,6 @@
                     <input type="text" name="phone" value="{{ $customer->phone }}" class="w-full h-10 px-3 border border-slate-200 rounded-xl text-sm">
                 </div>
                 <div>
-                    <label class="text-xs text-slate-600">Group</label>
-                    <select name="customer_group_id" class="w-full h-10 px-3 border border-slate-200 rounded-xl text-sm">
-                        <option value="">— None —</option>
-                        @foreach($groups as $g)
-                            <option value="{{ $g->id }}" @selected($customer->customer_group_id==$g->id)>{{ $g->name }} ({{ $g->discount_percent }}%)</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div>
                     <label class="text-xs text-slate-600">Internal Notes</label>
                     <textarea name="admin_notes" rows="4" class="w-full p-3 border border-slate-200 rounded-xl text-sm">{{ $customer->admin_notes }}</textarea>
                 </div>

@@ -56,7 +56,6 @@
         ]],
         ['title' => __('app.admin_menu_orders'),         'icon' => 'fa-shopping-cart', 'route' => 'admin.orders.index'],
         ['title' => __('app.admin_menu_customers'),      'icon' => 'fa-users',         'route' => 'admin.customers.index'],
-        ['title' => __('app.admin_menu_customer_groups'),'icon' => 'fa-layer-group',   'route' => 'admin.customer-groups.index'],
         ['title' => __('app.admin_menu_stock'), 'icon' => 'fa-warehouse', 'children' => [
             ['title' => __('app.admin_menu_stock_manage'),  'route' => 'admin.stock.index'],
             ['title' => __('app.admin_menu_stock_history'), 'route' => 'admin.stock.history'],
