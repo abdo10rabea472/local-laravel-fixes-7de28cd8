@@ -152,13 +152,10 @@ class CategoryController extends Controller
             $validated['image'] = $this->imageService->storeCategoryImage($request->file('image'), 'image');
         }
 
-        $sub = Category::create($validated);
-        $this->clearCategoryCache($sub);
-        $this->clearParentCache((int) $validated['parent_id']);
+        Category::create($validated);
+        $this->clearCategoryCache();
 
-        return redirect()
-            ->route('admin.subcategories.index', ['college_id' => $validated['parent_id']])
-            ->with('success', 'تم إضافة التصنيف الفرعي بنجاح.');
+        return redirect()->route('admin.subcategories.index')->with('success', 'تم إضافة التصنيف الفرعي بنجاح.');
     }
 
     public function subcategoriesEdit(Category $category): View|RedirectResponse
@@ -191,13 +188,8 @@ class CategoryController extends Controller
         }
 
         $oldSlug = $category->slug;
-        $oldParentId = $category->parent_id;
         $category->update($validated);
         $this->clearCategoryCache($category, $oldSlug);
-        $this->clearParentCache((int) $validated['parent_id']);
-        if ($oldParentId && $oldParentId !== (int) $validated['parent_id']) {
-            $this->clearParentCache((int) $oldParentId);
-        }
 
         return redirect()->route('admin.subcategories.index')->with('success', 'تم تحديث التصنيف الفرعي بنجاح.');
     }
@@ -213,13 +205,9 @@ class CategoryController extends Controller
                 ->with('error', 'لا يمكن حذف تصنيف مرتبط بمنتجات.');
         }
 
-        $parentId = $category->parent_id;
         $this->imageService->deletePaths($category->image, $category->banner);
         $category->delete();
         $this->clearCategoryCache($category);
-        if ($parentId) {
-            $this->clearParentCache((int) $parentId);
-        }
 
         return redirect()->route('admin.subcategories.index')->with('success', 'تم حذف التصنيف الفرعي بنجاح.');
     }
@@ -351,14 +339,6 @@ class CategoryController extends Controller
 
         if ($category?->slug) {
             Cache::forget("category_page_{$category->slug}");
-        }
-    }
-
-    private function clearParentCache(int $parentId): void
-    {
-        $parent = Category::find($parentId);
-        if ($parent?->slug) {
-            Cache::forget("category_page_{$parent->slug}");
         }
     }
 }
