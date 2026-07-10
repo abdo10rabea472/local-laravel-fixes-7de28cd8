@@ -422,6 +422,8 @@
         </div>
         @endif
         </div>{{-- /#products-results --}}
+        </div>{{-- /products column --}}
+      </div>{{-- /flex row --}}
     </div>
 </section>
 @endsection
