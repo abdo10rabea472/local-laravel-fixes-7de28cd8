@@ -225,7 +225,9 @@
         {{-- ========== PRODUCTS COLUMN ========== --}}
         <div class="flex-1 min-w-0">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+
                     {{ $isCollege ? __('app.cat_title_all', ['name' => $category->name]) : __('app.cat_title', ['name' => $category->name]) }}
                 </h2>
                 <p class="text-slate-500 text-sm mt-1">
