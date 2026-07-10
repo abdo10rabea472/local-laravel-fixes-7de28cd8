@@ -51,7 +51,10 @@
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           @foreach($products as $p)
             @php
-              $discount = $p->price > 0 ? round((($p->price - $p->sale_price) / $p->price) * 100) : 0;
+              $effective = $p->effective_price;
+              $original  = (float) $p->price;
+              $discount  = $p->discount_percent;
+
             @endphp
             <a href="{{ route('product.show', $p->slug) }}"
               class="block flex-1 flex flex-col focus:outline-none bg-white rounded-3xl border border-slate-200/80 overflow-hidden hover:shadow-xl transition-all duration-300 group relative">
