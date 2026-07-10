@@ -115,6 +115,11 @@
                   class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-300 focus:bg-white transition-colors">
               </div>
               <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-500">Alternative Phone <span class="text-slate-400 font-normal">(optional)</span></label>
+                <input type="tel" name="phone_alt" value="{{ $profile['phone_alt'] ?? '' }}" maxlength="30"
+                  class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-300 focus:bg-white transition-colors">
+              </div>
+              <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-500">Country</label>
                 <select id="shipping-country" name="country" required
                   class="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-300 focus:bg-white transition-colors">
@@ -679,6 +684,7 @@
               cart: cart.map(i => ({ id: i.id, price: i.price, quantity: i.quantity || 1 })),
               email: form.email.value,
               phone: form.phone.value,
+              phone_alt: form.phone_alt?.value || null,
               customer_name: [form.first_name?.value, form.last_name?.value].filter(Boolean).join(' ') || form.full_name?.value || form.name?.value || null,
               shipping_country: countryOpt?.textContent?.trim() || null,
               shipping_region: regionOpt?.textContent?.trim() || null,
