@@ -175,8 +175,56 @@
 {{-- =================== PRODUCTS =================== --}}
 <section class="py-10 sm:py-14 bg-slate-50" id="products">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="flex flex-col lg:flex-row gap-6">
+        {{-- ========== DEPARTMENTS SIDEBAR ========== --}}
+        @if($departments->isNotEmpty())
+        <aside class="lg:w-72 shrink-0">
+          <div class="sticky top-28">
+            <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+              <div class="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100"
+                   style="background: linear-gradient(135deg, {{ $primary }}15, {{ $secondary }}15);">
+                <span class="flex h-8 w-8 items-center justify-center rounded-xl text-white shadow-md"
+                      style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});">
+                  <i class="fa-solid fa-layer-group text-xs"></i>
+                </span>
+                <h3 class="text-sm font-black text-slate-900">{{ __('app.cat_departments') }}</h3>
+              </div>
+              <div class="p-3 space-y-1 max-h-[70vh] overflow-y-auto">
+                @if($college)
+                  @php $allActive = $isCollege; @endphp
+                  <a href="{{ route('category.show', $college->slug) }}"
+                     class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all
+                            {{ $allActive ? 'text-white shadow' : 'text-slate-600 hover:bg-slate-50' }}"
+                     @if($allActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-grip text-[10px] opacity-70"></i>
+                      {{ __('app.cat_all_prefix', ['name' => $college->name]) }}</span>
+                    @if($allActive)<i class="fa-solid fa-check text-[10px]"></i>@endif
+                  </a>
+                @endif
+                @foreach($departments as $dept)
+                  @php $isActive = !$isCollege && $category->slug === $dept->slug; @endphp
+                  <a href="{{ route('category.show', $dept->slug) }}"
+                     class="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all
+                            {{ $isActive ? 'text-white shadow' : 'text-slate-600 hover:bg-slate-50' }}"
+                     @if($isActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
+                    <span class="truncate">{{ $dept->name }}</span>
+                    <span class="flex items-center gap-1.5 shrink-0">
+                      @if($dept->products_count > 0)
+                        <span class="opacity-70 text-[10px]">({{ $dept->products_count }})</span>
+                      @endif
+                      @if($isActive)<i class="fa-solid fa-check text-[10px]"></i>@endif
+                    </span>
+                  </a>
+                @endforeach
+              </div>
+            </div>
+          </div>
+        </aside>
+        @endif
+
+        {{-- ========== PRODUCTS COLUMN ========== --}}
+        <div class="flex-1 min-w-0">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-            <div>
                 <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                     {{ $isCollege ? __('app.cat_title_all', ['name' => $category->name]) : __('app.cat_title', ['name' => $category->name]) }}
                 </h2>
