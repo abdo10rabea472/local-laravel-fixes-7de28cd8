@@ -51,7 +51,10 @@
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           @foreach($products as $p)
             @php
-              $discount = $p->price > 0 ? round((($p->price - $p->sale_price) / $p->price) * 100) : 0;
+              $effective = $p->effective_price;
+              $original  = (float) $p->price;
+              $discount  = $p->discount_percent;
+
             @endphp
             <a href="{{ route('product.show', $p->slug) }}"
               class="block flex-1 flex flex-col focus:outline-none bg-white rounded-3xl border border-slate-200/80 overflow-hidden hover:shadow-xl transition-all duration-300 group relative">
@@ -119,13 +122,13 @@
 
                     <!-- السعر الحالي بعد الخصم -->
                     <span class="text-xl font-black font-mono tracking-tight" style="color: #db2777">
-                      {{ money($p->sale_price) }}
+                      {{ money($effective) }}
                     </span>
 
                   <!-- السعر الأصلي المشطوب (يظهر فقط إذا كان هناك خصم) -->
                     @if($discount > 0)
                       <span class="text-xs text-slate-400 line-through font-mono mt-0.5">
-                        {{ money($p->price) }}
+                        {{ money($original) }}
                       </span>
                     @endif
                   </div>
