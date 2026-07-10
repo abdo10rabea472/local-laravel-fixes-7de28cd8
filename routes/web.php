@@ -256,11 +256,6 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->name('admin.')->gro
     Route::patch('/customers/{customer}/toggle-active', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleActive'])->name('customers.toggle-active');
     Route::post('/customers/{customer}/send-email', [\App\Http\Controllers\Admin\CustomerController::class, 'sendEmail'])->name('customers.send-email');
 
-    // Customer Groups
-    Route::get('/customer-groups', [\App\Http\Controllers\Admin\CustomerGroupController::class, 'index'])->name('customer-groups.index');
-    Route::post('/customer-groups', [\App\Http\Controllers\Admin\CustomerGroupController::class, 'store'])->name('customer-groups.store');
-    Route::put('/customer-groups/{group}', [\App\Http\Controllers\Admin\CustomerGroupController::class, 'update'])->name('customer-groups.update');
-    Route::delete('/customer-groups/{group}', [\App\Http\Controllers\Admin\CustomerGroupController::class, 'destroy'])->name('customer-groups.destroy');
 
     // Reviews
     Route::get('/reviews', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');

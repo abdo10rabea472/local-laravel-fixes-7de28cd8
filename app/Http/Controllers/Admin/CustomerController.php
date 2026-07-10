@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\CustomerNotificationMail;
-use App\Models\CustomerGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +15,6 @@ class CustomerController extends Controller
     {
         $q = User::query()
             ->withCount('orders')
-            ->with('customerGroup:id,name,badge_color')
             ->latest();
 
         if ($s = $request->string('q')->trim()->value()) {
@@ -26,35 +24,28 @@ class CustomerController extends Controller
                   ->orWhere('phone', 'like', "%{$s}%");
             });
         }
-        if ($g = $request->integer('group')) {
-            $q->where('customer_group_id', $g);
-        }
         if ($request->filled('status')) {
             $q->where('is_active', $request->string('status')->value() === 'active');
         }
 
         $customers = $q->paginate(20)->withQueryString();
-        $groups = CustomerGroup::orderBy('name')->get();
 
-        return view('admin.customers.index', compact('customers', 'groups'));
+        return view('admin.customers.index', compact('customers'));
     }
 
     public function show(User $customer)
     {
         $customer->load([
-            'customerGroup',
             'orders' => fn ($q) => $q->withCount('items')->latest()->limit(50),
             'reviews.product:id,slug,name',
         ]);
         $totalSpent = $customer->totalSpent();
-        $groups = CustomerGroup::orderBy('name')->get();
-        return view('admin.customers.show', compact('customer', 'totalSpent', 'groups'));
+        return view('admin.customers.show', compact('customer', 'totalSpent'));
     }
 
     public function update(Request $request, User $customer)
     {
         $data = $request->validate([
-            'customer_group_id' => 'nullable|exists:customer_groups,id',
             'admin_notes' => 'nullable|string|max:2000',
             'phone' => 'nullable|string|max:30',
         ]);

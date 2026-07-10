@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +16,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password', 'phone',
-        'customer_group_id', 'is_active', 'admin_notes', 'last_login_at',
+        'is_active', 'admin_notes', 'last_login_at',
         'shipping_country', 'shipping_region', 'shipping_city',
         'shipping_address', 'shipping_postcode',
     ];
@@ -43,10 +43,6 @@ class User extends Authenticatable
         return $this->hasMany(Review::class)->latest();
     }
 
-    public function customerGroup(): BelongsTo
-    {
-        return $this->belongsTo(CustomerGroup::class);
-    }
 
     public function totalSpent(): float
     {
