@@ -207,6 +207,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lte:price',
             'stock' => 'required|integer|min:0',
+            'low_stock_threshold' => 'nullable|integer|min:0',
             'short_description' => 'nullable|string|max:300',
             'description' => 'nullable|string',
             'featured' => 'nullable|boolean',

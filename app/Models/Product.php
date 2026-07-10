@@ -21,6 +21,7 @@ class Product extends Model
         'price',
         'sale_price',
         'stock',
+        'low_stock_threshold',
         'featured',
         'seo_title',
         'seo_description',
