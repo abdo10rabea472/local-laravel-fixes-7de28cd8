@@ -154,43 +154,7 @@
     </div>
 </section>
 
-{{-- =================== DEPARTMENT FILTER BAR =================== --}}
-@if($departments->isNotEmpty())
-<section class="bg-slate-50 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6">
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 items-center gap-2
-                    bg-slate-200/50 p-1.5 rounded-2xl shadow-[inset_0_2px_4px_rgba(0,0,0,0.04)]
-                    border border-slate-200/30 backdrop-blur-md w-full">
-            @if($college)
-                @php $allActive = $isCollege; @endphp
-                <a href="{{ route('category.show', $college->slug) }}"
-                   class="px-4 py-3 text-[11px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-center transform active:scale-95
-                          {{ $allActive
-                              ? 'text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.15)]'
-                              : 'text-slate-500 hover:text-slate-900 hover:bg-white/70' }}"
-                   @if($allActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
-                    {{ __('app.cat_all_prefix', ['name' => $college->name]) }}
-                </a>
-            @endif
-
-            @foreach($departments as $dept)
-                @php $isActive = !$isCollege && $category->slug === $dept->slug; @endphp
-                <a href="{{ route('category.show', $dept->slug) }}"
-                   class="px-4 py-3 text-[11px] sm:text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-center transform active:scale-95
-                          {{ $isActive
-                              ? 'text-white shadow-[0_8px_20px_-6px_rgba(0,0,0,0.15)]'
-                              : 'text-slate-500 hover:text-slate-900 hover:bg-white/70' }}"
-                   @if($isActive) style="background: linear-gradient(135deg, {{ $primary }}, {{ $secondary }});" @endif>
-                    {{ $dept->name }}
-                    @if($dept->products_count > 0)
-                        <span class="opacity-70">({{ $dept->products_count }})</span>
-                    @endif
-                </a>
-            @endforeach
-        </div>
-    </div>
-</section>
-@endif
+{{-- Departments moved into sidebar within Products section below --}}
 
 {{-- =================== DYNAMIC SECTIONS =================== --}}
 @if($category->sections && $category->sections->isNotEmpty())
