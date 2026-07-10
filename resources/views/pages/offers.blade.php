@@ -122,13 +122,13 @@
 
                     <!-- السعر الحالي بعد الخصم -->
                     <span class="text-xl font-black font-mono tracking-tight" style="color: #db2777">
-                      {{ money($p->sale_price) }}
+                      {{ money($effective) }}
                     </span>
 
                   <!-- السعر الأصلي المشطوب (يظهر فقط إذا كان هناك خصم) -->
                     @if($discount > 0)
                       <span class="text-xs text-slate-400 line-through font-mono mt-0.5">
-                        {{ money($p->price) }}
+                        {{ money($original) }}
                       </span>
                     @endif
                   </div>
