@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\Product;
-use Illuminate\Support\Facades\Schema;
 
 class OffersController extends Controller
 {
@@ -21,21 +20,11 @@ class OffersController extends Controller
             ->orderByDesc('id')
             ->paginate(20);
 
-
-        $coupons = collect();
-        if (Schema::hasTable('coupons')) {
-            $now = now();
-            $coupons = Coupon::where('is_active', true)
-                ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '<=', $now))
-                ->where(fn ($q) => $q->whereNull('ends_at')->orWhere('ends_at', '>=', $now))
-                ->where(function ($q) {
-                    $q->whereNull('usage_limit')
-                      ->orWhereRaw('COALESCE(used_count,0) < usage_limit');
-                })
-                ->orderByDesc('id')
-                ->limit(24)
-                ->get();
-        }
+        $coupons = Coupon::query()
+            ->where('is_active', true)
+            ->orderByDesc('id')
+            ->limit(24)
+            ->get();
 
         return view('pages.offers', compact('products', 'coupons'));
     }
